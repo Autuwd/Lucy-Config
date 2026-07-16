@@ -1,0 +1,371 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode/deepseek-v4-flash-free",
+  "small_model": "opencode/north-mini-code-free",
+  "agent": {
+    "accessibility-specialist": {
+      "description": "Ensures game is accessible: color blind modes, subtitle sizing, input alternatives.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "ai-programmer": {
+      "description": "Implements AI systems: pathfinding, behavior trees, state machines, utility AI.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "analytics-engineer": {
+      "description": "Implements analytics tracking, telemetry, and data pipelines.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "art-director": {
+      "description": "Visual direction lead. Owns art style, visual consistency, and aesthetic quality gates.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "atlas": {
+      "description": "Multi-agent orchestration coordinator",
+      "mode": "primary",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "audio-director": {
+      "description": "Audio direction lead. Owns sound design, music direction, and audio pipeline.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "community-manager": {
+      "description": "Manages community relations, feedback collection, and player communication.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "creative-director": {
+      "description": "Highest-level creative authority. Makes binding decisions on game vision, tone, aesthetic direction.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6",
+      "permission": {
+        "skill": {
+          "brainstorm": "allow",
+          "design-review": "allow"
+        }
+      }
+    },
+    "devops-engineer": {
+      "description": "Manages CI/CD, build pipelines, and deployment infrastructure.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "economy-designer": {
+      "description": "Designs in-game economies: currency, pricing, rewards, monetization balance.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "engine-programmer": {
+      "description": "Works on core engine systems: rendering, physics, audio engine, platform abstraction.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "explore": {
+      "description": "调研模式 - 快速搜索网页、查找资料、收集信息，适合调研新技术或查文档",
+      "mode": "primary",
+      "model": "openai/gpt-5.4-mini-fast"
+    },
+    "game-designer": {
+      "description": "Game design lead. Owns mechanics, systems, player progression, and difficulty balancing.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "gamemaker-assets-specialist": {
+      "description": "GMS2 assets specialist. Owns texture groups, texture page packing, audio groups, sprite import settings, and VRAM budgets.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "gamemaker-gml-specialist": {
+      "description": "GML language specialist. Hands-on authority for writing, reviewing, and refactoring GML code: language features, style, patterns, memory management, and the full GML API surface.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "gamemaker-networking-specialist": {
+      "description": "GMS2 networking specialist. Owns socket architecture, buffer design, UDP/TCP packets, Async Networking event, rollback/lockstep netcode, and Steam SDR integration.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "gamemaker-performance-specialist": {
+      "description": "GMS2 performance specialist. Owns draw call batching, instance deactivation, texture pages, spatial partitioning, and per-platform profiling.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "gamemaker-shader-specialist": {
+      "description": "GMS2 shader specialist. Owns GLSL ES shaders, surface-based post-processing, shader uniforms, and visual effect optimization.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "gamemaker-specialist": {
+      "description": "GameMaker Studio 2 engine specialist. Authority on GML architecture, object/event design, project structure, and GMS2 best practices.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "gamemaker-ui-specialist": {
+      "description": "GMS2 UI specialist. Owns Draw GUI event layer, HUD systems, menu screen stacks, sequences for UI animation, and cross-platform input handling.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "gameplay-programmer": {
+      "description": "Implements player-facing gameplay systems: movement, combat, abilities, inventory.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "godot-gdextension-specialist": {
+      "description": "Godot GDExtension/C++ expert. Creates native extensions.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "godot-gdscript-specialist": {
+      "description": "Godot GDScript expert. Implements gameplay in GDScript.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "godot-shader-specialist": {
+      "description": "Godot shader expert. Creates visual shaders in Godot.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "godot-specialist": {
+      "description": "Godot 4 engine specialist. Leads Godot-based development.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "hephaestus": {
+      "description": "Tool building and code generation agent",
+      "mode": "primary",
+      "model": "openai/gpt-5.5",
+      "variant": "medium"
+    },
+    "lead-programmer": {
+      "description": "Technical lead. Owns code architecture, technical debt, code quality standards, and development velocity.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "level-designer": {
+      "description": "Designs and builds game levels, encounters, and spatial puzzles.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "librarian": {
+      "description": "Knowledge retrieval and documentation specialist",
+      "mode": "primary",
+      "model": "openai/gpt-5.4-mini-fast"
+    },
+    "live-ops-designer": {
+      "description": "Plans live service: events, content updates, player retention strategies.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "localization-lead": {
+      "description": "Localization lead. Owns translation pipeline, locale management, and text externalization.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "metis": {
+      "description": "架构模式 - 系统架构设计、技术方案决策、代码结构规划，适合设计阶段",
+      "mode": "primary",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "momus": {
+      "description": "Critical code review and quality gate agent",
+      "mode": "subagent",
+      "model": "openai/gpt-5.5",
+      "variant": "xhigh"
+    },
+    "multimodal-looker": {
+      "description": "Vision and image analysis agent",
+      "mode": "subagent",
+      "model": "openai/gpt-5.5",
+      "variant": "medium"
+    },
+    "narrative-director": {
+      "description": "Narrative direction lead. Owns story, world-building, dialogue, and narrative consistency.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "network-programmer": {
+      "description": "Implements networking: client-server architecture, sync, replication, lag compensation.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "oracle": {
+      "description": "审查模式 - 深度验证代码质量、审查 PR、检查 Bug，适合做质量把关",
+      "mode": "primary",
+      "model": "openai/gpt-5.5",
+      "variant": "high"
+    },
+    "performance-analyst": {
+      "description": "Profiles performance, identifies bottlenecks, and optimizes game execution.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "producer": {
+      "description": "Production lead. Owns schedule, scope management, cross-department coordination, and change propagation.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "prometheus": {
+      "description": "生成模式 - 高质量代码生成、大规模重构、复杂功能实现，适合写核心代码",
+      "mode": "primary",
+      "model": "anthropic/claude-opus-4-7",
+      "variant": "max"
+    },
+    "prototyper": {
+      "description": "Creates rapid prototypes to validate mechanics and ideas.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "qa-lead": {
+      "description": "QA lead. Owns testing strategy, bug tracking, and quality gates.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "qa-tester": {
+      "description": "Tests features, finds bugs, and validates game quality.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "release-manager": {
+      "description": "Release lead. Owns release planning, certification, store submission, and deployment.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "security-engineer": {
+      "description": "Implements security measures, anti-cheat, and secure networking.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "sisyphus": {
+      "description": "Complex multi-step task execution agent",
+      "mode": "primary",
+      "model": "anthropic/claude-opus-4-7",
+      "variant": "max"
+    },
+    "sisyphus-junior": {
+      "description": "Lightweight task execution for simple subtasks",
+      "mode": "subagent",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "sound-designer": {
+      "description": "Creates sound effects, ambient audio, and implements audio systems.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "systems-designer": {
+      "description": "Designs complex game systems: progression, economy, stats, loadouts.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "technical-artist": {
+      "description": "Bridges art and code: shader setup, tool creation, pipeline automation.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "technical-director": {
+      "description": "Highest-level technical authority. Makes binding decisions on architecture, tech stack, and resolves conflicts between engineering domains.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6",
+      "permission": {
+        "skill": {
+          "code-review": "allow",
+          "tech-debt": "allow"
+        }
+      }
+    },
+    "tools-programmer": {
+      "description": "Builds editor tools, pipeline scripts, and dev utilities.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "ue-blueprint-specialist": {
+      "description": "Unreal Blueprint specialist. Implements visual scripting.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "ue-gas-specialist": {
+      "description": "Unreal GAS (Gameplay Ability System) specialist.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "ue-replication-specialist": {
+      "description": "Unreal networking/replication specialist.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "ue-umg-specialist": {
+      "description": "Unreal UMG/CommonUI specialist. Implements UI in UE.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "ui-programmer": {
+      "description": "Implements UI systems: menus, HUDs, dialogs, input handling.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "unity-addressables-specialist": {
+      "description": "Unity Addressables specialist. Manages asset loading.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "unity-dots-specialist": {
+      "description": "Unity DOTS/ECS specialist. Implements data-oriented systems.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "unity-shader-specialist": {
+      "description": "Unity shader expert. Creates HLSL shaders and VFX.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "unity-specialist": {
+      "description": "Unity engine specialist. Leads Unity-based development.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "unity-ui-specialist": {
+      "description": "Unity UI Toolkit specialist. Implements UI in Unity.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "unreal-specialist": {
+      "description": "Unreal Engine 5 specialist. Leads UE5-based development.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "ux-designer": {
+      "description": "Designs user experience flows, information architecture, and usability.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "world-builder": {
+      "description": "Creates lore, geography, factions, and world-building documents.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    },
+    "writer": {
+      "description": "Writes dialogue, narrative content, and story elements.",
+      "mode": "all",
+      "model": "anthropic/claude-sonnet-4-6"
+    }
+  },
+  "permission": {
+    "skill": {
+      "*": "allow"
+    },
+    "task": {
+      "*": "allow"
+    },
+    "tool": {
+      "*": "allow"
+    }
+  },
+  "plugin": ["oh-my-openagent"],
+  "provider": {
+    "anthropic": {},
+    "openai": {}
+  }
+}
