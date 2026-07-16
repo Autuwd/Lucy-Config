@@ -29,3 +29,4 @@
 - **SuperSmashLike 项目**：当 `G:\Unity2022Project\SuperSmashLike` 有修改后，提醒主人同步更新 `E:\Lucy-Config\学习知识库.md` 中的项目状态
 - **追踪内容**：C# 脚本数量、组件完成状态、开发阶段进度
 - **同步方式**：直接修改学习知识库中的项目状态表，然后推送到 GitHub
+- **配置备份**：当 `G:\Unity2022Project\SuperSmashLike\AGENTS.md` 有修改后，提醒主人提交推送到 GitHub（项目配置防丢失）
