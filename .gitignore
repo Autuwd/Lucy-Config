@@ -1,0 +1,8 @@
+# OpenCode / AI 内部文件
+.codegraph/
+.omo/
+
+# OS 文件
+Thumbs.db
+Desktop.ini
+.DS_Store

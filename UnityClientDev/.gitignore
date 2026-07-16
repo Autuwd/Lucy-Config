@@ -1,0 +1,33 @@
+# OpenCode / AI 内部文件
+.codegraph/
+.omo/
+
+# OS 文件
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Unity 项目生成的文件（如果有）
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+UserSettings/
+MemoryCaptures/
+Recordings/
+
+# IDE
+.vs/
+.vscode/
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
