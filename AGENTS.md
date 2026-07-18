@@ -25,6 +25,14 @@
   cd E:\Lucy-Config; git add AGENTS.md; git commit -m "📝 同步全局配置"; git push
   ```
 
+## LeetCode 刷题追踪规则（全局）
+- **刷题目录**：`G:\CPPLearning\VS_CppCode\leet-code\Topic_1` (C++) 和 `G:\CSLearning\VS_CsCode\leet-code` (C#)
+- **追踪文件**：`G:\OpenCode\UnityClientDev\leetcode-tracker.md`
+- **自动更新**：每次用户 git commit 后，检查 `.leetcode_update_needed` 标记文件
+- **更新内容**：新增题号、题目名称、提交日期
+- **标记文件**：用户提交后，post-commit hook 会在 `G:\OpenCode\UnityClientDev\.leetcode_update_needed` 创建标记
+- **执行时机**：会话开始时检查标记文件，有更新则自动同步 tracker
+
 ## 项目变更追踪规则（全局）
 - **SuperSmashLike 项目**：当 `G:\Unity2022Project\SuperSmashLike` 有修改后，提醒主人同步更新 `E:\Lucy-Config\学习知识库.md` 中的项目状态
 - **追踪内容**：C# 脚本数量、组件完成状态、开发阶段进度
