@@ -2,6 +2,15 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 光线追踪加速结构 — RayTracingAccelerationStructure的核心API绑定
+// 💡 管理场景中参与光线追踪的Mesh和实例的BVH层次加速结构
+// 💡 RayTracingSubMeshFlags控制子网格的命中行为(ClosestHit/AnyHit)
+// 💡 RayTracingInstanceCullingFlags控制实例剔除(Sphere/Plane/LOD/固角)
+// ⚡ 通过CullInstance/CullSubMesh等原生方法实现GPU端高效剔除
+// 📌 从Experimental.Rendering迁移至UnityEngine.Rendering命名空间
+// ====================================================================
+
 using System;
 using System.Collections.Generic;
 

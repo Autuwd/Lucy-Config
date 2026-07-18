@@ -2,6 +2,26 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 MaterialEffectPlayable — Timeline 材质效果 Playable
+//
+// 📌 作用：
+//   MaterialEffectPlayable 允许在 Timeline 中控制材质效果。
+//   可以通过时间线精确控制 Material 的 Pass 切换，实现
+//   类似于"时间线驱动的后期处理效果"。
+//
+// 🔑 核心操作：
+//   Create(graph, material, pass) — 创建材质效果 Playable
+//   GetMaterial()/SetMaterial() — 控制目标材质
+//   GetPass()/SetPass() — 控制材质渲染 Pass
+//
+// 💡 使用场景：
+//   在 Timeline 中制作过场动画时，可以在特定时间点切换
+//   材质的渲染 Pass，实现画面特效的精确时间控制。
+//
+// 📍 对应 C++ 头文件：Runtime/Shaders/Director/MaterialEffectPlayable.h
+// ==============================================================
+
 using System;
 using System.ComponentModel;
 using UnityEngine.Bindings;
@@ -12,6 +32,22 @@ using UnityObject = UnityEngine.Object;
 
 namespace UnityEngine.Experimental.Playables
 {
+    // ==============================================================
+    // MaterialEffectPlayable — Timeline 材质效果 Playable
+    //
+    // 🔑 关键字段：
+    //   m_Handle (PlayableHandle) — 包装的底层句柄
+    //
+    // 🔑 核心操作：
+    //   Create(graph, material, pass) — 创建材质效果 Playable
+    //   GetMaterial()/SetMaterial() — 控制目标材质
+    //   GetPass()/SetPass() — 控制渲染 Pass
+    //
+    // 💡 使用场景：
+    //   在 Timeline 中实现"时间线驱动的材质特效切换"。
+    //   例如，在过场动画的特定时间点切换材质的渲染 Pass，
+    //   实现画面特效变化。
+    // ==============================================================
     [NativeHeader("Runtime/Export/Director/MaterialEffectPlayable.bindings.h")]
     [NativeHeader("Runtime/Shaders/Director/MaterialEffectPlayable.h")]
     [NativeHeader("Runtime/Director/Core/HPlayable.h")]
@@ -21,6 +57,12 @@ namespace UnityEngine.Experimental.Playables
     {
         PlayableHandle m_Handle;
 
+        // ==============================================================
+        // Create — 创建材质效果 Playable
+        //
+        // 🎯 在指定图中创建材质控制节点
+        // 📌 pass = -1 表示使用材质的默认 Pass
+        // ==============================================================
         public static MaterialEffectPlayable Create(PlayableGraph graph, Material material, int pass = -1)
         {
             var handle = CreateHandle(graph, material, pass);
@@ -35,6 +77,11 @@ namespace UnityEngine.Experimental.Playables
             return handle;
         }
 
+        // ==============================================================
+        // 构造函数 — 带类型安全检查的 Handle 包装
+        //
+        // ⚡ 确保传入的 Handle 是 MaterialEffectPlayable 类型
+        // ==============================================================
         internal MaterialEffectPlayable(PlayableHandle handle)
         {
             if (handle.IsValid())
@@ -66,7 +113,9 @@ namespace UnityEngine.Experimental.Playables
             return GetHandle() == other.GetHandle();
         }
 
-
+        // ==============================================================
+        // GetMaterial / SetMaterial — 控制目标材质
+        // ==============================================================
         public Material GetMaterial()
         {
             return GetMaterialInternal(ref m_Handle);
@@ -77,6 +126,9 @@ namespace UnityEngine.Experimental.Playables
             SetMaterialInternal(ref m_Handle, value);
         }
 
+        // ==============================================================
+        // GetPass / SetPass — 控制材质的渲染 Pass
+        // ==============================================================
         public int GetPass()
         {
             return GetPassInternal(ref m_Handle);
@@ -104,6 +156,5 @@ namespace UnityEngine.Experimental.Playables
 
         [NativeMethod(ThrowsException = true)]
         extern private static bool ValidateType(ref PlayableHandle hdl);
-
     }
 }

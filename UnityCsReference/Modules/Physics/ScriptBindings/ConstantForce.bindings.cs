@@ -2,6 +2,22 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 ConstantForce — 恒力组件
+//
+// 📌 作用：
+//   对 Rigidbody 持续施加力和扭矩，无需每帧手动调用 AddForce。
+//   底层在物理步中自动调用 PhysX 的 PxRigidBody::addForce。
+//
+// 💡 四种模式：
+//   - force：世界空间持续力（牛顿），适合风力、推力
+//   - torque：世界空间持续扭矩（N·m）
+//   - relativeForce：局部空间持续力，随物体旋转（火箭引擎）
+//   - relativeTorque：局部空间持续扭矩
+//
+// ⚡ 注意：需要 Rigidbody 组件配合使用。
+// ==============================================================
+
 using UnityEngine.Bindings;
 
 namespace UnityEngine

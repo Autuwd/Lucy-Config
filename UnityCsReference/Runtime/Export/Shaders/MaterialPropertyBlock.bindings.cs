@@ -2,6 +2,30 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 MaterialPropertyBlock — 材质属性覆盖（批处理安全版）
+//
+// 📌 作用：
+//   在不创建 Material 实例的情况下，覆盖渲染时的材质参数。
+//   用于在 GPU Instancing / SRP Batcher 中传递每个物体的独有数据。
+//
+// 💡 核心场景：
+//   1. 多个物体使用同一 Material，但需要不同颜色/浮点参数
+//   2. 保留 GPU Instancing / SRP Batcher 的批处理能力
+//   3. 避免大量 Material 实例导致的内存和 Draw Call 开销
+//
+// ⚠️ 批处理打断规则：
+//   - SetFloat/SetVector/SetColor/SetMatrix → 不打断 SRP Batcher
+//   - SetTexture → 会打断批处理（纹理是全局状态）
+//   - SetBuffer → ComputeBuffer 绑定会打断批处理
+//   原因：纹理和缓冲区绑定是全局的，无法通过 Per Object Data 传递
+//
+// 💡 内部实现：
+//   MaterialPropertyBlock 底层是 ShaderPropertySheet，
+//   通过 PropertySheet 将覆盖数据传递给渲染循环。
+//   所有 Setter/Getter 标注 IsThreadSafe = true，支持 Job System。
+// ==============================================================
+
 using System;
 using System.Collections.Generic;
 using UnityEngine.Bindings;

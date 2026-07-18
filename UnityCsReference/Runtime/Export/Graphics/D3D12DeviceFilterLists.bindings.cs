@@ -2,6 +2,15 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 D3D12设备过滤列表 — 按GPU型号/驱动/显存等条件筛选后应用配置
+// 💡 D3D12DeviceFilterData支持按vendorName/deviceName/driverVersion等字段过滤
+// 💡 D3D12GraphicsJobsDeviceFilterData为匹配设备指定GraphicsJobs执行模式
+// 💡 D3D12DeviceFilterList/GraphicsJobsFilterList管理过滤规则集合
+// 💡 D3D12Comparator提供EqualTo/NotEqualTo/LessThan等比较操作符
+// ⚡ 数据结构需与C++端D3D12DeviceFilterData.h严格同步
+// ====================================================================
+
 using System;
 using System.Text.RegularExpressions;
 using UnityEngine.Bindings;

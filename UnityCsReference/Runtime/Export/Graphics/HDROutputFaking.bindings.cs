@@ -2,6 +2,13 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 HDR输出模拟 — 内部测试用的假HDR显示模式
+// 💡 SetEnabled开启模拟HDR输出，用于在非HDR显示器上测试HDR流程
+// 💡 IsRealDisplayHDRAvailable检测物理显示器是否真正支持HDR
+// ⚡ ExcludeFromDocs标记，仅限内部测试使用
+// ====================================================================
+
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;

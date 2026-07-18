@@ -3,6 +3,19 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 
+// ============================================================
+// 🎯 DSPGraph —— 实时音频 DSP 图核心绑定
+//     构建 DSPNode 的有向无环图，管理音频信号流
+// 💡 Internal_CreateDSPGraph：创建 DSP 图，指定输出格式/声道/采样率
+// 💡 Internal_GetRootDSP 获取根节点
+// 💡 Internal_BeginMix / Internal_ReadMix 开始混音并读取输出
+// 💡 Internal_Update 管线更新
+// 💡 Internal_GetDSPClock 获取 DSP 时钟（用于参数插值时间戳）
+// 💡 Internal_ScheduleGraph 调度 DSPNode 执行顺序
+// ⚡ Internal_ExecuteJob / Internal_InitializeJob
+//     Internal_ExecuteUpdateJob 负责实际 Job 执行
+// 📌 thread-safe 方法标注 IsThreadSafe = true
+// ============================================================
 using Unity.Jobs;
 using UnityEngine.Bindings;
 using System.Runtime.InteropServices;

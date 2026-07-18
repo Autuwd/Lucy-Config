@@ -2,6 +2,18 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 ScriptableRootOutput —— 根输出处理器
+//     接收最终混音输出，可附加额外音频到主输出
+//     用于音频中间件集成（如 FMOD、Wwise 等）
+// 💡 IControl<TRealtime>：Configure 返回 JobHandle 异步配置
+// 💡 IRealtime 四阶段处理管线：
+//     ① EarlyProcessing → ② Process → ③ EndProcessing → ④ RemovedFromProcessing
+// 💡 EndProcessing 的 output 会被累加到主音频输出
+// ⚡ 通过 ControlContext.AllocateRootOutput 创建
+//     Burst 编译 + Job System 调度
+// 📌 极低层级，为原生音频中间件提供集成点
+// ============================================================
 using System;
 using System.ComponentModel;
 using Unity.Burst;

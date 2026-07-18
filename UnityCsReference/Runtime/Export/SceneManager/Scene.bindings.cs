@@ -2,6 +2,27 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 Scene — 场景实例核心
+//
+// 📌 作用：
+//   代表一个场景实例（不是资源），管理场景的加载状态、层级、
+//   根物体列表、以及加载标志位。
+//   每个 Scene 对象是一个封装了 m_Handle 的轻量值类型（struct）。
+//
+// 💡 场景生命周期：
+//   Created → Loading → Loaded → Unloading → Unloaded
+//   SceneManager 负责驱动所有场景的加载/卸载。
+//   Scene 实例是运行时对象，不是 SceneAsset 资源本身。
+//
+// ⚡ 场景加载模式：
+//   - Single: 卸载当前所有场景，加载新场景
+//   - Additive: 保留当前场景，附加加载新场景
+//
+// 📌 重要场景标志位：
+//   m_LoadSceneParameters、m_LoadingPriority、m_AllowLoadScene
+//   控制场景的加载行为和优先级
+// ==============================================================
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -12,7 +33,6 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine.SceneManagement
 {
-    //=============================================================================
     // Scene 结构体 —— 场景句柄的 C# 值类型包装
     //
     // 设计说明:

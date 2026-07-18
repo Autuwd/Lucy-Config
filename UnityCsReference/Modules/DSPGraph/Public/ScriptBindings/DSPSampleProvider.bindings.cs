@@ -3,6 +3,15 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 
+// ============================================================
+// 🎯 DSPSampleProvider —— DSP 采样供给器绑定
+//     在 DSP 图内部读取 AudioSampleProvider 的采样数据
+// 💡 支持多种格式：UInt8 / SInt16 / Float
+// 💡 通过 providerId 或原生 provider 指针访问
+// 💡 GetChannelCount / GetSampleRate 获取格式信息
+// ⚡ 全部标记 IsThreadSafe，可在音频线程调用
+// 📌 用于 DSPNode 内部实时读取音频数据
+// ============================================================
 using UnityEngine.Bindings;
 
 namespace Unity.Audio

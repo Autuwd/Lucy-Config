@@ -2,6 +2,32 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 TransformAccessArray — 作业系统的 Transform 并行访问
+//
+// 📌 作用：
+//   为 IJobParallelForTransform 提供批量 Transform 安全访问。
+//   它是 Transform 到 TransformAccess 的索引映射，支持在
+//   Job System 中并行读取/写入 Transform 的位置、旋转、缩放。
+//
+// 💡 工作原理：
+//   - TransformAccessArray 内部维护 TransformAccess 数组
+//   - GetSortedTransformAccess() 按层级父子排序索引
+//   - AtomicSafetyHandle 提供读写分离安全检查
+//   - JobHandle 依赖链确保并行作业不会写入冲突
+//
+// ⚡ 与常规 Transform 的区别：
+//   - Transform 属性必须在主线程读写（MonoBehaviour 限制）
+//   - TransformAccessArray 允许在 Job 内通过索引访问
+//   - 只对 Transform 的位置、旋转、缩放有效
+//   - 通过 Dispose(JobHandle) 实现作业安全释放
+//
+// 📌 使用模式：
+//   1. 收集 Transform[] → 创建 TransformAccessArray
+//   2. 调度 IJobParallelForTransform
+//   3. 在 Execute 中通过 TransformAccess 操作
+//   4. Dispose 时等待 JobHandle
+// ==============================================================
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -16,6 +42,37 @@ using System.Runtime.InteropServices;
 
 namespace UnityEngine.Jobs
 {
+    //=============================================================================
+    // 🎯 TransformAccessArray —— Job System 并行变换访问
+    //
+    // 设计说明:
+    //   TransformAccessArray 允许在 IJobParallelForTransform 中安全地
+    //   并行读写场景中多个 Transform 的位置/旋转/缩放。
+    //   它是连接 Transform 层级树和 Job System 的桥梁。
+    //
+    // 💡 IJobParallelForTransform 工作流:
+    //   1. 构造 TransformAccessArray(transforms)，内部创建原生数据数组
+    //   2. 每个 Job 调用 Execute(int index, TransformAccess access)
+    //   3. C++ 侧通过 GetSortedTransformAccess 按层级排序索引
+    //   4. 主线程调用 Schedule(readOnly, dependsOn) 启动 Job
+    //   5. Job 完成后，主线程会自动应用所有修改（QueueTransformDispatch）
+    //
+    // 📌 内部结构:
+    //   - m_TransformArray: IntPtr 指向 C++ 侧的 TransformAccessArray 原生对象
+    //   - m_Safety: AtomicSafetyHandle 提供读写安全保护
+    //   - UnsafeTransformAccess: 无安全检查的底层访问（ECS 专用）
+    //   - TransformAccess: 带安全检查的 Job 内访问（只读/读写分离）
+    //
+    // ⚠️ 安全机制:
+    //   所有公开方法在访问原生数据前都会调用 AtomicSafetyHandle 的
+    //   CheckReadAndThrow / CheckWriteAndThrow 进行安全检查。
+    //   Job Schedule 时明确区分 readOnly 和 readWrite 权限。
+    //
+    // 📌 扩展支持:
+    //   支持通过 TransformHandle 或 EntityId 添加/移除变换，
+    //   兼容 ECS 环境。内部按 TransformHierarchy 层级排序以提高缓存效率。
+    //=============================================================================
+
     // Provides an efficient interface to TransformHierarchy data from C#, with no job safety whatsoever.
     // It is intended to be used from an ECS transform component, where the ECS safety system has already determined
     // that the calling code has the necessary read or read/write access to the transform data.

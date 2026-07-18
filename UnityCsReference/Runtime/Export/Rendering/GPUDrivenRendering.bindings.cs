@@ -2,6 +2,29 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 GPUDrivenRendering — GPU 驱动渲染管线
+//
+// 📌 作用：
+//   GPU-Driven Rendering（GPU 驱动渲染）的核心 C# 绑定。
+//   将 CPU 端的可视性剔除、LOD 选择、实例化决策等工作
+//   转移到 GPU 完成，大幅减少 CPU 开销。
+//
+// 💡 核心类型和功能：
+//   - GPUResidentDrawer：GPU 常驻绘制器
+//   - GPUResidentChunk：GPU 常驻数据块
+//   - CullingAllocationInfo：剔除分配信息
+//   - InstanceType/VisibilitySubCategory：实例类型和可见性子分类
+//   - 批量实例数据处理（Add/Remove/UpdateInstance）
+//   - LOD 和可见性管理
+//   - 运动向量和遮挡数据处理
+//
+// ⚡ GPUDrivenPipeline 特性必须启用（#pragma enable_d3d11_debug_symbols）。
+//   与 RenderPipeLines 配合使用（可见 InternalsVisibleTo 属性）。
+//
+// ⚠️ 这是一个 700+ 行的大型文件，包含大量底层数据结构。
+// ==============================================================
+
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;

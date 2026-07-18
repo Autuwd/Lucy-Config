@@ -2,6 +2,22 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 PhysicsGeometry — 物理几何体
+//
+// 📌 作用：
+//   提供低层级物理几何形状的 C# 接口和结构体，封装 PhysX
+//   的几何类型。用于 ImmediatePhysics 和底层碰撞检测 API。
+//
+// 💡 核心类型：
+//   - IGeometry：几何形状接口（Box/Sphere/Capsule/ConvexMesh/TriangleMesh/Terrain）
+//   - GeometryType：形状类型枚举
+//   - 每个形状是 struct（内存布局需与 C++ 侧严格一致）
+//
+// ⚠️ 属于 UnityEngine.LowLevelPhysics 命名空间，
+//    不是常规碰撞器组件的一部分。
+// ==============================================================
+
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;

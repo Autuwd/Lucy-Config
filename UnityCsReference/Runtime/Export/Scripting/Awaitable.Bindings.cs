@@ -9,6 +9,29 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine
 {
+    //=============================================================================
+    // 🎯 Awaitable —— 零分配异步操作（C++ 回调节点到 C# async/await）
+    //
+    // 设计说明:
+    //   Awaitable 是 Unity 实现的零 GC 分配异步原语，允许 C++ 侧的回调事件
+    //   （如 AsyncOperation 完成、渲染事件、动画回调等）直接被 C# 的
+    //   async/await 模式消费，无需额外分配 Task 或 Coroutine 包装。
+    //
+    // 💡 工作流程:
+    //   1. C++ 侧创建原生 Awaitable 对象，持有对应的 GCHandle 指向 C# 实例
+    //   2. C# 侧 await 该 Awaitable 时，_continuation 被设置为编译器生成的续行动作
+    //   3. C++ 回调完成时调用 RunContinuation():
+    //      - 在 _spinLock 保护下取出 _continuation
+    //      - 执行续行，恢复 async 方法的执行
+    //   4. 异常通过 SetExceptionFromNative() 传递到 C# 侧的 ExceptionDispatchInfo
+    //
+    // 📌 相比 Coroutine 的优势:
+    //   - 零 GC 分配（Coroutine 每次 yield 都会产生装箱）
+    //   - 可被 async/await 直接消费（无需 StartCoroutine）
+    //   - 与 UniTask 等 ValueTask 方案兼容
+    //   - C++ 侧直接回调，无 Mono 协程调度开销
+    //=============================================================================
+
     [NativeHeader("Runtime/Mono/Awaitable.h")]
     public partial class Awaitable
     {

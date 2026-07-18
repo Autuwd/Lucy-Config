@@ -2,6 +2,22 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 LocalKeywordSpace — Shader 的关键字命名空间
+//
+// 📌 作用：
+//   每个 Shader / ComputeShader / RayTracingShader 都有自己的
+//   LocalKeywordSpace，用于管理该 Shader 中定义的所有局部关键字。
+//
+// 💡 访问方式：
+//   shader.keywordSpace → 获取 Shader 的关键字空间
+//   通过 keywordSpace.keywords / keywordNames 枚举所有关键字
+//
+// 📌 设计意图：
+//   不同的 Shader 可能定义相同名称但不同含义的关键字，
+//   LocalKeywordSpace 通过空间隔离避免命名冲突。
+// ==============================================================
+
 using System;
 using System.Collections.Generic;
 using UnityEngine.Bindings;

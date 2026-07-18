@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 图形纹理描述符 — GraphicsTextureDescriptor与GraphicsTexture的底层封装
+// 💡 GraphicsTextureDescriptor定义纹理的width/height/depth/format/dimension等元数据
+// 💡 GraphicsTexture是对原生纹理对象的C#包装，支持Update/UploadData操作
+// ⚡ GraphicsTextureDescriptorFlags控制RenderTarget/RandomWriteTarget标记
+// 📌 底层数据上传通过Native方法实现，支持Span<byte>批量更新
+// ====================================================================
+
 using System;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;

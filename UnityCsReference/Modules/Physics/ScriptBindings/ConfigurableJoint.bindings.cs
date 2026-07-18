@@ -2,6 +2,27 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 ConfigurableJoint — 可配置关节（弹簧/阻尼/驱动力/目标）
+//
+// 📌 作用：
+//   最强大的关节组件，提供 6 自由度（6-DOF）的完全可配置约束。
+//   每个轴（X/Y/Z 平移 + 旋转）可独立设置为 Locked/Limited/Free。
+//
+// 💡 核心功能：
+//   - xMotion/yMotion/zMotion：平移自由度限制
+//   - angularXMotion/angularYMotion/angularZMotion：旋转自由度限制
+//   - targetPosition/targetVelocity：目标位置和速度（驱动用）
+//   - targetRotation/targetAngularVelocity：目标旋转和角速度
+//   - xDrive/yDrive/zDrive/slerpDrive：各轴驱动力设置
+//   - linearLimit/angularYLimit/angularZLimit：软限制（弹簧缓冲）
+//   - projectionMode/projectionDistance/projectionAngle：投影修正
+//
+// ⚡ 适用场景：自定义物理约束、车辆悬挂、互动机械、复杂关节链。
+//   ConfigurableJointMotion：Locked=固定, Limited=有限范围, Free=自由
+//   RotationDriveMode：XYAndZ(各轴独立) / Slerp(球面插值)
+// ==============================================================
+
 using System;
 using System.ComponentModel;
 using UnityEngine.Bindings;

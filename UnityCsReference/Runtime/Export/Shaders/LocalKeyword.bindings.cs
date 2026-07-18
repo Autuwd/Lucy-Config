@@ -2,6 +2,26 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 LocalKeyword — 局部着色器关键字（单个 Shader/Material 生效）
+//
+// 📌 作用：
+//   局部关键字仅影响特定 Shader 或 ComputeShader 上的关键字状态。
+//   通过 Material.EnableKeyword / DisableKeyword 控制。
+//
+// 📌 与 GlobalKeyword 的区别：
+//   GlobalKeyword → 全局生效，影响所有材质
+//   LocalKeyword  → 单个 Shader/Material 级别，更精细的控制
+//
+// 📌 shader_feature vs multi_compile：
+//   shader_feature：未使用的变体在构建时会被剥离（减少体积）
+//   multi_compile：所有变体都会被保留（适合运行时切换）
+//   对应关键字用 LocalKeyword + Shader Variant Collection 管理。
+//
+// 💡 LocalKeyword 包含 SpaceInfo（所属 Shader 的关键字空间）
+//   和 Index（在该空间中的位置），用于快速查找和比较。
+// ==============================================================
+
 using System;
 using UnityEngine.Assertions;
 using UnityEngine.Bindings;

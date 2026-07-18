@@ -2,6 +2,17 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 WebCamTexture —— 摄像头纹理
+//     从物理摄像头设备捕获视频帧到 Texture
+// 💡 WebCamDevice 描述设备信息：
+//     name / isFrontFacing / kind / depthCameraName / availableResolutions
+// 💡 request/requestedWidth/Height/FPS 请求参数（最终由设备决定）
+// 💡 autoFocusPoint 自动对焦点（nullable Vector2）
+// 💡 didUpdateThisFrame 检查帧更新
+// ⚡ aging：设备列表随插拔动态刷新（静态 WebCamTexture.devices）
+// 📌 深度摄像头通过 isDepth 和 depthCameraName 访问
+// ============================================================
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 

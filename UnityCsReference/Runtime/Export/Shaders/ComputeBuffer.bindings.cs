@@ -2,6 +2,36 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 ComputeBuffer — GPU 通用计算缓冲区
+//
+// 📌 作用：
+//   在 GPU 上分配一块可读/写的缓冲区，供 Compute Shader 使用。
+//   Unity 的 ComputeBuffer 底层由 C++ GraphicsBuffer 实现。
+//
+// 💡 核心概念：
+//   count × stride = 总字节数
+//   count  = 元素数量
+//   stride = 每个元素的字节大小
+//
+// 🎯 UAV (Unordered Access View)：
+//   ComputeBuffer 默认是 UAV，Compute Shader 可随机读写。
+//   对应 HLSL 中的 RWStructuredBuffer / RWByteAddressBuffer。
+//
+// 🎯 SRV (Shader Resource View)：
+//   也可作为 SRV 绑定到 Graphics Shader（非 Compute），
+//   此时为只读，对应 HLSL 中的 StructuredBuffer / ByteAddressBuffer。
+//
+// ⚡ CopyCount：
+//   将 Append/Consume 缓冲区的隐藏计数器值拷贝到另一个缓冲区。
+//   常用于间接绘制：先用 Compute Shader 生成数据，
+//   再用 CopyCount 将元素数量写入 args buffer，
+//   最后用 Graphics.DrawProceduralIndirect 绘制。
+//
+// 💡 SetData 要求 blittable 类型（内存布局连续），
+//   支持 Array、List<T>、NativeArray<T> 三种数据源。
+// ==============================================================
+
 using System;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
@@ -112,10 +142,15 @@ namespace UnityEngine
             return m_Ptr != IntPtr.Zero && IsValidBuffer(this);
         }
 
-        // Number of elements in the buffer (RO).
+        // ==============================================================
+        // count / stride — 缓冲区的元素数量和单个元素大小
+        //
+        // 📌 count  = 元素数量（如 1024 个 float4）
+        // 📌 stride = 每个元素的字节大小（如 16 字节）
+        //    总 GPU 内存 = count × stride
+        // ==============================================================
         extern public int count { get; }
 
-        // Size of one element in the buffer (RO).
         extern public int stride { get; }
 
         extern private ComputeBufferMode usage { get; }
@@ -311,19 +346,25 @@ namespace UnityEngine
             EndBufferWrite(countWritten * elementSize);
         }
 
-        // Buffer name for graphics debuggers
-        public string name { set { SetName(value); } }
+        // ==============================================================
+        // GetNativeBufferPtr — 获取指向本机 GraphicsBuffer 的指针
+        // 用于与 Native Rendering Plugin 交互（如 Vulkan/Metal 底层 API）
+        // ==============================================================
+        extern public IntPtr GetNativeBufferPtr();
 
         [FreeFunction(Name = "GraphicsBuffer_Bindings::SetName", HasExplicitThis = true)]
         extern private void SetName(string name);
 
-        // Set counter value of append/consume buffer.
+        // ==============================================================
+        // SetCounterValue / CopyCount — Append/Consume 缓冲区计数器
+        //
+        // 📌 SetCounterValue：手动设置 Append/Consume 缓冲区的隐藏计数器
+        // 📌 CopyCount：将源缓冲区的计数器值拷贝到目标缓冲区
+        //    典型用途：GPU 级联 Indirect Draw，避免 CPU 回读
+        // ==============================================================
         extern public void SetCounterValue(uint counterValue);
 
-        // Copy counter value of append/consume buffer into another buffer.
         extern public static void CopyCount(ComputeBuffer src, ComputeBuffer dst, int dstOffsetBytes);
-
-        extern public IntPtr GetNativeBufferPtr();
 
         internal void AddBufferToLeakDetector()
         {

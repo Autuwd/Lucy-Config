@@ -2,6 +2,22 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 ScriptableProcessor —— 可脚本化处理器的核心框架
+//     ProcessorInstance 是所有 Generator/RootOutput 的基类句柄
+// 💡 DualThreadHandle：32 位压缩句柄（Index/Version/DTM ID）
+//     支持 ABA 防护、线程安全验证
+// 💡 IControl<TRealtime>：Dispose / Update / OnMessage 生命周期
+// 💡 IRealtime：Update 实时线程回调
+// 💡 Pipe：双线程双向通信（SendData / GetAvailableData）
+// 💡 AvailableData：类型擦除数据的迭代器模式
+// ⚡ 零 GC 命令缓冲区设计：
+//     - 所有跨线程数据通过 AvailableData.Element 链表传递
+//     - 使用 BurstRuntime.GetHashCode64 类型哈希做运行时类型匹配
+//     - ProcessorFunction/ControlFunction 枚举驱动 Job 调度
+// 📌 JobProducerType 集成 Unity Job System
+//     Burst 编译支持，native 直接调用
+// ============================================================
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;

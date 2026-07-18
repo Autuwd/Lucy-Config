@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 机器学习推理上下文 — 创建和管理ML算子的执行环境
+// 💡 CreateContext/DestroyContext管理原生ML上下文的生命周期
+// 💡 BuildIdentity/BuildConv/BuildReduce/BuildGemm在上下文中构建算子实例
+// 💡 每个算子类型有对应的Attributes结构体(IdentityAttributes/ConvAttributes等)
+// ⚡ 通过模板化的Native方法(MachineLearning_Bindings::BuildOperatorForContext<T>)实现
+// ====================================================================
+
 using System;
 using UnityEngine.Bindings;
 

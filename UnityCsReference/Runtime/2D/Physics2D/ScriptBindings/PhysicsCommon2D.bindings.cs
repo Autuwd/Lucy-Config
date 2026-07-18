@@ -6,6 +6,31 @@ using System;
 
 namespace UnityEngine
 {
+    //=============================================================================
+    // 🎯 PhysicsCommon2D —— 2D 物理核心枚举定义
+    //
+    // 设计说明:
+    //   定义 2D 物理系统的核心枚举类型，这些枚举在 Physics2D 的整个 API 中广泛使用。
+    //   必须与 C++ 侧的 2D 物理引擎枚举保持同步。
+    //
+    // 📌 SimulationMode2D（2D 物理模拟模式）:
+    //   FixedUpdate — 在 FixedUpdate 中更新（默认，与物理计时器同步）
+    //   Update      — 在 Update 中更新（帧率相关，适合非物理游戏）
+    //   Script      — 手动调用 Physics2D.Simulate() 控制（自定义步长）
+    //
+    // 📌 RigidbodyType2D（刚体类型）:
+    //   Dynamic    — 受力和碰撞影响（全物理模拟）
+    //   Kinematic  — 用户控制运动，影响其他物体（速度驱动）
+    //   Static     — 不受力影响，不可移动（性能最优）
+    //
+    // 📌 RigidbodyConstraints2D（刚体约束）:
+    //   标志位枚举，可组合约束 X/Y 轴位置和 Z 轴旋转。
+    //
+    // 📌 PhysicsMaterialCombine2D（物理材质组合模式）:
+    //   当两个碰撞体接触时，它们的物理材质属性（摩擦、弹性）
+    //   通过此模式组合: Average / Mean / Multiply / Minimum / Maximum
+    //=============================================================================
+
     public enum SimulationMode2D
     {
         FixedUpdate = 0,

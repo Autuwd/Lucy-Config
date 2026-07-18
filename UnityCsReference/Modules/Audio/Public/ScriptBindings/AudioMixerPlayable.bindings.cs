@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 AudioMixerPlayable —— PlayableGraph 集成音频混合
+//     将 AudioMixer 作为 Playable 节点接入 Timeline 系统
+// 💡 Create(graph, inputCount, normalizeInputVolumes)
+//     支持归一化输入音量（自动平衡多输入）
+// ⚡ 内部通过 CreateAudioMixerPlayableInternal 调用原生
+// 📌 IPlayable + IEquatable 实现，支持 Playable 隐式转换
+// ============================================================
 using System;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;

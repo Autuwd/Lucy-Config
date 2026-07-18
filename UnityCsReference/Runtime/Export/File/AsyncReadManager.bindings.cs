@@ -2,6 +2,27 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 AsyncReadManager — 异步文件读取管理器
+//
+// 📌 作用：
+//   Unity 底层的异步文件 I/O 系统，提供高性能的异步读取
+//   操作，支持线程安全、批量读取和压缩数据处理。
+//
+// 💡 核心功能：
+//   - ReadAsync：异步读取文件数据
+//   - ReadDecompressedAsync：异步读取并解压
+//   - QueueReadJobs：批量排队读取任务
+//   - GetComponentReadDemandStats：组件读取统计
+//   - RegisterReadCallback/UnregisterReadCallback：读写回调
+//   - TextDataContainsBytesWithNonAscii/NonPrintable：文本检查
+//   - 线程安全检查（IsCurrentThreadValidForRead/EnsureValidThread）
+//   - UpdateCompleteAllReadsNow：强制完成所有读取
+//
+// ⚠️ 涉及大量 unsafe 指针操作，用于底层资源加载管线。
+//   部分 API 是 Internal 级别，仅 Unity 内部使用。
+// ==============================================================
+
 using UnityEngine.Bindings;
 using System;
 using Unity.Collections;

@@ -10,6 +10,27 @@ using UnityEngine.Bindings;
 
 namespace UnityEngine
 {
+    //=============================================================================
+    // 📌 ApiRestrictions —— API 运行时访问控制
+    //
+    // 设计说明:
+    //   提供运行时 API 调用限制的 Push/Pop 机制，在特定生命周期内
+    //   临时禁用某些引擎 API（如 DestroyImmediate、SendMessage、AddComponent 等）。
+    //
+    // 🎯 两种限制范围:
+    //   GlobalRestrictions   — 全局级别限制（影响所有对象）
+    //     OBJECT_DESTROYIMMEDIATE — 禁止调用 DestroyImmediate()
+    //     OBJECT_SENDMESSAGE      — 禁止调用 SendMessage()
+    //     OBJECT_RENDERING        — 禁止渲染操作
+    //   ContextRestrictions  — 上下文级别限制（关联特定对象）
+    //     RENDERERSCENE_ADDREMOVE      — 禁止在场景中添加/移除 Renderer
+    //     OBJECT_ADDCOMPONENTTRANSFORM — 禁止添加 Transform 相关组件
+    //
+    // 💡 DisableApiScope / EnableApiScope:
+    //   using 块作用域风格的 RAII 封装。在 Dispose() 中自动恢复限制状态。
+    //   PushDisableApi 推入限制 → PopDisableApi 弹出恢复。
+    //=============================================================================
+
     [NativeHeader("Runtime/Scripting/ApiRestrictions.h")]
     [UsedByNativeCode]
     [ExtensionOfNativeClass]

@@ -2,6 +2,41 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 ScriptableRenderContext — SRP 渲染循环核心上下文
+//
+// 📌 作用：
+//   ScriptableRenderPipeline 中"记录 → 提交"渲染命令的核心对象。
+//   C++ 端的 ScriptableRenderContext 管理所有渲染命令队列。
+//
+// 🎯 SRP 渲染循环流程：
+//   1. SetupCameraProperties(camera) — 设置摄像机投影/视图矩阵等
+//   2. DrawRenderers(cullResults, drawSettings, filterSettings) — 记录绘制命令
+//   3. DrawShadows(shadowSettings) — 记录阴影绘制
+//   4. ExecuteCommandBuffer(cmd) — 执行 CommandBuffer 命令
+//   5. Submit() — 将所有记录的命令提交给渲染线程
+//   （在 URP/HDRP 中由 RenderPipeline.Render() 内部的 RenderPass 管理）
+//
+// 📌 渲染循环命令队列：
+//   所有 DrawRenderers/DrawShadows/ExecuteCommandBuffer 调用
+//   只是"记录命令"到上下文中，不会立即执行。
+//   直到 Submit() 被调用，才会提交给渲染线程统一处理。
+//
+// 📌 Render Pass API（Tile-based GPU 优化）：
+//   BeginRenderPass → BeginSubPass → EndSubPass → EndRenderPass
+//   在移动端（TBDR）将多个渲染操作合并到同一个 Render Pass 中，
+//   减少 Tile 数据的来回读写开销。
+//
+// 📌 RendererList（预计算渲染列表）：
+//   CreateRendererList_Internal → PrepareRendererListsAsync → 异步并行准备
+//   QueryRendererListStatus → 获取准备状态
+//   RendererList 允许跨帧重用渲染列表，减少每帧的筛选开销。
+//
+// ⚡ SRP Batcher 控制：
+//   PushDisableApiRenderers / PopDisableApiRenderers
+//   临时禁用特定的渲染器后端。
+// ==============================================================
+
 using UnityEngine.Bindings;
 using UnityEngine.Rendering;
 using System;

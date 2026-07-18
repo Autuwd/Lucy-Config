@@ -2,6 +2,23 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 ShaderKeywordSet — Shader 当前生效的关键字集合
+//
+// 📌 作用：
+//   记录一个 Shader 变体中所有已启用的关键字状态。
+//   在 CullingResults 中返回，用于确定每个物体的 Shader 变体。
+//
+// 💡 使用方式：
+//   - IsEnabled(ShaderKeyword/GlobalKeyword/LocalKeyword) — 检查关键字
+//   - Enable/Disable — 修改关键字状态
+//   - GetShaderKeywords() — 获取所有启用的关键字
+//
+// 📌 设计意图：
+//   ShaderKeywordSet 在渲染循环中用于判断当前 Draw Call
+//   使用哪个 Shader 变体，是 Shader 变体选择的运行时决策依据。
+// ==============================================================
+
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 using UnityEngine.Assertions;

@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 即时命令编码 — CommandBuffer核心实现，封装GPU命令序列的构建
+// 💡 与ScriptableRenderContext配合使用，实现自定义渲染管线
+// 💡 支持ConvertTexture、AsyncReadback、ProceduralDraw等高级命令
+// ⚡ ValidateAgainstExecutionFlags控制命令在Main/AsyncCompute队列的执行权限
+// 📌 通过RenderPipeline.Submit()提交到ScriptableRenderContext执行
+// ====================================================================
+
 using System;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;

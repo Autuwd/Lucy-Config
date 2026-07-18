@@ -2,6 +2,29 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 ShaderType / ShaderStage / ShaderStageFlags — Shader 类型与阶段枚举
+//
+// 📌 作用：
+//   描述 Shader 的整体类型（Graphics/Compute/RayTracing）
+//   以及渲染管线中各个 Shader 阶段（Vertex/Fragment/Hull/Domain/Geometry/Compute/RayTracing）。
+//
+// 📌 ShaderType（着色器类型）：
+//   Graphics    → 传统图形渲染 Shader
+//   Compute     → 通用计算 Shader
+//   RayTracing  → 光线追踪 Shader
+//
+// 📌 ShaderStage（渲染阶段）：
+//   Vertex → Fragment →（可选：Hull → Domain → Geometry）→ Compute → RayTracing
+//   GraphicsStageCount = Compute（前 6 个是图形阶段）
+//
+// 📌 ShaderStageFlags（位标记组合）：
+//   Basic       = Vertex | Fragment
+//   Tessellation = Hull | Domain
+//   Graphics    = Basic | Tessellation | Geometry
+//   Any         = 全部
+// ==============================================================
+
 using System;
 
 using UnityEngine.Bindings;

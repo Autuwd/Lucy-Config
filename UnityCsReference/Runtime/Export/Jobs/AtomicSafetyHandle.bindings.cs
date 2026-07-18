@@ -12,6 +12,37 @@ using System.Runtime.CompilerServices;
 
 namespace Unity.Collections.LowLevel.Unsafe
 {
+    //=============================================================================
+    // 🎯 AtomicSafetyHandle —— Job System 安全系统容器保护
+    //
+    // 设计说明:
+    //   AtomicSafetyHandle 是 Unity Job System 的安全验证核心。
+    //   每个 NativeContainer（NativeArray、NativeList 等）都关联一个
+    //   AtomicSafetyHandle，通过版本号（version）和读写权限检查来防止:
+    //
+    //   ⚠️ 竞态条件:
+    //     1. 多个 Job 同时写入同一个容器
+    //     2. 一个 Job 写入而另一个 Job 同时读取
+    //     3. 主线程访问已被 Job 持有的容器
+    //
+    //   ⚡ 版本号机制:
+    //     每个 SafetyHandle 维护一个 versionNode（版本号节点），
+    //     handle.version 记录期望的版本，C++ 侧 versionNode 记录实际版本。
+    //     每次 Schedule 时版本递增，执行权限检查时比较两者是否匹配:
+    //       versionNode 中位: Read=1, Write=2, Dispose=4
+    //       ReadCheck   = ~(Write | Dispose) — 写入/释放时不可读
+    //       WriteCheck  = ~(Read | Dispose)  — 读取/释放时不可写
+    //       DisposeCheck = ~(Read | Write)   — 读写时不可释放
+    //
+    //   📌 CheckReadAndThrow / CheckWriteAndThrow:
+    //     通过 ENABLE_UNITY_COLLECTIONS_CHECKS 条件编译的安全检查。
+    //     在 Editor 和 Development Build 中生效，Release 中完全移除（零开销）。
+    //
+    //   💡 二级版本号（Secondary Version）:
+    //     用于 NativeList 等动态容器: 修改 Length 时增二级版本，
+    //     使之前获得的 NativeArray 失效而 List 本身仍有效。
+    //=============================================================================
+
     public enum EnforceJobResult
     {
         AllJobsAlreadySynced = 0,

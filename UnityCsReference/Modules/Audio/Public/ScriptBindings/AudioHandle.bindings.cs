@@ -2,6 +2,15 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 AudioHandle —— 非安全句柄，带版本号的 DSP 节点引用
+//     用于 DSPGraph 中的节点标识与合法性校验
+// 💡 Version 字段实现 ABA 防护，检测悬空引用
+// 💡 Valid：m_Ptr != null && version 匹配
+// 💡 Alive：Valid 且 Id != InvalidId（节点已被提交）
+// ⚡ FlushNode() 将 Id 重置为 InvalidId 并递增版本号
+// 📌 内部 Node 结构体包含 Next/Id/Version/AllocationFlags
+// ============================================================
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine.Bindings;

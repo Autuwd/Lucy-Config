@@ -3,6 +3,16 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 
+// ============================================================
+// 🎯 DSPNodeUpdateRequest —— DSP 节点更新请求
+//     在 DSP 图处理中异步获取节点更新结果
+// 💡 Internal_GetUpdateJobData 获取更新 Job 数据指针
+// 💡 Internal_HasError 检查是否发生错误
+// 💡 Internal_GetDSPNode 获取更新的节点句柄
+// 💡 Internal_GetFence 获取完成信号 JobHandle
+// 💡 Internal_Dispose 释放更新请求
+// ⚡ 用于 DSPNode.Update 操作的异步结果追踪
+// ============================================================
 using System;
 using Unity.Jobs;
 using UnityEngine.Bindings;

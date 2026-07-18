@@ -3,6 +3,21 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 
+// ============================================================
+// 🎯 DSPCommandBlock —— DSP 命令缓冲区
+//     批量提交对 DSP 图的修改操作（原子化、零 GC）
+// 💡 支持的操作：
+//     - CreateDSPNode / ReleaseDSPNode 节点生命周期
+//     - SetFloat / AddFloatKey / SustainFloat 参数自动化
+//     - Connect / Disconnect / DisconnectByHandle 连接管理
+//     - SetAttenuation / AddAttenuationKey 衰减自动化
+//     - AddInletPort / AddOutletPort 端口管理
+//     - SetSampleProvider / InsertSampleProvider 采样供给器管理
+//     - UpdateAudioJob / CreateUpdateRequest 更新请求
+//     - Complete / Cancel 提交或取消命令块
+// ⚡ 零 GC 命令缓冲区设计：所有操作暂存后一次提交
+// 📌 通过 DSPGraph.CreateCommandBlock() 创建
+// ============================================================
 using System;
 using UnityEngine.Bindings;
 

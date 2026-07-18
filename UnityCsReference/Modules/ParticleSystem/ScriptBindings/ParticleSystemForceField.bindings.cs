@@ -2,6 +2,20 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 ParticleSystemForceField — 粒子系统力场
+//
+// 📌 作用：
+//   为粒子系统（ParticleSystem）添加外部力场影响。
+//   支持方向力、涡流、噪声等模式，用 MinMaxCurve 控制强度。
+//
+// 💡 核心类型：
+//   - ParticleSystemForceFieldShape：形状（Sphere/Hemisphere/Cylinder/Box/Donut）
+//   - 强度通过 MinMaxCurve 设定，支持随机范围
+//
+// ⚡ 适用：风场、引力场、涡旋、爆炸冲击波等环境效果。
+// ==============================================================
+
 using UnityEngine.Bindings;
 using MinMaxCurve = UnityEngine.ParticleSystem.MinMaxCurve;
 using MinMaxCurveBlittable = UnityEngine.ParticleSystem.MinMaxCurveBlittable;

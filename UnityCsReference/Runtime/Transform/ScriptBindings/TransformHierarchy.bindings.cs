@@ -8,6 +8,26 @@ using UnityEngine.Jobs;
 
 namespace UnityEngine
 {
+    //=============================================================================
+    // 📌 TransformHierarchy —— Transform 层级结构原生绑定
+    //
+    // 设计说明:
+    //   TransformHierarchy 是 C# 侧访问原生 Transform 层级树的内部接口。
+    //   它通过 P/Invoke 直接调用 C++ TransformHierarchyBindings 上的静态方法，
+    //   提供层级遍历（GetParentIndex、GetChildCount、GetChildEntities）和
+    //   结构变更（CreateHierarchy、SetParent）能力。
+    //
+    // 🎯 线程安全说明:
+    //   遍历方法标记了 IsThreadSafe = true，因为:
+    //   1. 这些函数只读取层级数组（parentIndices、childIndices 等）
+    //   2. 结构变更（SetParent、DetachChildren）会在修改层级前等待所有 Job 完成
+    //   3. AtomicSafetyHandle 保证并发读写不受冲突
+    //
+    // ⚠️ 限制:
+    //   当前尚不支持在子线程安全地遍历含 GameObject 的层级（DOTS-10269）。
+    //   纯 Entity 层级（无 GameObject 包装）可在 Job 中安全遍历。
+    //=============================================================================
+
     internal struct TransformHierarchy
     {
         [FreeFunction("TransformHierarchyBindings::SetUpdateTransformUnionsCallback", HasExplicitThis = false)]

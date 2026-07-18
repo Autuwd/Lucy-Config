@@ -2,6 +2,15 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 ML算子定义 — 机器学习算子类型枚举与输入/输出张量绑定
+// 💡 MachineLearningOperatorType支持Identity/Gemm/Conv/ReLU及多种Reduce算子
+// 💡 AddInputTensor/AddOutputTensor管理算子的输入输出张量连接
+// 💡 Dispatch执行ML算子的GPU计算
+// 💡 MachineLearningOperatorAttributes定义各算子的参数结构(Strides/Pads/Axis等)
+// ⚡ C++端枚举需保持同步(参见MachineLearningOperatorAttributes.h)
+// ====================================================================
+
 using System;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;

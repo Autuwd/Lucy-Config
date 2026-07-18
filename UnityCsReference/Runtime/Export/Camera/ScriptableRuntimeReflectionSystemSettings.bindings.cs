@@ -7,6 +7,23 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine.Experimental.Rendering
 {
+    //=============================================================================
+    // 🎯 ScriptableRuntimeReflectionSystemSettings —— 可编程运行时反射系统设置
+    //
+    // 设计说明:
+    //   允许用户替换 Unity 内置的实时反射探针更新系统（BuiltinRuntimeReflectionSystem）
+    //   为自定义实现，提供更灵活的反射探针更新策略（如按需更新、LOD 更新等）。
+    //
+    // 💡 system 属性:
+    //   设置时自动释放旧的系统实例，仅允许一个活跃系统。
+    //   如果新系统与 BuiltinRuntimeReflectionSystem 不同且已有非内置系统，
+    //   会发出警告提示多次分配。
+    //
+    // 📌 默认行为:
+    //   Domain Reload 后自动设置为 BuiltinRuntimeReflectionSystem。
+    //   Addressables 等资源管理系统可以通过此接口接管反射探针更新。
+    //=============================================================================
+
     [RequiredByNativeCode]
     [NativeHeader("Runtime/Camera/ScriptableRuntimeReflectionSystem.h")]
     public static class ScriptableRuntimeReflectionSystemSettings

@@ -2,6 +2,38 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 Camera — 相机渲染管线入口
+//
+// 📌 作用：
+//   控制场景的渲染视角和输出目标。Camera 是渲染管线的核心入口，
+//   定义了视口、投影、渲染路径、剔除掩码等所有渲染参数。
+//   每个 Camera 在 C++ 端对应一个 CameraState，SRP 中通过
+//   SetupCameraProperties 将状态推送到 GPU。
+//
+// 💡 渲染生命周期（C++ 回调顺序）：
+//   onPreCull → OnPreCull → Culling → onPreRender → OnPreRender
+//   → RenderLoop → onPostRender → OnPostRender → OnRenderImage
+//
+// 💡 渲染路径：
+//   - Forward: 前向渲染（简单场景）
+//   - Deferred: 延迟渲染（多光源场景）
+//   - Vertex: 顶点级渲染（已废弃）
+//
+// ⚡ CullingType 与 sceneCamera:
+//   - Camera 本身不负责剔除，剔除由 CullingGroup 管理
+//   - sceneCamera 标志用于编辑器相机（不参与构建）
+//   - cameraType 区分 Game/VR/Preview 等场景
+//
+// 📌 重要属性：
+//   fieldOfView、nearClipPlane、farClipPlane — 投影裁剪
+//   cullingMask、renderingPath、targetTexture — 输出控制
+//   worldToCameraMatrix、projectionMatrix — 变换矩阵
+//
+// ⚡ SRP 集成：
+//   ScriptableRenderContext 接管渲染后，Camera 仍然是配置输入
+//   源，但绘制命令完全由 RenderPipeline 控制。
+// ==============================================================
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -19,6 +51,47 @@ using ComputeQueueType = UnityEngine.Rendering.ComputeQueueType;
 
 namespace UnityEngine
 {
+    //=============================================================================
+    // 🎯 Camera —— 相机
+    //
+    // 设计说明:
+    //   Camera 是 Unity 渲染管线的核心入口。每帧渲染时，引擎按 depth 从小到大排序
+    //   所有活跃相机，逐个执行: 剔除(Culling) → 渲染(Render) → 后处理(PostProcess)。
+    //
+    // 📌 渲染管线钩子:
+    //   CullingType 决定相机使用的剔除方式:
+    //     CameraCullingType.Frustum — 标准视锥体剔除
+    //     CameraCullingType.Sphere — 球体剔除（反射探针等）
+    //   renderType 决定相机的渲染用途:
+    //     Game / SceneView / Preview / VR / Reflection
+    //   sceneCameraFlag 标记该相机是否为编辑器场景视图相机:
+    //     场景相机不会触发 MonoBehaviour 的 OnWillRenderObject 等事件
+    //
+    // 💡 Camera 渲染生命周期:
+    //   1. onPreCull (静态事件)  — 剔除前回调
+    //   2. OnPreCull             — 剔除前消息
+    //   3. 视锥体裁剪 + 遮挡剔除
+    //   4. onPreRender (静态事件) — 渲染前回调
+    //   5. OnPreRender           — 渲染前消息
+    //   6. 不透明几何体渲染 (Front→Back)
+    //   7. 天空盒
+    //   8. 透明几何体渲染 (Back→Front)
+    //   9. onPostRender (静态事件) — 渲染后回调
+    //   10. OnPostRender          — 渲染后消息
+    //   11. OnRenderImage          — 图像后处理效果
+    //   12. OnRenderObject         — 自定义渲染
+    //
+    // ⚡ SRP 兼容性:
+    //   AddCommandBuffer / RemoveCommandBuffer 等内置管线 API
+    //   在 SRP 下会发出警告。SRP 应使用 RenderPipelineManager 的
+    //   事件（beginCameraRendering、endCameraRendering）替代。
+    //
+    // ⚠️ 物理相机（usePhysicalProperties）:
+    //   启用后使用真实相机参数: iso / shutterSpeed / aperture /
+    //   focalLength / sensorSize / bladeCount 等，
+    //   产生真实的曝光和景深效果。
+    //=============================================================================
+
     [NativeHeader("Runtime/Camera/Camera.h")]
     [NativeHeader("Runtime/Camera/RenderManager.h")]
     [NativeHeader("Runtime/GfxDevice/GfxDeviceTypes.h")]

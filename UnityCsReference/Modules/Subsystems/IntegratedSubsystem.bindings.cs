@@ -2,6 +2,18 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 IntegratedSubsystem —— 集成子系统的抽象基类
+//     作为 AR/VR 等原生子系统的托管端抽象
+// 💡 ISubsystem 接口：Start / Stop / Destroy 生命周期
+// 💡 IntegratedSubsystem<TSubsystemDescriptor> 泛型变体
+//     通过 subsystemDescriptor 属性获取描述符
+// 💡 valid：检查 m_Ptr 非空
+// 💡 running：valid && IsRunning()
+// ⚡ Destroy 通过 SubsystemManager.RemoveIntegratedSubsystemByPtr
+//     先清理托管引用，再销毁原生对象
+// 📌 BindingsMarshaller 提供 Ptr 转换
+// ============================================================
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine.Bindings;

@@ -2,6 +2,15 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 ML张量数据结构 — 张量形状、数据类型与描述符定义
+// 💡 MachineLearningTensorShape支持最高8维张量(D0-D7)的形状描述
+// 💡 MachineLearningDataType定义Float32/Float16/UInt32/Int32等数据类型
+// 💡 MachineLearningTensorDescriptor包含数据类型、形状和名称
+// 💡 MachineLearningTensor是原生张量的C#包装，支持创建/销毁/读写
+// ⚡ 张量数据通过Map/Unmap实现CPU端读写访问
+// ====================================================================
+
 using System;
 using UnityEngine.Bindings;
 using System.Runtime.InteropServices;

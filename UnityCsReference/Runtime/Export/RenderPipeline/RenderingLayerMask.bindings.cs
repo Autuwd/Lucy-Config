@@ -2,6 +2,30 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 RenderingLayerMask — 渲染层遮罩（32 位位掩码）
+//
+// 📌 作用：
+//   在 LayerMask（GameObject 层级）之外的第二个筛选层，
+//   专门用于渲染管线的细粒度控制。
+//
+// 📌 LayerMask vs RenderingLayerMask：
+//   LayerMask：决定 GameObject 是否被摄像机看到（物理/渲染公共层）
+//   RenderingLayerMask：在渲染管线中进一步筛选（仅渲染层）
+//
+// 💡 典型应用：
+//   1. 延迟渲染中不同物体的 Decal 接收控制
+//   2. 特定光源只照亮某些 RenderingLayer
+//   3. 后处理效果只应用到特定层级的物体
+//   4. SRP 中通过 FilteringSettings.renderingLayerMask 控制
+//
+// 📌 操作方式：
+//   - RenderingLayerToName / NameToRenderingLayer — 层名转换
+//   - GetMask("Layer1", "Layer2") — 从名称构造遮罩
+//   - GetDefinedRenderingLayerCount / GetDefinedRenderingLayerNames — 枚举
+//   - 默认值 = 1（仅最低位）
+// ==============================================================
+
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine.Bindings;

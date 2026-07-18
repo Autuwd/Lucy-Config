@@ -2,6 +2,23 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 File — 文件 I/O 工具
+//
+// 📌 作用：
+//   提供 Unity 内部的线程 I/O 限制管理工具，
+//   用于检测和防止从非主线程执行文件操作。
+//
+// 💡 核心类型：
+//   - ThreadIORestrictionMode：线程 IO 限制模式（Allowed/TreatAsError）
+//   - ThreadIORestrictionUtility：线程限制检测工具
+//   - FileHelper：文件帮助类（路径规范化/模式匹配）
+//   - ReadAllBytesWithRetry：带重试的读取
+//   - UnityIOUtility：IO 工具（合法性检查/文件名清理）
+//
+// ⚠️ Internal 级别，用于 Unity 编辑器和运行时内部使用。
+// ==============================================================
+
 using UnityEngine.Bindings;
 
 namespace UnityEngine.IO

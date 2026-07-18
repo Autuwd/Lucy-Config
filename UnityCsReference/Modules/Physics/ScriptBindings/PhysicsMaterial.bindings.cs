@@ -2,6 +2,23 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 PhysicsMaterial — 物理材质
+//
+// 📌 作用：
+//   定义碰撞表面的物理属性（摩擦力和弹性），控制物体间的
+//   交互行为。对应 PhysX 的 PxMaterial。
+//
+// 💡 核心属性：
+//   - dynamicFriction/staticFriction：动/静摩擦系数
+//   - bounciness：弹性系数（0~1）
+//   - frictionCombine/bounceCombine：合并模式
+//
+// 📌 PhysicsMaterialCombine：
+//   Average(平均) / Minimum(取小) / Maximum(取大) / Multiply(相乘)
+//   决定两个材质接触时如何合并属性值。
+// ==============================================================
+
 using UnityEngine.Bindings;
 
 namespace UnityEngine

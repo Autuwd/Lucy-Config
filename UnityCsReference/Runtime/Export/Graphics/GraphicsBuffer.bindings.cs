@@ -2,6 +2,13 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 GPU缓冲区核心抽象 — ComputeBuffer与GraphicsBuffer的统一底层封装
+// 💡 C#的ComputeBuffer和GraphicsBuffer共享同一个C++实现对象(GraphicsBuffer)
+// ⚡ 支持Target: Structured/Raw/Append/Counter/IndirectArguments等计算用途
+// 📌 IndirectDrawArgs/IndirectDrawIndexedArgs用于GPU间接绘制调用
+// ====================================================================
+
 using System;
 using System.Runtime.InteropServices;
 using System.Diagnostics;

@@ -2,6 +2,32 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 ComputeShader — GPU 通用计算着色器
+//
+// 📌 作用：
+//   在 GPU 上执行大规模并行计算任务（非图形渲染）。
+//   常用于粒子模拟、后处理、物理计算、蒙皮/BlendShape 等。
+//
+// 💡 核心流程：
+//   1. FindKernel("CSMain") — 获取内核索引
+//   2. SetFloat/SetInt/SetTexture/SetBuffer — 设置参数
+//   3. Dispatch(kernel, groupsX, groupsY, groupsZ) — 启动计算
+//
+// 📌 Dispatch 参数含义：
+//   threadGroupsX/Y/Z = 线程组数量
+//   每个线程组大小在 HLSL 中用 [numthreads(X,Y,Z)] 定义
+//   总线程数 = threadGroups × numthreads
+//
+// ⚡ 常量缓冲区（SetConstantBuffer）：
+//   通过 Constant Buffer 传递数据比 SetFloat 逐个设置更高效。
+//   适合 Camera 参数、光照数据等低频变化数据。
+//
+// 💡 支持 Indirect Dispatch：
+//   DispatchIndirect 由 GPU 决定启动多少线程组，
+//   参数从 ComputeBuffer 中读取，实现 GPU 驱动的渲染管线。
+// ==============================================================
+
 using System;
 using System.Collections.Generic;
 using UnityEngine.Bindings;

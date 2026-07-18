@@ -2,6 +2,15 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 Vulkan设备过滤列表 — 按GPU品牌/Android版本/Vulkan API版本过滤配置
+// 💡 VulkanDeviceFilterData支持vendorName/deviceName/brandName/productName等字段
+// 💡 VulkanGraphicsJobsDeviceFilterData为匹配设备指定GraphicsJobs模式
+// 💡 VulkanDeviceFilterUtils提供版本号正则校验与错误信息生成
+// 💡 VulkanDeviceFilterList/GraphicsJobsFilterList管理过滤规则集合
+// ⚡ 版本号格式: "Major.Minor.Patch" 或 0x开头的十六进制
+// ====================================================================
+
 using System;
 using System.Text.RegularExpressions;
 using UnityEngine.Bindings;

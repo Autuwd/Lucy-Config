@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 渲染器组件绑定 — Renderer核心属性与静态批处理/光照贴图API
+// 💡 封装Renderer的bounds、lightmapIndex、shadowCastingMode等关键属性
+// 💡 StaticBatchRoot、LightmapParameters等控制静态合并与光照系统
+// ⚡ RayTracingMode枚举暂在Experimental命名空间，未来迁移至Rendering
+// 📌 内部的SetStaticLightmapST/SetDynamicLightmapST设置光照贴图ST变换
+// ====================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;

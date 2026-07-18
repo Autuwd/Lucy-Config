@@ -2,6 +2,24 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 Joint — 关节基类
+//
+// 📌 作用：
+//   所有关节组件（FixedJoint/HingeJoint/SpringJoint/ConfigurableJoint/CharacterJoint）
+//   的基类，定义通用的关节属性和行为。底层对应 PhysX 的 PxJoint。
+//
+// 💡 核心属性：
+//   - connectedBody：连接的刚体（null=连接到世界固定点）
+//   - anchor/connectedAnchor：关节锚点（局部坐标）
+//   - axis：关节轴方向
+//   - breakForce/breakTorque：断开力/扭矩阈值（Infinity=永不）
+//   - enableCollision：连接物体间是否碰撞
+//   - enablePreprocessing：关节预处理（提高稳定性）
+//   - massScale/connectedMassScale：质量缩放（调整力的分配）
+//   - currentForce/currentTorque：当前约束力（只读）
+// ==============================================================
+
 using UnityEngine.Bindings;
 
 namespace UnityEngine

@@ -2,6 +2,15 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 AudioRandomContainer —— 音频随机容器
+//     定义一组 AudioContainerElement 的随机/顺序播放规则
+// 💡 支持 Sequential / Shuffle / Random 三种播放模式
+// 💡 支持音量、音高随机化范围（volumeRandomizationRange）
+// 💡 自动触发模式：Pulse（脉冲）/ Offset（偏移）
+// 💡 循环模式：Infinite / Clips / Cycles
+// 📌 实现 IAudioGenerator 接口，可作为生成器使用
+// ============================================================
 using System;
 using UnityEngine;
 using UnityEngine.Bindings;

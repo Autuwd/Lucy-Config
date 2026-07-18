@@ -2,6 +2,26 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 RayTracingShader — 光线追踪着色器
+//
+// 📌 作用：
+//   在支持 DXR（DirectX Raytracing）的 GPU 上执行光线追踪。
+//   包含 Ray Generation、Closest Hit、Any Hit、Miss、Intersection 等 Shader。
+//
+// 💡 核心操作：
+//   - Dispatch(rayGenFunc, w, h, d, camera) — 启动 Ray Tracing
+//   - SetAccelerationStructure — 绑定加速结构（BVH）
+//   - SetShaderPass — 指定要使用的 Shader Pass
+//
+// 📌 参数传递方式：
+//   与 ComputeShader 类似，支持 SetFloat/SetInt/SetTexture/SetBuffer
+//   同时支持 ConstantBuffer 批量传递参数以提升性能。
+//
+// ⚡ 关键字支持：
+//   支持 LocalKeyword 进行关键字变体切换，机制同 ComputeShader。
+// ==============================================================
+
 using UnityEngine.Bindings;
 using UnityEngine.Scripting.APIUpdating;
 

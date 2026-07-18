@@ -2,6 +2,15 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 AudioClipPlayable —— Playable 音频时间控制
+//     在 PlayableGraph 中驱动 AudioClip 的回放
+// 💡 Create(graph, clip, looping) 创建时可设置循环
+// 💡 Seek(startTime, startDelay, duration) 支持精确定位
+// 💡 GetClip / GetLooped / GetVolume / GetStereoPan 等属性
+// ⚡ PauseDelay 机制：利用延迟实现精确的节拍同步
+// 📌 音量范围 [0,1]，立体声范围 [-1,1], SpatialBlend 范围 [0,1]
+// ============================================================
 using System;
 using System.ComponentModel;
 using UnityEngine.Bindings;

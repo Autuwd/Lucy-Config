@@ -2,6 +2,16 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 AudioSampleProvider —— 实时音频采样供给器
+//     提供音频采样数据从 C++ 到 C# 的桥梁
+//     用于自定义解码器、程序化音频生成等场景
+// 💡 ConsumeSampleFrames：C# 侧消耗采样帧
+// 💡 sampleFramesAvailable / sampleFramesOverflow 委托事件
+// 💡 支持 Native 函数指针直接调用（避免托管开销）
+// ⚡ 线程安全：InternalGetConsumeSampleFramesNativeFunctionPtr
+// 📌 IDisposable 模式，析构时自动清理原生资源
+// ============================================================
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;

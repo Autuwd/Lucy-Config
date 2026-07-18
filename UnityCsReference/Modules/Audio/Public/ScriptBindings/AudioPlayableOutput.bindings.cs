@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 AudioPlayableOutput —— PlayableGraph 的音频输出节点
+//     将 PlayableGraph 的音频数据路由到 AudioSource
+// 💡 Create(graph, name, target) 指定目标 AudioSource
+// 💡 EvaluateOnSeek 控制 Seek 时是否重新评估 DSP
+// ⚡ 每次 Evaluate() 触发 DSP 管线处理
+// 📌 IPlayableOutput 结构体，支持隐式转换为 PlayableOutput
+// ============================================================
 using System;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;

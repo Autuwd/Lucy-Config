@@ -2,6 +2,12 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 SampleProviderBindings —— 采样供给器原生绑定
+//     CreateGeneratorHeader 创建 SampleProvider 生成器头部
+// 💡 支持嵌套配置（nestedConfiguration）
+// 📌 底层方法，供其他 Generator/Processor 使用
+// ============================================================
 using System;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine.Bindings;

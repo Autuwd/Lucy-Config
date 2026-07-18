@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 GPU API验证层 — D3D12/Vulkan调试层的错误查询与抑制
+// 💡 仅在Windows平台启用(NativeConditional)，其他平台IsValidationSupported=false
+// 💡 ClearValidationErrors/GetValidationErrorCount管理验证错误缓冲区
+// 💡 SetValidationErrorLoggingSuppressed控制日志输出抑制
+// ⚡ 使用NativeConditional("(PLATFORM_WIN || PLATFORM_WINRT) && !PLATFORM_GAMECORE")
+// ====================================================================
+
 using UnityEngine.Bindings;
 
 namespace UnityEngine.Rendering

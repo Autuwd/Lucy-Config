@@ -2,6 +2,29 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 SerializationBackendManagedCommands — 序列化后端托管命令
+//
+// 📌 作用：
+//   提供 C# 侧向 C++ 序列化后端发送命令的桥梁。
+//   通过封装命令缓冲区（CommandBuffer），支持批量执行
+//   内存传输、类型注册、资源反序列化等操作。
+//
+// 💡 核心类型：
+//   - SerializationManagedCommand：命令基类
+//   - TransferBinaryCommand：二进制数据传输命令
+//   - AcquireCommand：获取序列化状态命令
+//   - ReleaseCommand：释放序列化状态命令
+//   - GetSerializedTypeFromReferencedType：从引用类型获取序列化类型
+//   - ManagedObjectCreationData：托管对象创建数据
+//   - ObjectCreationCommand：对象创建命令
+//   - CompleteObjectCreationCommand：完成对象创建命令
+//   - GetResourceForTypeCommand：获取类型资源命令
+//
+// ⚠️ 这是一个 5000+ 行的大型文件，涉及 Unity 序列化管线的
+//   底层实现。包括 Resource 和 Record 两种序列化上下文。
+// ==============================================================
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;

@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 图形格式转换工具 — TextureFormat/RenderTextureFormat与GraphicsFormat互转
+// 💡 GraphicsFormat是Unity内部的统一像素格式表示，跨平台抽象
+// 💡 线程安全的FreeFunction用于格式查询，访问GraphicsCaps的需非线程安全
+// ⚡ 交换链格式(SwapChainFormat)在HDR/非HDR下返回不同结果
+// 📌 支持SRGB/Native/RGB565等格式的特殊路由处理
+// ====================================================================
+
 using System;
 using UnityEngine.Bindings;
 using UnityEngine.Rendering;

@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 GPU同步围栏 — 跨队列GPU同步与CPU端完成状态查询
+// 💡 GraphicsFenceType.CPUSynchronisation: CPU轮询GPU是否越过围栏
+// 💡 GraphicsFenceType.AsyncQueueSynchronisation: 主线程与异步计算队列同步
+// ⚡ 需SystemInfo.supportsGraphicsFence平台支持
+// 📌 通过Graphics.CreateGraphicsFence()或CommandBuffer.CreateGraphicsFence()创建
+// ====================================================================
+
 using System;
 using System.Collections.Generic;
 using ShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode;

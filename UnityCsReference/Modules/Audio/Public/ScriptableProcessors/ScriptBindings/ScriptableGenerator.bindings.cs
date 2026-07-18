@@ -2,6 +2,18 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 ScriptableGenerator —— 可脚本化音频生成器
+//     IAudioGenerator 接口：MonoBehaviour/ScriptableObject 上的工厂
+//     GeneratorInstance：Burst 编译的实时音频生成实例
+// 💡 ICapabilities：isFinite / isRealtime / length 声明能力
+// 💡 IControl<TRealtime>：Configure 配置采样率和声道数
+// 💡 IRealtime：Process 产生音频帧到 ChannelBuffer
+// ⚡ 双线程架构：Control（主线程） + Realtime（音频线程）
+//     JobProducerType 集成 Unity Job System 调度
+// 📌 支持嵌套生成器（nestedFormat）供 Processor 内部使用
+// 💡 IAudioGenerator.Serializable 帮助序列化接口引用
+// ============================================================
 using System;
 using System.ComponentModel;
 using Unity.Burst;

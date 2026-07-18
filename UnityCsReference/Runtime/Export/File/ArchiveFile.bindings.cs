@@ -2,6 +2,24 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 ArchiveFile — 归档文件（AssetBundle/Unity 归档）
+//
+// 📌 作用：
+//   管理和操作 Unity 的归档文件系统（Archive），封装底层
+//   的压缩/解压、文件索引和读取操作。
+//
+// 💡 核心类型：
+//   - ArchiveStatus：归档状态枚举（Pending/InProgress/Success/Error/Cancelled）
+//   - ArchiveInfo：归档文件信息结构
+//   - ArchiveFileInterface：底层文件接口
+//   - CompressedBlockSize：压缩块大小结构
+//   - AsyncReadIntoArchiveJob：异步读取归档作业
+//   - ReadCommand/ReadHandle：异步读取命令和处理
+//
+// ⚡ 用于 Addressables、AssetBundle 等资源管理系统。
+// ==============================================================
+
 using System;
 using Unity.Content;
 using Unity.Jobs;

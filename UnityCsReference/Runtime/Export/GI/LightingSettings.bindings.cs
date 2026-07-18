@@ -2,6 +2,34 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 LightingSettings — 光照设置
+//
+// 📌 作用：
+//   光照贴图烘焙的完整配置集合，控制场景光照烘焙的
+//   所有参数。取代旧版 LightmapEditorSettings。
+//
+// 💡 核心配置分类：
+//   - Lightmapper：烘焙器类型（ProgressiveCPU/ProgressiveGPU/Enlighten）
+//   - Direct Samples/Indirect Samples/Environment Samples：采样数
+//   - Max Bounces：最大反弹次数
+//   - Lightmap Resolution：光照贴图分辨率
+//   - Lightmap Padding：贴图间距
+//   - Lightmap Size：贴图尺寸（最大 4096）
+//   - Lightmap Directional Mode：方向性模式
+//   - Ambient Occlusion：AO 参数
+//   - Filtering：滤波设置
+//   - Realtime GI：实时 GI 开关和参数
+//   - Mixed Lighting：混合光照模式
+//   - Adaptive Resolution：自适应分辨率
+//   - Light Probe 相关设置
+//
+// 📌 核心枚举：
+//   LightmapperUtils.LightmapperBackend：ProgressiveCPU(0)/ProgressiveGPU(1)/Enlighten(2)
+//   LightmapsMode：NonDirectional(0)/CombinedDirectionalSpecular(1)
+//   MixedLightingMode：IndirectOnly(0)/Subtractive(1)/Shadowmask(2)
+// ==============================================================
+
 using System;
 using UnityEngine;
 using UnityEngine.Bindings;

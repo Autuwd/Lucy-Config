@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 RP全局设置 — RenderPipelineGlobalSettings的注册、遍历与变更通知
+// 💡 Subscribe/Unsubscribe提供IRenderPipelineGraphicsSettings的变更事件
+// 💡 ForEach枚举当前RP的所有全局设置实例
+// 💡 Native方法负责渲染管线的注册/注销管理
+// ⚡ 使用PropertyHelper实现泛型事件分发
+// ====================================================================
+
 using System;
 using UnityEngine.Bindings;
 using UnityEngine.Events;

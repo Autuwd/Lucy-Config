@@ -7,6 +7,34 @@ using UnityEngine.Scripting;
 
 namespace Unity.Collections
 {
+    //=============================================================================
+    // 🎯 NativeCollectionEnums —— 原生集合核心枚举
+    //
+    // 设计说明:
+    //   定义了 Unity 原生集合（NativeContainer）系统的三大核心枚举:
+    //
+    //   📌 Allocator（分配器类型）:
+    //     Invalid = 0     — 默认值，确保 new NativeArray\<T\>() 产生无效分配
+    //     None            — 无分配
+    //     Temp            — 临时分配（单帧内使用，自动回收）
+    //     TempJob         — 作业级分配（4 帧内自动回收）
+    //     Persistent      — 持久分配（手动 Dispose）
+    //     AudioKernel     — 音频内核专用
+    //     Domain          — Domain 级别
+    //     FirstUserIndex  — 用户自定义分配器起始索引
+    //
+    //   📌 NativeLeakDetectionMode（泄漏检测模式）:
+    //     控制对未 Dispose 的 NativeContainer 的检测行为
+    //
+    //   📌 LeakCategory（泄漏分类）:
+    //     用于内存泄漏追踪，按子系统区分（内部使用）
+    //
+    // 💡 枚举值必须与 C++ 侧的对应头文件严格同步:
+    //     Runtime/Export/Collections/NativeCollectionAllocator.h
+    //     Runtime/Export/Collections/NativeCollectionLeakDetectionMode.h
+    //     Runtime/Export/Collections/NativeCollectionLeakCategory.h
+    //=============================================================================
+
     [UsedByNativeCode]
     public enum Allocator
     {

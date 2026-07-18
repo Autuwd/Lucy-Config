@@ -2,6 +2,41 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 RendererList — 预计算渲染对象列表
+//
+// 📌 作用：
+//   根据 CullingResults + DrawingSettings + FilteringSettings
+//   预计算出需要渲染的物体列表，支持跨帧重用。
+//
+// 💡 核心流程：
+//   CullingResults（裁剪结果）
+//   → FilterResults（根据 Layer / RenderQueue / RenderingLayerMask 筛选）
+//   → RendererList（渲染列表，异步准备）
+//   → DrawRendererList（执行绘制）
+//
+// ⚡ 性能优势：
+//   传统流程每帧都做筛选开销大。
+//   RendererList 将筛选结果缓存，异步并行准备（PrepareRendererListsAsync），
+//   后续帧中只需提交即可，减少每帧 CPU 开销。
+//
+// 📌 RendererListParams（底层参数结构）：
+//   cullingResults — 裁剪结果
+//   drawSettings — 绘制设置（SortingCriteria、PerObjectData）
+//   filteringSettings — 筛选设置（RenderQueue、LayerMask、RenderingLayerMask）
+//   tagValues / stateBlocks — Shader Tag 和 RenderState 覆盖数组
+//
+// 📌 RendererListDesc（高层便捷构造器，RendererUtils 命名空间）：
+//   提供更友好的构造方式，通过 ConvertToParameters 转为底层参数。
+//   支持 passName（单个）/ passNames（多个）两种方式指定 Shader Pass。
+//   支持 overrideShader / overrideMaterial / stateBlock 等高级选项。
+//
+// 📌 FilterResults 的作用：
+//   CullingResults 包含所有可见物体，
+//   FilterResults 根据 Layer/RenderQueue/RenderingLayerMask 筛选出子集，
+//   RendererList 封装这个子集供 DrawRenderers 使用。
+// ==============================================================
+
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine.Scripting;

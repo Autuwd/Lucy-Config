@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 图形组件集 — OcclusionPortal/OcclusionArea/Flare等基础图形组件绑定
+// 💡 OcclusionPortal控制遮挡剔除门的开关状态
+// 💡 OcclusionArea定义遮挡区域中心与大小
+// 💡 Flare是镜头光晕资源，含多元素(Fallback/FlareElement)定义
+// ⚡ 这些组件直接映射到C++原生实现
+// ====================================================================
+
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 using UnityEngine.Rendering;

@@ -2,6 +2,30 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 ArticulationBody — 多关节链（机器人/机械臂）
+//
+// 📌 作用：
+//   ArticulationBody 是 Unity 的 Dof（自由度）关节链系统。
+//   不同于普通 Joint（约束一个物体到另一个），ArticulationBody
+//   将多个刚体链接成树状结构，每个关节有特定自由度和驱动力。
+//
+// 💡 核心概念：
+//   - dofCount：自由度数量（1~3），决定关节可运动方向
+//   - ArticulationJointType：Fixed/Prismatic/Revolute/Spherical
+//   - ArticulationDrive：刚度/阻尼/力限/目标/目标速度
+//   - ArticulationReducedSpace：缩减空间坐标（1~3个值）
+//   - ArticulationJacobian：雅可比矩阵（正向/逆向运动学）
+//
+// ⚡ 适用场景：机械臂、机器人、多段爪子、车辆悬挂等需链式传动的物体。
+//
+// 📌 关键特性：
+//   - isRoot：判断是否是关节链的根节点
+//   - GetJointForces / GetJointPositions / SetJointTargets：批处理操作
+//   - TeleportRoot：瞬移根节点（保持关节链结构完整）
+//   - SnapAnchorToClosestContact：智能锚点对齐
+// ==============================================================
+
 using System;
 using UnityEngine.Bindings;
 using System.Runtime.InteropServices;

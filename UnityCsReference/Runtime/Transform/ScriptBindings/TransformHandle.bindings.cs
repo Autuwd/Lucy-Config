@@ -11,6 +11,30 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine
 {
+    //=============================================================================
+    // 📌 TransformHandle —— Transform 轻量句柄（ECS 兼容）
+    //
+    // 设计说明:
+    //   TransformHandle 是 Transform 组件的轻量级值类型句柄，用于 ECS 环境中
+    //   无需 GameObject/MonoBehaviour 包装即可操作 Transform 数据。
+    //   它包含指向原生 TransformData 的指针和 EntityId，支持层级遍历。
+    //
+    // 🎯 与 Transform 的区别:
+    //   Transform       — 需要 GameObject 包装，只能在主线程使用
+    //   TransformHandle — 纯值类型，可在 Job/Burst 中使用，零 GC
+    //   TransformAccess — Job 中通过 TransformAccessArray 获得的安全访问
+    //
+    // 💡 层级遍历:
+    //   DirectChildren: 直接子节点迭代器（仅一级）
+    //   Subhierarchy:   完整子树迭代器（深度优先）带版本检查，
+    //     遍历期间修改层级会抛出 InvalidOperationException
+    //
+    // ⚠️ 验证机制:
+    //   所有属性/方法都会调用 AssertHandleIsValid() 检查:
+    //   - EntityId.None → NullReferenceException（未初始化）
+    //   - 版本不匹配   → MissingReferenceException（对象已销毁）
+    //=============================================================================
+
     [StructLayout(LayoutKind.Sequential)]
     [UsedByNativeCode]
     [Serializable]

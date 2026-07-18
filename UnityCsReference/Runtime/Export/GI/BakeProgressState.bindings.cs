@@ -2,6 +2,26 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 BakeProgressState — 烘焙进度状态
+//
+// 📌 作用：
+//   跟踪光照贴图烘焙（Lightmap Baking）的进度状态。
+//   在 Unity 的轻量级传输（LightTransport）管线中使用。
+//
+// 💡 核心功能：
+//   - IsCompleted：是否完成
+//   - IsCanceled：是否被取消
+//   - CancelRequested：是否请求取消（线程安全）
+//   - Progress：当前进度（0~1）
+//   - OverallProgress：总体进度（多阶段烘焙用）
+//   - Cancel/CancelAndWait：取消操作
+//   - Reset：重置状态
+//   - UpdateProgress/UpdateOverallProgress：更新进度（线程安全）
+//
+// ⚡ 内部类，属于 UnityEngine.LightTransport 命名空间。
+// ==============================================================
+
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine.Bindings;

@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 AudioRenderer —— 音频渲染器，用于捕获音频帧
+//     Start/Stop 控制渲染，Render 输出到 NativeArray<float>
+// 💡 GetSampleCountForCaptureFrame 获取当前帧采样数
+// 💡 AddMixerGroupSink 添加混音组输出监听（sink）
+// ⚡ 支持 excludeFromMix 排除主混音
+// 📌 用于音频可视化、录制等低频捕获场景
+// ============================================================
 using System;
 using UnityEngine;
 using UnityEngine.Audio;

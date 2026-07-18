@@ -3,6 +3,12 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 
+// ============================================================
+// 🎯 AudioClipExtensions —— AudioClip 扩展方法
+//     Internal_CreateAudioClipSampleProvider 创建采样供给器
+// 💡 用于从 AudioClip 生成实时采样数据流
+// 📌 internal 类，仅引擎内部调用
+// ============================================================
 using UnityEngine.Bindings;
 
 namespace UnityEngine.Experimental.Audio

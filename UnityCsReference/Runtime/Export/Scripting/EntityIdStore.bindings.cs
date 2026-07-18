@@ -18,6 +18,36 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine
 {
+    //=============================================================================
+    // 🎯 EntityIdStore —— EntityId 分配器与存储（ECS 核心基础设施）
+    //
+    // 设计说明:
+    //   EntityIdStore 是 Unity ECS 中 EntityId 分配与查询的核心组件。
+    //   管理所有活跃 Entity 的唯一 ID 分配、回收、存在性检查和本地对象指针查找。
+    //
+    // 💡 EntityId 位布局: [Version:24 | TypeId:12 | Index:28]
+    //   - Index: 实体在存储中的索引（28 位，最大 2.68 亿个实体）
+    //   - TypeId: 类型标识（12 位）
+    //   - Version: 版本号（24 位，每次释放递增，防止"悬挂指针"问题）
+    //
+    // 📌 存储模式（由平台决定）:
+    //   虚拟内存模式（Virtual Memory）:
+    //     直接通过 EntitySlot[] 数组索引，未分配页由 OS 零填充。
+    //     支持按块按需提交（on-demand commit）。
+    //   页表模式（Page Table）:
+    //     通过 Block** 二级索引，每块 256 个槽位。
+    //     仅在 32 位平台或不支持虚拟内存的环境使用。
+    //
+    // 📌 线程安全:
+    //   - 每块的自旋锁（block spinlock）控制并发分配
+    //   - 每线程预分配池（EntityIdPool）减少锁竞争
+    //   - Burst 编译支持，通过 SharedStatic\<ContextData\> 缓存配置
+    //
+    // ⚠️ 完整性检查:
+    //   IntegrityCheck() 验证分配位图与槽位版本奇偶性一致
+    //   （奇数版本 = 活跃，偶数版本 = 空闲）
+    //=============================================================================
+
     // Bindings for the layout/info exports added to Runtime/BaseClasses/EntityIdStore.{h,cpp}
     // and the GCHandle-offset helper in BaseObject.{h,cpp}. Kept private to this file so the
     // EntityIdStore type below is the only consumer.

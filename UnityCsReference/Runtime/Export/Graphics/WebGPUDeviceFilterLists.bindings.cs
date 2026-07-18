@@ -2,6 +2,16 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 WebGPU设备过滤列表 — 按设备类型/特性/功能级别过滤WebGPU配置
+// 💡 WebGPUDeviceType区分Mobile/Desktop设备类型
+// 💡 WebGPUDeviceFeature枚举CoreFeatures/DepthClipControl/BCn/ASTC等特性
+// 💡 WebGPUDeviceFilterData/WebGPUDeviceFilterList管理过滤规则集合
+// 💡 WebGPUGraphicsJobsDeviceFilterData指定匹配设备的GraphicsJobs模式
+// 💡 WebGPUComparator提供EqualTo/NotEqualTo/LessThan等比较操作符
+// ⚡ 枚举与C++端WebGPUDeviceFilterData.h需严格同步
+// ====================================================================
+
 using System;
 using System.Text.RegularExpressions;
 using UnityEngine.Bindings;

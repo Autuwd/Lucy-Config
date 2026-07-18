@@ -2,6 +2,23 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 DynamicGI — 动态全局光照
+//
+// 📌 作用：
+//   控制运行时全局光照（GI）的行为，管理间接光照的更新。
+//   用于调整预计算光照（Baked GI）在运行时的效果。
+//
+// 💡 核心 API：
+//   - indirectScale：间接光强度缩放
+//   - updateThreshold：更新阈值（变化小于此值不更新）
+//   - materialUpdateTimeSlice：每帧材质更新时间分配
+//   - UpdateEnvironment：强制更新环境光照
+//   - SetEmissive：设置渲染器的自发光对 GI 的影响
+//
+// ⚡ 影响的是预烘焙 GI 在运行时的表现，不是实时 GI 计算。
+// ==============================================================
+
 using System;
 using UnityEngine.Bindings;
 

@@ -2,6 +2,15 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 AudioMixer —— DSP 音频混音树的容器核心
+//     定义从 AudioSource 到 AudioListener 的路由图
+//     管理 Groups / Effects / Snapshots 的层次结构
+// 💡 dB 缩放：SetFloat/GetFloat 以 dB 为单位控制衰减
+//     Duck Volume 通过 TransitionToSnapshots 实现快照过渡
+// ⚡ updateMode 支持 Normal / UnscaledTime 两种更新模式
+// 📌 FindMatchingGroups 按 subPath 递归搜索混音组
+// ============================================================
 using UnityEngine;
 using System;
 using JetBrains.Annotations;

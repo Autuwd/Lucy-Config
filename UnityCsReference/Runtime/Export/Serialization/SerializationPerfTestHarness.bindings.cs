@@ -2,6 +2,21 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 SerializationPerfTestHarness — 序列化性能测试工具
+//
+// 📌 作用：
+//   用于序列化性能基准测试的工具类。将 UnityEngine.Object
+//   序列化到原生暂存缓冲区再读回，精确测量写入和读取时间。
+//
+// 💡 工作原理：
+//   - 对象序列化到原生缓冲区（不经过托管数组封送）
+//   - flags == 0：PackEntityId（克隆模式）
+//   - flags == 1：kReadWriteFromSerializedFile（解析器模式）
+//
+// ⚡ 仅测试程序集可见（Internal 级别）。
+// ==============================================================
+
 using UnityEngine.Bindings;
 using Object = UnityEngine.Object;
 

@@ -12,6 +12,36 @@ using Unity.Scripting.LifecycleManagement;
 
 namespace UnityEngine
 {
+    //=============================================================================
+    // 🎯 ReflectionProbe —— 反射探针
+    //
+    // 设计说明:
+    //   ReflectionProbe 捕获周围环境的立方体贴图（Cubemap），用于在
+    //   场景中的物体上产生反射效果。它充当场景中特定位置的"反射相机"。
+    //
+    // 💡 三种模式（ReflectionProbeMode）:
+    //   Baked    — 烘焙静态反射贴图（离线，性能最优）
+    //   Realtime — 实时捕获反射（动态效果，性能开销大）
+    //   Custom   — 使用自定义贴图（customBakedTexture）
+    //
+    // 📌 更新策略:
+    //   refreshMode: OnAwake / EveryFrame / ViaScripting
+    //   timeSlicingMode: AllFacesAtOnce / IndividualFaces / NoTimeSlicing
+    //     分时切片（IndividualFaces）将 Cubemap 的 6 个面分布到多帧渲染，
+    //     避免单帧渲染 6 次场景的巨大开销。
+    //
+    // 📌 混合与代理:
+    //   blendDistance: 两个探针之间混合的过渡距离
+    //   boxProjection: 启用包围盒投影，产生更真实的局部反射
+    //   importance: 多个探针重叠时的优先级
+    //
+    // ⚡ 事件系统:
+    //   reflectionProbeChanged: 探针增减时触发
+    //   defaultReflectionTexture: 默认反射贴图变更时触发
+    //
+    // ⚠️ 反射探针是性能敏感组件，实时模式下每帧更新 6 个面相当于渲染 6 次场景。
+    //=============================================================================
+
     [NativeHeader("Runtime/Camera/ReflectionProbes.h")]
     public sealed partial class ReflectionProbe : Behaviour
     {

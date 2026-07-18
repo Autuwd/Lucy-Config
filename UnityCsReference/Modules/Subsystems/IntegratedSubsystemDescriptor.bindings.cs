@@ -2,6 +2,17 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 IntegratedSubsystemDescriptor —— 集成子系统描述符
+//     工厂模式：通过 Create() 实例化对应子系统
+// 💡 IntegratedSubsystemDescriptor 抽象基类
+//     id 属性标识子系统类型
+// 💡 IntegratedSubsystemDescriptor<TSubsystem> 泛型实现
+//     Create() 返回强类型子系统实例
+// ⚡ SubsystemDescriptorBindings.Create 调用原生创建
+//     创建后通过 SubsystemManager 注册
+// 📌 ISubsystemDescriptorImpl 接口管理原生指针
+// ============================================================
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine.Bindings;

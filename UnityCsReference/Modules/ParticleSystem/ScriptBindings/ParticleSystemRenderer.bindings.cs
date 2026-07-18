@@ -2,6 +2,29 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 ParticleSystemRenderer — 粒子渲染器
+//
+// 📌 作用：
+//   控制粒子系统的渲染方式，决定粒子如何被绘制到屏幕上。
+//   支持多种渲染模式：Billboard、Stretch、Mesh、None。
+//
+// 💡 核心功能：
+//   - renderMode：渲染模式（Billboard/StretchedBillboard/Mesh/None）
+//   - mesh/meshCount/meshes：渲染网格（Mesh模式）
+//   - material/trailMaterial：材质设置
+//   - sortMode/sortingFudge：排序控制
+//   - alignment：对齐方式（View/World/Local/FacingVelocity）
+//   - pivot：粒子轴心偏移
+//   - masking：遮罩设置
+//   - shadowCastingMode/receiveShadows：阴影
+//   - minParticleSize/maxParticleSize：粒子大小范围
+//   - enableGPUInstancing：GPU实例化
+//
+// 📌 ParticleSystemRenderMode：Billboard/Stretch/Mesh/None
+// 📌 ParticleSystemSortMode：ByDistance/ByAge/ByDepth/ByDistanceToCenter
+// ==============================================================
+
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine.Bindings;

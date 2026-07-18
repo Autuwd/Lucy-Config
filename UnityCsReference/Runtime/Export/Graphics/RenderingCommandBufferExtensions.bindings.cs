@@ -2,6 +2,13 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 命令缓冲区扩展 — FastMemory平台相关API (XboxOne/GameCore)
+// 💡 SwitchIntoFastMemory/SwitchOutOfFastMemory仅Xbox平台生效
+// 💡 通过NativeConditional("UNITY_XBOXONE || UNITY_GAMECORE_XBOXONE")隔离
+// ⚡ 其他平台为空实现(stub)，调用无副作用
+// ====================================================================
+
 using System;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;

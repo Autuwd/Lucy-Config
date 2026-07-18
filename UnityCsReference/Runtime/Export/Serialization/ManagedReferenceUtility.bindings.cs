@@ -2,6 +2,23 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 ManagedReferenceUtility — 托管引用工具
+//
+// 📌 作用：
+//   管理序列化系统中的托管引用（Managed Reference），
+//   支持 SerializeReference 属性的运行时创建和类型查找。
+//
+// 💡 核心功能：
+//   - CreateMissingManagedReferenceTypeFallback：创建缺失类型的回落实例
+//   - GetManagedReferenceId：获取托管引用 ID
+//   - SetManagedReferenceId：设置托管引用 ID
+//   - GetManagedReferenceType：获取托管引用类型
+//   - GetManagedReferenceAssemblyQualifiedName：获取程序集限定名称
+//
+// ⚡ 用于 SerializeReference 属性的序列化/反序列化。
+// ==============================================================
+
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine.Bindings;

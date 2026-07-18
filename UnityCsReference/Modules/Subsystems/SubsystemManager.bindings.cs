@@ -2,6 +2,19 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ============================================================
+// 🎯 SubsystemManager —— 子系统生命周期管理器
+//     管理所有 IntegratedSubsystem 的创建/重载/销毁
+// 💡 ReloadSubsystemsStarted / ReloadSubsystemsCompleted：
+//     域重载时的事件回调（beforeReload / afterReload）
+// 💡 InitializeIntegratedSubsystem：
+//     原生创建子系统后的注册入口
+//     设置 m_Ptr 和 SetHandle，添加到 s_IntegratedSubsystems
+// 💡 ClearSubsystems：
+//     清理所有子系统列表（m_Ptr 置零）
+// ⚡ [RequiredByNativeCode] 标记，由原生代码自动调用
+// 📌 StaticConstructScriptingClassMap 在代码加载后重建类映射
+// ============================================================
 using System;
 using Unity.Scripting.LifecycleManagement;
 using UnityEngine.Bindings;

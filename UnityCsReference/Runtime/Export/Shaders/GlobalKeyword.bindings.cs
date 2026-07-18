@@ -2,6 +2,23 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 GlobalKeyword — 全局着色器关键字（跨所有 Shader 生效）
+//
+// 📌 作用：
+//   全局关键字影响当前场景中所有使用该关键字的 Shader。
+//   通过 Shader.EnableKeyword / DisableKeyword 控制。
+//
+// 💡 应用场景：
+//   - 全局渲染功能开关（如 _FOG_ON、_SHADOWS_SOFT）
+//   - 平台特性适配（如 _DIRECTIONAL_PCF3）
+//   - 品质等级切换（如 _HDR_ON）
+//
+// ⚠️ 注意事项：
+//   全局关键字会触发所有受影响材质的 Shader 变体切换，
+//   频繁开关可能导致性能开销。
+// ==============================================================
+
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 using System.Runtime.InteropServices;

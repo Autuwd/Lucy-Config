@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 图形状态收集与预热 — 录制GPU状态并批量预热Shader变体
+// 💡 BeginTrace/EndTrace录制渲染状态，保存到文件或JSON
+// 💡 WarmUp/WarmUpProgressively在Job系统中预热已收集的状态
+// 💡 GraphicsState子结构管理Mesh/Pass/RenderState的设置
+// ⚡ 常用于减少运行时Shader编译卡顿（预编译）
+// ====================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;

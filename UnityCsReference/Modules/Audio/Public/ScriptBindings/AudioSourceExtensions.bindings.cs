@@ -3,6 +3,13 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 
+// ============================================================
+// 🎯 AudioSourceExtensions —— AudioSource 扩展方法
+//     注册/注销 AudioSampleProvider 到 AudioSource
+// 💡 RegisterSampleProvider：将自定义采样供给器绑定到 AudioSource
+// 💡 UnregisterSampleProvider：解除绑定
+// 📌 用于程序化音频替代传统 AudioClip
+// ============================================================
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine.Bindings;

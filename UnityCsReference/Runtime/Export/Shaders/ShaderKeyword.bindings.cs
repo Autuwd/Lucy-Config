@@ -2,6 +2,33 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ==============================================================
+// 🎯 ShaderKeyword — 着色器关键字（变体选择系统核心）
+//
+// 📌 作用：
+//   通过关键字启用/禁用 Shader 的不同编译变体。
+//   是 Unity 实现"一套 Shader 多种效果"的核心机制。
+//
+// 📌 关键字类型（ShaderKeywordType）：
+//   - BuiltinDefault：引擎内置关键字（如 _MAIN_LIGHT_SHADOWS）
+//   - UserDefined：用户通过 #pragma shader_feature / multi_compile 定义
+//   - Plugin：通过 Plugin 注册的关键字
+//
+// 📌 shader_feature vs multi_compile：
+//   shader_feature (UserDefined)：
+//     构建时自动剥离未使用的变体 → 更小的打包体积
+//     适合 Material 固定使用的特性开关
+//   multi_compile (UserDefined)：
+//     所有变体全部保留 → 更大的打包体积
+//     适合运行时动态切换的特性
+//
+// 📌 关键区别：
+//   ShaderKeyword（旧 API）同时支持全局和局部关键字。
+//   新 API 拆分为 GlobalKeyword 和 LocalKeyword（更清晰）。
+//   m_IsLocal = true → Shader 局部关键字
+//   m_IsLocal = false → 全局关键字
+// ==============================================================
+
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 using System.Runtime.InteropServices;

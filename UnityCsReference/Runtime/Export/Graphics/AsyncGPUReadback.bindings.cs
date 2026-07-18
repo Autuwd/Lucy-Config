@@ -2,6 +2,14 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+// ====================================================================
+// 🎯 异步GPU→CPU回读 — 不阻塞渲染管线地从GPU读取数据
+// 💡 支持从ComputeBuffer/GraphicsBuffer/Texture异步读取到NativeArray/NativeSlice
+// 💡 RequestAsync系列方法返回Awaitable，支持async/await模式
+// ⚡ 输入数据不能用Temp/ TempJob内存(结果可能延迟到达)
+// 📌 RequestIntoNativeArray/RequestIntoNativeSlice直接写入现有Native容器
+// ====================================================================
+
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
