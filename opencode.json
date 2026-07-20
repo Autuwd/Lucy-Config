@@ -363,9 +363,21 @@
       "*": "allow"
     }
   },
-  "plugin": ["oh-my-openagent"],
+  "plugin": ["oh-my-openagent", "superpowers@git+https://github.com/obra/superpowers.git"],
   "provider": {
     "anthropic": {},
-    "openai": {}
+    "openai": {},
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen3:1.7b": {
+          "name": "Qwen3 1.7B (local)"
+        }
+      }
+    }
   }
 }
