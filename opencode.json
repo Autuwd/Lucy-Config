@@ -374,12 +374,7 @@
         "baseURL": "http://localhost:11434/v1"
       },
       "models": {
-        "qwen3:1.7b": {
-          "name": "Qwen3 1.7B (local)"
-        },
-        "qwen3:4b": {
-          "name": "Qwen3 4B (local)"
-        },
+
         "qwen3:8b": {
           "name": "Qwen3 8B (local)"
         },
