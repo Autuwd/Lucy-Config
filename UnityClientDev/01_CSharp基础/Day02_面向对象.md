@@ -72,7 +72,12 @@ public class Player {  // 默认 public（class 本身）
 }
 ```
 
-**C# class 默认 public 的哲学原因：** C# 设计目标是"快速开发"，大多数时候你要公开类。而 C++ 设计目标是"零开销抽象"，默认 private 更安全。这是两种语言优先级不同的体现。
+**关于默认访问级别的说明：** 
+- C# namespace 下直接定义的 class 默认是 `internal`（同一项目可见）
+- C# 的嵌套 class 默认是 `private`（只对外部类可见）
+- 文档示例中写 `public class Player` 的 `public` 是显式声明，不是默认值
+
+C++ 和 C# 在这个点上的真实对比：C++ class 默认 `private`，C# namespace 下 class 默认 `internal`（比 C++ 开放，但比 `public` 安全）。这是两种语言优先级不同的体现。
 
 ### 构造函数
 
@@ -810,7 +815,7 @@ public class Player : MonoBehaviour
 
 | Raylib (C++) | Unity (C#) | 底层差异 |
 |-------------|-----------|---------|
-| `struct Player { Vector2 pos; }` | `class Player : MonoBehaviour` | Unity 用 class（引用类型）+ 组件挂载 |
+| `struct Player { Vector2 pos; }` | `class Player : MonoBehaviour` | C++ struct（值类型）/ Unity 用 class（引用类型）+ 组件挂载 |
 | `player.Update(dt)` | Unity 自动调用 `Update()` | PlayerLoop 调度 |
 | `DrawTexturePro(player.texture, ...)` | SpriteRenderer 自动渲染 | 引擎自动 Draw Call |
 | `player.hp -= damage;` | 属性封装 + 逻辑验证 | Property 语法糖 |

@@ -813,7 +813,7 @@ public partial class Player
 
 > 协变（out）让 IEnumerable&lt;Cat&gt; 可以变成 IEnumerable&lt;Animal&gt;。逆变（in）让 Action&lt;Animal&gt; 可以变成 Action&lt;Cat&gt;。
 > 模式匹配让你用 switch 表达式代替 if-else 链——尤其是属性模式和元组模式非常实用。
-> Record 是引用类型但值相等——编译器自动生成 Equals/GetHashCode/ToString/Deconstruct。with 表达式做非破坏性修改。
+> Record 是引用类型但值相等——编译器自动生成 Equals/GetHashCode/ToString/Deconstruct。with 表达式做非破坏性修改。（注：C# 10 的 `record struct` 是值类型，同样具有值相等性）
 > init 属性只能在对象初始化器中赋值一次。required 属性强制调用者必须赋值。
 > 默认接口方法让接口可以演进而不破坏已有实现。
 > 静态抽象接口方法让泛型可以调用运算符和静态方法——开启泛型数学和工厂模式。

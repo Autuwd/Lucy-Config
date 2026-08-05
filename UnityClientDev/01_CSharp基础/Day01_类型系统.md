@@ -370,7 +370,7 @@ string s2 = "hel" + "lo";  // 编译期常量折叠，还是同一个
 string s3 = "hel";
 string s4 = s3 + "lo";     // 运行时拼接，新对象！
 
-// s1 == s4 是 false（引用不同）
+// s1 == s4 是 True（值相同）C#中重载了==运算符，比较的是值，不是引用
 // s1.Equals(s4) 是 true（值相同）
 ```
 
@@ -410,6 +410,7 @@ Nullable<int> x = new Nullable<int>();
 ```
 
 `Nullable<T>` 结构体的定义：
+
 ```csharp
 public struct Nullable<T> where T : struct
 {
