@@ -1,0 +1,1078 @@
+{
+  "communities": {
+    "0": [
+      "GameProgrammingPatterns_完整版_behavior_tree",
+      "GameProgrammingPatterns_完整版_concurrent_fsm",
+      "GameProgrammingPatterns_完整版_enemyai",
+      "GameProgrammingPatterns_完整版_entity_class",
+      "GameProgrammingPatterns_完整版_finite_state_machine",
+      "GameProgrammingPatterns_完整版_fixed_time_step",
+      "GameProgrammingPatterns_完整版_fixed_update_variable_render",
+      "GameProgrammingPatterns_完整版_flyweight",
+      "GameProgrammingPatterns_完整版_hierarchical_fsm",
+      "GameProgrammingPatterns_完整版_interpolation",
+      "GameProgrammingPatterns_完整版_planning_system",
+      "GameProgrammingPatterns_完整版_pushdown_automata",
+      "GameProgrammingPatterns_完整版_simple_fsm",
+      "GameProgrammingPatterns_完整版_skeleton_class",
+      "GameProgrammingPatterns_完整版_statue_class",
+      "GameProgrammingPatterns_完整版_strategy_pattern",
+      "GameProgrammingPatterns_完整版_variable_time_step",
+      "GameProgrammingPatterns_完整版_world_class",
+      "game_programming_patterns_complete_component",
+      "game_programming_patterns_complete_data_locality",
+      "game_programming_patterns_complete_flyweight",
+      "game_programming_patterns_complete_game_loop",
+      "game_programming_patterns_complete_object_pool",
+      "game_programming_patterns_complete_prototype",
+      "game_programming_patterns_complete_state",
+      "game_programming_patterns_complete_type_object",
+      "game_programming_patterns_complete_update_method",
+      "gameprogrammingpatterns_完整版_advanced_object_pool",
+      "gameprogrammingpatterns_完整版_ai_component",
+      "gameprogrammingpatterns_完整版_burst_compiler",
+      "gameprogrammingpatterns_完整版_data_locality_demo",
+      "gameprogrammingpatterns_完整版_object_pool_usage_example",
+      "gameprogrammingpatterns_完整版_particle",
+      "gameprogrammingpatterns_完整版_particle_pool",
+      "gameprogrammingpatterns_完整版_physics_component",
+      "gameprogrammingpatterns_完整版_render_component",
+      "gameprogrammingpatterns_完整版_simple_object_pool",
+      "gameprogrammingpatterns_完整版_unity_ecs",
+      "gameprogrammingpatterns_完整版_unity_job_system"
+    ],
+    "1": [
+      "algorithm_roadmap",
+      "algorithm_roadmap_backtracking",
+      "algorithm_roadmap_bfs",
+      "algorithm_roadmap_dijkstra",
+      "algorithm_roadmap_dynamic_programming",
+      "algorithm_roadmap_greedy_algorithm",
+      "algorithm_roadmap_lru_cache",
+      "algorithm_roadmap_monotonic_stack",
+      "algorithm_roadmap_sliding_window",
+      "algorithm_roadmap_two_pointers",
+      "algorithm_roadmap_union_find",
+      "confusing_knowledge_points",
+      "confusing_knowledge_points_coroutine_vs_async",
+      "confusing_knowledge_points_delegate_event_unityevent",
+      "confusing_knowledge_points_resource_loading_models",
+      "confusing_knowledge_points_singleton_pattern",
+      "confusing_knowledge_points_stack_vs_heap",
+      "confusing_knowledge_points_value_type_vs_reference_type",
+      "game_dev_interview_questions",
+      "game_dev_interview_questions_a_star",
+      "game_dev_interview_questions_boxing_unboxing",
+      "game_dev_interview_questions_ecs",
+      "game_dev_interview_questions_garbage_collection",
+      "game_dev_interview_questions_generics",
+      "game_dev_interview_questions_network_sync",
+      "game_dev_interview_questions_unity_lifecycle",
+      "internship_capability_check",
+      "practice_templates",
+      "tu_jie_xi_tong",
+      "tu_jie_xi_tong_process_vs_thread",
+      "tu_jie_xi_tong_tcp_vs_udp",
+      "unity_manual_bilingual_v2",
+      "unity_manual_bilingual_v2_addressables",
+      "unity_manual_bilingual_v2_audio_source",
+      "unity_manual_bilingual_v2_il2cpp",
+      "unity_manual_bilingual_v2_navmesh",
+      "unity_manual_bilingual_v2_particle_system",
+      "unity_manual_bilingual_v2_render_pipeline",
+      "unity_manual_bilingual_v2_xr"
+    ],
+    "2": [
+      "GameProgrammingPatterns_完整版_lua_language",
+      "GameProgrammingPatterns_完整版_provided_operations",
+      "GameProgrammingPatterns_完整版_register_vm_concept",
+      "GameProgrammingPatterns_完整版_sandbox_method",
+      "GameProgrammingPatterns_完整版_stack_vm_concept",
+      "GameProgrammingPatterns_完整版_stackvm_class",
+      "GameProgrammingPatterns_完整版_superpower_class",
+      "GameProgrammingPatterns_完整版_vm_class",
+      "GameProgrammingPatterns_完整版_wren_language",
+      "game_programming_patterns_complete_bytecode",
+      "game_programming_patterns_complete_command",
+      "game_programming_patterns_complete_event_queue",
+      "game_programming_patterns_complete_md_actor_model",
+      "game_programming_patterns_complete_md_facade_pattern",
+      "game_programming_patterns_complete_md_template_method_pattern",
+      "game_programming_patterns_complete_observer",
+      "game_programming_patterns_complete_subclass_sandbox"
+    ],
+    "3": [
+      "GameProgrammingPatterns_完整版_divingstate",
+      "GameProgrammingPatterns_完整版_duckingstate",
+      "GameProgrammingPatterns_完整版_entry_action",
+      "GameProgrammingPatterns_完整版_heroine",
+      "GameProgrammingPatterns_完整版_heroinestate",
+      "GameProgrammingPatterns_完整版_jumpingstate",
+      "GameProgrammingPatterns_完整版_ongroundstate",
+      "GameProgrammingPatterns_完整版_standingstate",
+      "game_programming_patterns_complete_heroine",
+      "game_programming_patterns_complete_heroine_state",
+      "game_programming_patterns_complete_on_ground_state"
+    ],
+    "4": [
+      "stage0_data_structures_algorithms_BinaryTreeTraversal",
+      "stage0_data_structures_algorithms_CPU缓存",
+      "stage0_data_structures_algorithms_LinkedList",
+      "stage0_data_structures_algorithms_ListNode",
+      "stage0_data_structures_algorithms_MyList",
+      "stage0_data_structures_algorithms_Queue",
+      "stage0_data_structures_algorithms_Stack",
+      "stage0_data_structures_algorithms_TaskQueue",
+      "stage0_data_structures_algorithms_TreeNode",
+      "stage0_data_structures_algorithms_UndoManager"
+    ],
+    "5": [
+      "GameProgrammingPatterns_完整版_actor",
+      "GameProgrammingPatterns_完整版_comedian",
+      "GameProgrammingPatterns_完整版_framebuffer",
+      "GameProgrammingPatterns_完整版_scene",
+      "GameProgrammingPatterns_完整版_stage",
+      "GameProgrammingPatterns_完整版_swap",
+      "GameProgrammingPatterns_完整版_tearing",
+      "game_programming_patterns_complete_double_buffer"
+    ],
+    "6": [
+      "game_programming_patterns_complete_spatial_partition",
+      "gameprogrammingpatterns_完整版_grid",
+      "gameprogrammingpatterns_完整版_grid_cell",
+      "gameprogrammingpatterns_完整版_spatial_partition_demo",
+      "gameprogrammingpatterns_完整版_unit",
+      "unity_manual_bilingual_v2_collider",
+      "unity_manual_bilingual_v2_physics_material",
+      "unity_manual_bilingual_v2_rigidbody"
+    ],
+    "7": [
+      "cpp_java_guide_hashmap_java",
+      "cpp_java_guide_hashset_java",
+      "cpp_java_guide_treeset",
+      "cpp_learning_doc_std_unordered_map",
+      "csharp_complete_notes_dictionary",
+      "csharp_complete_notes_hashset",
+      "csharp_complete_notes_sortedset"
+    ],
+    "8": [
+      "game_programming_patterns_complete_dirty_flag",
+      "gameprogrammingpatterns_完整版_dirty_flag_demo",
+      "gameprogrammingpatterns_完整版_graph_node",
+      "gameprogrammingpatterns_完整版_transform",
+      "unity_manual_bilingual_v2_component",
+      "unity_manual_bilingual_v2_game_object",
+      "unity_manual_bilingual_v2_transform"
+    ],
+    "9": [
+      "game_programming_patterns_complete_md_bjorn",
+      "game_programming_patterns_complete_md_demoinputcomponent",
+      "game_programming_patterns_complete_md_gameobject",
+      "game_programming_patterns_complete_md_graphicscomponent",
+      "game_programming_patterns_complete_md_inputcomponent",
+      "game_programming_patterns_complete_md_physicscomponent",
+      "game_programming_patterns_complete_md_playerinputcomponent"
+    ],
+    "10": [
+      "jieduan1_csharp_jichu_attributes",
+      "jieduan1_csharp_jichu_dependency_injection",
+      "stage1_csharp_basics_JsonConfigLoader",
+      "stage1_csharp_basics_反射",
+      "stage1_csharp_basics_序列化",
+      "stage1_csharp_basics_异常处理"
+    ],
+    "11": [
+      "stage3_unity_advanced_HDRP",
+      "stage3_unity_advanced_MaterialDemo",
+      "stage3_unity_advanced_SRPBatcherDemo",
+      "stage3_unity_advanced_Shader_SimpleUnlit",
+      "stage3_unity_advanced_URP",
+      "stage3_unity_advanced_渲染管线"
+    ],
+    "12": [
+      "cpp_java_guide_arraydeque",
+      "cpp_learning_doc_std_queue",
+      "cpp_learning_doc_std_stack",
+      "csharp_complete_notes_queue_t",
+      "csharp_complete_notes_stack_t"
+    ],
+    "13": [
+      "cpp_java_guide_arraylist_java",
+      "cpp_learning_doc_std_vector",
+      "csharp_complete_notes_array",
+      "csharp_complete_notes_list_t",
+      "csharp_complete_notes_property"
+    ],
+    "14": [
+      "game_programming_patterns_complete_command_class",
+      "game_programming_patterns_complete_fire_command",
+      "game_programming_patterns_complete_input_handler",
+      "game_programming_patterns_complete_jump_command",
+      "game_programming_patterns_complete_move_unit_command"
+    ],
+    "15": [
+      "game_programming_patterns_complete_demon",
+      "game_programming_patterns_complete_ghost",
+      "game_programming_patterns_complete_monster",
+      "game_programming_patterns_complete_sorcerer",
+      "game_programming_patterns_complete_spawner"
+    ],
+    "16": [
+      "game_programming_patterns_complete_md_audio",
+      "game_programming_patterns_complete_md_consoleaudio",
+      "game_programming_patterns_complete_md_locator",
+      "game_programming_patterns_complete_md_loggedaudio",
+      "game_programming_patterns_complete_md_nulla_audio"
+    ],
+    "17": [
+      "jieduan1_csharp_jichu_collections",
+      "jieduan1_csharp_jichu_covariance_contravariance",
+      "jieduan1_csharp_jichu_expression_trees",
+      "jieduan1_csharp_jichu_generics",
+      "jieduan1_csharp_jichu_linq"
+    ],
+    "18": [
+      "stage4_design_patterns_GamePresenter",
+      "stage4_design_patterns_MessageCenter",
+      "stage4_design_patterns_PlayerController_MVC",
+      "stage4_design_patterns_PlayerModel",
+      "stage4_design_patterns_PlayerView"
+    ],
+    "19": [
+      "stage4_design_patterns_IState",
+      "stage4_design_patterns_IdleState",
+      "stage4_design_patterns_PlayerController",
+      "stage4_design_patterns_RunState",
+      "stage4_design_patterns_StateMachine"
+    ],
+    "20": [
+      "concept_binary_heap",
+      "concept_priority_queue",
+      "stage0_ds_alg_binaryheap",
+      "stage0_ds_alg_mypriorityqueue"
+    ],
+    "21": [
+      "game_programming_patterns_complete_md_breed",
+      "game_programming_patterns_complete_md_dragon",
+      "game_programming_patterns_complete_md_monster",
+      "game_programming_patterns_complete_md_troll"
+    ],
+    "22": [
+      "game_programming_patterns_complete_md_freezeray",
+      "game_programming_patterns_complete_md_skylaunch",
+      "game_programming_patterns_complete_md_soundplayer",
+      "game_programming_patterns_complete_md_superpower"
+    ],
+    "23": [
+      "jieduan1_csharp_jichu_classes_and_objects",
+      "jieduan1_csharp_jichu_encapsulation",
+      "jieduan1_csharp_jichu_inheritance",
+      "jieduan1_csharp_jichu_polymorphism"
+    ],
+    "24": [
+      "stage0_ds_alg_astar_findpath",
+      "stage0_ds_alg_astar_getneighbors",
+      "stage0_ds_alg_astar_heuristic",
+      "stage0_ds_alg_astar_reconstructpath"
+    ],
+    "25": [
+      "stage1_csharp_basics_AdoNetDemo",
+      "stage1_csharp_basics_GetUsers",
+      "stage1_csharp_basics_SqlCommand",
+      "stage1_csharp_basics_SqlConnection"
+    ],
+    "26": [
+      "stage1_csharp_basics_AppDbContext",
+      "stage1_csharp_basics_EfCoreDemo",
+      "stage1_csharp_basics_Order",
+      "stage1_csharp_basics_User"
+    ],
+    "27": [
+      "stage2_unity_basics_CollisionCallback",
+      "stage2_unity_basics_LifecycleDemo",
+      "stage2_unity_basics_RigidbodyDemo",
+      "stage2_unity_basics_TriggerCallback"
+    ],
+    "28": [
+      "GameProgrammingPatterns_完整版_chasestate",
+      "GameProgrammingPatterns_完整版_ienemystate",
+      "GameProgrammingPatterns_完整版_patrolstate"
+    ],
+    "29": [
+      "concept_binary_search_tree",
+      "stage0_ds_alg_bst",
+      "stage0_ds_alg_bst_node"
+    ],
+    "30": [
+      "concept_merge_sort",
+      "stage0_ds_alg_mergesort_merge",
+      "stage0_ds_alg_mergesort_sort"
+    ],
+    "31": [
+      "concept_quick_sort",
+      "stage0_ds_alg_quicksort_partition",
+      "stage0_ds_alg_quicksort_sort"
+    ],
+    "32": [
+      "cpp_java_guide_generic_erasure",
+      "cpp_learning_doc_template",
+      "csharp_complete_notes_generic"
+    ],
+    "33": [
+      "cpp_java_guide_priorityqueue_java",
+      "cpp_learning_doc_std_priority_queue",
+      "csharp_complete_notes_priorityqueue"
+    ],
+    "34": [
+      "cpp_java_guide_string_java",
+      "cpp_learning_doc_std_string",
+      "csharp_complete_notes_string"
+    ],
+    "35": [
+      "game_programming_patterns_complete_file_system",
+      "game_programming_patterns_complete_service_locator",
+      "game_programming_patterns_complete_singleton"
+    ],
+    "36": [
+      "jieduan1_csharp_jichu_animal",
+      "jieduan1_csharp_jichu_cat",
+      "jieduan1_csharp_jichu_dog"
+    ],
+    "37": [
+      "jieduan1_csharp_jichu_bow",
+      "jieduan1_csharp_jichu_sword",
+      "jieduan1_csharp_jichu_weapon"
+    ],
+    "38": [
+      "jieduan1_csharp_jichu_idamageable",
+      "jieduan1_csharp_jichu_ihealable",
+      "jieduan1_csharp_jichu_player"
+    ],
+    "39": [
+      "stage0_ds_alg_bst_delete",
+      "stage0_ds_alg_bst_deleterecursive",
+      "stage0_ds_alg_bst_minvalue"
+    ],
+    "40": [
+      "stage1_csharp_basics_FileLogger",
+      "stage1_csharp_basics_ILogger",
+      "stage1_csharp_basics_LevelFilteredLogger"
+    ],
+    "41": [
+      "stage3_unity_advanced_Bullet",
+      "stage3_unity_advanced_BulletManager",
+      "stage3_unity_advanced_ObjectPool"
+    ],
+    "42": [
+      "stage4_design_patterns_AudioManager",
+      "stage4_design_patterns_GameManager",
+      "stage4_design_patterns_Singleton"
+    ],
+    "43": [
+      "stage4_design_patterns_CharacterDecorator",
+      "stage4_design_patterns_IWeapon",
+      "stage4_design_patterns_WeaponFactory"
+    ],
+    "44": [
+      "stage4_design_patterns_CommandManager",
+      "stage4_design_patterns_ICommand",
+      "stage4_design_patterns_MoveCommand"
+    ],
+    "45": [
+      "stage5_interview_常见问题",
+      "stage5_interview_简历撰写",
+      "stage5_interview_项目经验"
+    ],
+    "46": [
+      "concept_astar",
+      "stage0_ds_alg_astar"
+    ],
+    "47": [
+      "concept_binary_search",
+      "stage0_ds_alg_binarysearch"
+    ],
+    "48": [
+      "concept_graph",
+      "stage0_ds_alg_graph"
+    ],
+    "49": [
+      "concept_object_pool",
+      "stage0_ds_alg_objectpool"
+    ],
+    "50": [
+      "cpp_java_guide_stream_api",
+      "csharp_complete_notes_linq"
+    ],
+    "51": [
+      "cpp_java_guide_stringbuilder_java",
+      "csharp_complete_notes_stringbuilder"
+    ],
+    "52": [
+      "cpp_java_guide_treemap",
+      "csharp_complete_notes_sorteddictionary"
+    ],
+    "53": [
+      "game_programming_patterns_complete_achievements",
+      "game_programming_patterns_complete_observer_class"
+    ],
+    "54": [
+      "game_programming_patterns_complete_md_iaudioservice",
+      "game_programming_patterns_complete_md_unityaudioservice"
+    ],
+    "55": [
+      "game_programming_patterns_complete_physics",
+      "game_programming_patterns_complete_subject"
+    ],
+    "56": [
+      "game_programming_patterns_complete_terrain",
+      "game_programming_patterns_complete_world"
+    ],
+    "57": [
+      "jieduan1_csharp_jichu_abstract_classes",
+      "jieduan1_csharp_jichu_interfaces"
+    ],
+    "58": [
+      "jieduan1_csharp_jichu_async_programming",
+      "jieduan1_csharp_jichu_threading"
+    ],
+    "59": [
+      "jieduan1_csharp_jichu_boxing_unboxing",
+      "jieduan1_csharp_jichu_variables_and_data_types"
+    ],
+    "60": [
+      "jieduan1_csharp_jichu_conditionals",
+      "jieduan1_csharp_jichu_pattern_matching"
+    ],
+    "61": [
+      "jieduan1_csharp_jichu_delegates",
+      "jieduan1_csharp_jichu_events"
+    ],
+    "62": [
+      "jieduan1_csharp_jichu_design_patterns",
+      "jieduan1_csharp_jichu_singleton_demo"
+    ],
+    "63": [
+      "stage0_ds_alg_binaryheap_heapifydown",
+      "stage0_ds_alg_binaryheap_pop"
+    ],
+    "64": [
+      "stage0_ds_alg_binaryheap_heapifyup",
+      "stage0_ds_alg_binaryheap_push"
+    ],
+    "65": [
+      "stage0_ds_alg_bst_insert",
+      "stage0_ds_alg_bst_insertrecursive"
+    ],
+    "66": [
+      "stage0_ds_alg_bst_search",
+      "stage0_ds_alg_bst_searchrecursive"
+    ],
+    "67": [
+      "stage0_ds_alg_graph_dfs",
+      "stage0_ds_alg_graph_dfsrecursive"
+    ],
+    "68": [
+      "stage0_ds_alg_mypriorityqueue_pop",
+      "stage0_ds_alg_mypriorityqueue_sink"
+    ],
+    "69": [
+      "stage0_ds_alg_mypriorityqueue_push",
+      "stage0_ds_alg_mypriorityqueue_swim"
+    ],
+    "70": [
+      "stage2_unity_basics_InputDemo",
+      "stage2_unity_basics_NewInputDemo"
+    ],
+    "71": [
+      "stage2_unity_basics_MovementDemo",
+      "stage2_unity_basics_TransformDemo"
+    ],
+    "72": [
+      "stage2_unity_basics_NavMeshDemo",
+      "stage2_unity_basics_PlayerController"
+    ],
+    "73": [
+      "stage3_unity_advanced_DrawCall",
+      "stage3_unity_advanced_Profiler"
+    ],
+    "74": [
+      "stage4_design_patterns_BulletPool",
+      "stage4_design_patterns_ObjectPool_T"
+    ],
+    "75": [
+      "GameProgrammingPatterns_完整版_exit_action"
+    ],
+    "76": [
+      "GameProgrammingPatterns_完整版_gameworld_class"
+    ],
+    "77": [
+      "GameProgrammingPatterns_完整版_groundstate"
+    ],
+    "78": [
+      "GameProgrammingPatterns_完整版_iheroinestate"
+    ],
+    "79": [
+      "GameProgrammingPatterns_完整版_instruction_enum"
+    ],
+    "80": [
+      "GameProgrammingPatterns_完整版_sprintingstate"
+    ],
+    "81": [
+      "GameProgrammingPatterns_完整版_walkingstate"
+    ],
+    "82": [
+      "cpp_learning_doc_move_semantics"
+    ],
+    "83": [
+      "cpp_learning_doc_raii"
+    ],
+    "84": [
+      "cpp_learning_doc_smart_pointer"
+    ],
+    "85": [
+      "csharp_complete_notes_linkedlist"
+    ],
+    "86": [
+      "csharp_linq_study_document_distinct"
+    ],
+    "87": [
+      "csharp_linq_study_document_groupby"
+    ],
+    "88": [
+      "csharp_linq_study_document_linq"
+    ],
+    "89": [
+      "csharp_linq_study_document_select"
+    ],
+    "90": [
+      "csharp_linq_study_document_where"
+    ],
+    "91": [
+      "game_programming_patterns_complete_bullet"
+    ],
+    "92": [
+      "game_programming_patterns_complete_bullet_manager"
+    ],
+    "93": [
+      "game_programming_patterns_complete_md_breed_with_inheritance"
+    ],
+    "94": [
+      "game_programming_patterns_complete_md_decorator_pattern"
+    ],
+    "95": [
+      "game_programming_patterns_complete_md_mediator_pattern"
+    ],
+    "96": [
+      "game_programming_patterns_complete_md_monsterbreedso"
+    ],
+    "97": [
+      "game_programming_patterns_complete_md_monsterentity"
+    ],
+    "98": [
+      "game_programming_patterns_complete_md_playmessage"
+    ],
+    "99": [
+      "game_programming_patterns_complete_md_superpowerv2"
+    ],
+    "100": [
+      "game_programming_patterns_complete_md_thunderstrike"
+    ],
+    "101": [
+      "game_programming_patterns_complete_tree_instance"
+    ],
+    "102": [
+      "game_programming_patterns_complete_tree_model"
+    ],
+    "103": [
+      "gameprogrammingpatterns_完整版_cache_line"
+    ],
+    "104": [
+      "gameprogrammingpatterns_完整版_free_list"
+    ],
+    "105": [
+      "gameprogrammingpatterns_完整版_game_entity"
+    ],
+    "106": [
+      "gameprogrammingpatterns_完整版_grid_spatial_partition"
+    ],
+    "107": [
+      "gameprogrammingpatterns_完整版_particle_system"
+    ],
+    "108": [
+      "gameprogrammingpatterns_完整版_spatial_unit"
+    ],
+    "109": [
+      "jieduan1_csharp_jichu_access_modifiers_and_properties"
+    ],
+    "110": [
+      "jieduan1_csharp_jichu_arrays"
+    ],
+    "111": [
+      "jieduan1_csharp_jichu_constructors"
+    ],
+    "112": [
+      "jieduan1_csharp_jichu_coroutines"
+    ],
+    "113": [
+      "jieduan1_csharp_jichu_extension_methods"
+    ],
+    "114": [
+      "jieduan1_csharp_jichu_file_io"
+    ],
+    "115": [
+      "jieduan1_csharp_jichu_garbage_collection"
+    ],
+    "116": [
+      "jieduan1_csharp_jichu_loops"
+    ],
+    "117": [
+      "jieduan1_csharp_jichu_methods"
+    ],
+    "118": [
+      "jieduan1_csharp_jichu_monobehaviour_lifecycle"
+    ],
+    "119": [
+      "jieduan1_csharp_jichu_networking"
+    ],
+    "120": [
+      "jieduan1_csharp_jichu_operators"
+    ],
+    "121": [
+      "jieduan1_csharp_jichu_scriptable_object"
+    ],
+    "122": [
+      "jieduan1_csharp_jichu_static_members"
+    ],
+    "123": [
+      "jieduan1_csharp_jichu_tuples"
+    ],
+    "124": [
+      "jieduan1_csharp_jichu_unity_event"
+    ],
+    "125": [
+      "stage0_data_structures_algorithms_HashMap"
+    ],
+    "126": [
+      "stage0_ds_alg_bubblesort"
+    ],
+    "127": [
+      "stage0_ds_alg_graph_addedge"
+    ],
+    "128": [
+      "stage0_ds_alg_graph_bfs"
+    ],
+    "129": [
+      "stage1_csharp_basics_DapperDemo"
+    ],
+    "130": [
+      "stage1_csharp_basics_EnvironmentConfig"
+    ],
+    "131": [
+      "stage1_csharp_basics_IniFileReader"
+    ],
+    "132": [
+      "stage1_csharp_basics_SimpleLogger"
+    ],
+    "133": [
+      "stage1_csharp_basics_StructuredLogger"
+    ],
+    "134": [
+      "stage2_unity_basics_AnimationDemo"
+    ],
+    "135": [
+      "stage2_unity_basics_AudioDemo"
+    ],
+    "136": [
+      "stage2_unity_basics_BulletTime"
+    ],
+    "137": [
+      "stage2_unity_basics_ColliderDemo"
+    ],
+    "138": [
+      "stage2_unity_basics_FirstPersonCamera"
+    ],
+    "139": [
+      "stage2_unity_basics_FollowCamera"
+    ],
+    "140": [
+      "stage2_unity_basics_HierarchyDemo"
+    ],
+    "141": [
+      "stage2_unity_basics_LoadingScreen"
+    ],
+    "142": [
+      "stage2_unity_basics_ParticleSystemDemo"
+    ],
+    "143": [
+      "stage2_unity_basics_PrefabDemo"
+    ],
+    "144": [
+      "stage2_unity_basics_RaycastDemo"
+    ],
+    "145": [
+      "stage2_unity_basics_UIDemo"
+    ],
+    "146": [
+      "stage3_unity_advanced_AddressablesDemo"
+    ],
+    "147": [
+      "stage3_unity_advanced_AdvancedInstancing"
+    ],
+    "148": [
+      "stage3_unity_advanced_AssetBundleDemo"
+    ],
+    "149": [
+      "stage3_unity_advanced_ConfigManager"
+    ],
+    "150": [
+      "stage3_unity_advanced_CoroutineDemo"
+    ],
+    "151": [
+      "stage3_unity_advanced_EnemyConfig"
+    ],
+    "152": [
+      "stage3_unity_advanced_LightDemo"
+    ],
+    "153": [
+      "stage3_unity_advanced_MemoryOptimization"
+    ],
+    "154": [
+      "stage3_unity_advanced_OcclusionDemo"
+    ],
+    "155": [
+      "stage3_unity_advanced_PlayerData"
+    ],
+    "156": [
+      "stage3_unity_advanced_PostProcessingDemo"
+    ],
+    "157": [
+      "stage3_unity_advanced_Shader_SimpleSurface"
+    ],
+    "158": [
+      "stage4_design_patterns_CharacterBuilderClass"
+    ],
+    "159": [
+      "stage5_interview_八股模拟"
+    ],
+    "160": [
+      "unity_manual_bilingual_v2_animator"
+    ],
+    "161": [
+      "unity_manual_bilingual_v2_coroutine"
+    ],
+    "162": [
+      "unity_manual_bilingual_v2_scene_manager"
+    ]
+  },
+  "cohesion": {
+    "0": 0.0620782726045884,
+    "1": 0.06612685560053981,
+    "2": 0.11764705882352941,
+    "3": 0.2727272727272727,
+    "4": 0.2,
+    "5": 0.25,
+    "6": 0.2857142857142857,
+    "7": 0.2857142857142857,
+    "8": 0.2857142857142857,
+    "9": 0.38095238095238093,
+    "10": 0.3333333333333333,
+    "11": 0.3333333333333333,
+    "12": 0.4,
+    "13": 0.4,
+    "14": 0.4,
+    "15": 0.4,
+    "16": 0.4,
+    "17": 0.4,
+    "18": 0.4,
+    "19": 0.4,
+    "20": 0.5,
+    "21": 0.5,
+    "22": 0.5,
+    "23": 0.5,
+    "24": 0.5,
+    "25": 0.5,
+    "26": 0.5,
+    "27": 0.5,
+    "28": 0.6666666666666666,
+    "29": 0.6666666666666666,
+    "30": 0.6666666666666666,
+    "31": 0.6666666666666666,
+    "32": 0.6666666666666666,
+    "33": 0.6666666666666666,
+    "34": 0.6666666666666666,
+    "35": 0.6666666666666666,
+    "36": 0.6666666666666666,
+    "37": 0.6666666666666666,
+    "38": 0.6666666666666666,
+    "39": 0.6666666666666666,
+    "40": 0.6666666666666666,
+    "41": 0.6666666666666666,
+    "42": 0.6666666666666666,
+    "43": 0.6666666666666666,
+    "44": 0.6666666666666666,
+    "45": 0.6666666666666666,
+    "46": 1.0,
+    "47": 1.0,
+    "48": 1.0,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0,
+    "55": 1.0,
+    "56": 1.0,
+    "57": 1.0,
+    "58": 1.0,
+    "59": 1.0,
+    "60": 1.0,
+    "61": 1.0,
+    "62": 1.0,
+    "63": 1.0,
+    "64": 1.0,
+    "65": 1.0,
+    "66": 1.0,
+    "67": 1.0,
+    "68": 1.0,
+    "69": 1.0,
+    "70": 1.0,
+    "71": 1.0,
+    "72": 1.0,
+    "73": 1.0,
+    "74": 1.0,
+    "75": 1.0,
+    "76": 1.0,
+    "77": 1.0,
+    "78": 1.0,
+    "79": 1.0,
+    "80": 1.0,
+    "81": 1.0,
+    "82": 1.0,
+    "83": 1.0,
+    "84": 1.0,
+    "85": 1.0,
+    "86": 1.0,
+    "87": 1.0,
+    "88": 1.0,
+    "89": 1.0,
+    "90": 1.0,
+    "91": 1.0,
+    "92": 1.0,
+    "93": 1.0,
+    "94": 1.0,
+    "95": 1.0,
+    "96": 1.0,
+    "97": 1.0,
+    "98": 1.0,
+    "99": 1.0,
+    "100": 1.0,
+    "101": 1.0,
+    "102": 1.0,
+    "103": 1.0,
+    "104": 1.0,
+    "105": 1.0,
+    "106": 1.0,
+    "107": 1.0,
+    "108": 1.0,
+    "109": 1.0,
+    "110": 1.0,
+    "111": 1.0,
+    "112": 1.0,
+    "113": 1.0,
+    "114": 1.0,
+    "115": 1.0,
+    "116": 1.0,
+    "117": 1.0,
+    "118": 1.0,
+    "119": 1.0,
+    "120": 1.0,
+    "121": 1.0,
+    "122": 1.0,
+    "123": 1.0,
+    "124": 1.0,
+    "125": 1.0,
+    "126": 1.0,
+    "127": 1.0,
+    "128": 1.0,
+    "129": 1.0,
+    "130": 1.0,
+    "131": 1.0,
+    "132": 1.0,
+    "133": 1.0,
+    "134": 1.0,
+    "135": 1.0,
+    "136": 1.0,
+    "137": 1.0,
+    "138": 1.0,
+    "139": 1.0,
+    "140": 1.0,
+    "141": 1.0,
+    "142": 1.0,
+    "143": 1.0,
+    "144": 1.0,
+    "145": 1.0,
+    "146": 1.0,
+    "147": 1.0,
+    "148": 1.0,
+    "149": 1.0,
+    "150": 1.0,
+    "151": 1.0,
+    "152": 1.0,
+    "153": 1.0,
+    "154": 1.0,
+    "155": 1.0,
+    "156": 1.0,
+    "157": 1.0,
+    "158": 1.0,
+    "159": 1.0,
+    "160": 1.0,
+    "161": 1.0,
+    "162": 1.0
+  },
+  "gods": [
+    {
+      "id": "game_programming_patterns_complete_state",
+      "label": "State Pattern",
+      "degree": 12
+    },
+    {
+      "id": "game_programming_patterns_complete_data_locality",
+      "label": "Data Locality Pattern",
+      "degree": 11
+    },
+    {
+      "id": "game_dev_interview_questions",
+      "label": "游戏开发工程师面试题汇总",
+      "degree": 10
+    },
+    {
+      "id": "algorithm_roadmap",
+      "label": "算法路线图",
+      "degree": 10
+    },
+    {
+      "id": "game_programming_patterns_complete_subclass_sandbox",
+      "label": "Subclass Sandbox Pattern",
+      "degree": 9
+    },
+    {
+      "id": "game_programming_patterns_complete_update_method",
+      "label": "Update Method Pattern",
+      "degree": 7
+    },
+    {
+      "id": "game_programming_patterns_complete_bytecode",
+      "label": "Bytecode Pattern",
+      "degree": 7
+    },
+    {
+      "id": "game_programming_patterns_complete_object_pool",
+      "label": "Object Pool Pattern",
+      "degree": 7
+    },
+    {
+      "id": "unity_manual_bilingual_v2",
+      "label": "Unity Manual v2 (Bilingual)",
+      "degree": 7
+    },
+    {
+      "id": "game_programming_patterns_complete_heroine_state",
+      "label": "HeroineState",
+      "degree": 6
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Property",
+      "target": "ArrayList",
+      "source_files": [
+        "CSharp_Complete_Notes.md",
+        "C++与Java从CSharp进阶指南.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "逐条对应章节与练习模板",
+      "target": "Coroutine vs Async/Await",
+      "source_files": [
+        "逐条对应章节与练习模板.md",
+        "易混淆知识点汇总.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `Coroutine vs Async/Await` unexpectedly reaches hub `逐条对应章节与练习模板`"
+    },
+    {
+      "source": "逐条对应章节与练习模板",
+      "target": "Resource Loading Models",
+      "source_files": [
+        "逐条对应章节与练习模板.md",
+        "易混淆知识点汇总.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `Resource Loading Models` unexpectedly reaches hub `逐条对应章节与练习模板`"
+    },
+    {
+      "source": "Render Pipeline",
+      "target": "ECS Architecture",
+      "source_files": [
+        "Unity_Manual_Bilingual_v2.md",
+        "游戏开发工程师面试题汇总.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "Process vs Thread",
+      "target": "Stack vs Heap",
+      "source_files": [
+        "图解系统.md",
+        "易混淆知识点汇总.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `State Pattern` connect `Game AI Patterns` to `Virtual Machine Patterns`, `Character State Machine`?",
+      "why": "High betweenness centrality (0.012) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Update Method Pattern` connect `Game AI Patterns` to `Virtual Machine Patterns`?",
+      "why": "High betweenness centrality (0.010) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Subclass Sandbox Pattern` connect `Virtual Machine Patterns` to `Game AI Patterns`?",
+      "why": "High betweenness centrality (0.008) - this node is a cross-community bridge."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 7 inferred relationships involving `State Pattern` (e.g. with `Behavior Trees` and `Flyweight Pattern (for static states)`) actually correct?",
+      "why": "`State Pattern` has 7 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 2 inferred relationships involving `Subclass Sandbox Pattern` (e.g. with `Bytecode Pattern` and `Type Object Pattern`) actually correct?",
+      "why": "`Subclass Sandbox Pattern` has 2 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `Array`, `LinkedList<T>`, `SortedDictionary<K,V>` to the rest of the system?",
+      "why": "316 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Game AI Patterns` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.0620782726045884 - nodes in this community are weakly interconnected."
+    }
+  ]
+}
