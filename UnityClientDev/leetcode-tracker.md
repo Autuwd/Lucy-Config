@@ -1,9 +1,9 @@
 # LeetCode 刷题记录
 
 ## 统计
-- **C# 总题数**: 174 题
+- **C# 总题数**: 178 题
 - **C++ 总题数**: 3 题
-- **总计**: 177 题
+- **总计**: 181 题
 
 ---
 
@@ -23,6 +23,7 @@
 | 25 | Reverse Nodes in k-Group | - | ✅ |
 | 27 | Remove Element | - | ✅ |
 | 32 | Longest Valid Parentheses | - | ✅ |
+| 34 | Find First and Last Position of Element in Sorted Array | 2026-08-05 | ✅ |
 | 37 | Sudoku Solver | - | ✅ |
 | 39 | Combination Sum | - | ✅ |
 | 40 | Combination Sum II | - | ✅ |
@@ -113,6 +114,7 @@
 | 387 | First Unique Character in a String | - | ✅ |
 | 394 | Decode String | - | ✅ |
 | 402 | Remove K Digits | - | ✅ |
+| 410 | Split Array Largest Sum | 2026-08-06 | ✅ |
 | 416 | Partition Equal Subset Sum | - | ✅ |
 | 429 | N-ary Tree Level Order Traversal | - | ✅ |
 | 454 | 4Sum II | - | ✅ |
@@ -146,6 +148,7 @@
 | 841 | Keys and Rooms | - | ✅ |
 | 853 | Car Fleet | - | ✅ |
 | 863 | All Nodes Distance K in Binary Tree | - | ✅ |
+| 875 | Koko Eating Bananas | 2026-08-06 | ✅ |
 | 876 | Middle of the Linked List | - | ✅ |
 | 886 | Possible Bipartition | - | ✅ |
 | 889 | Construct Binary Tree from Preorder and Postorder | - | ✅ |
@@ -156,6 +159,7 @@
 | 977 | Squares of a Sorted Array | - | ✅ |
 | 980 | Unique Paths III | - | ✅ |
 | 990 | Satisfiability of Equality Equations | - | ✅ |
+| 1011 | Capacity To Ship Packages Within D Days | 2026-08-06 | ✅ |
 | 1020 | Number of Enclaves | - | ✅ |
 | 1022 | Sum of Root To Leaf Binary Numbers | - | ✅ |
 | 1091 | Shortest Path in Binary Matrix | - | ✅ |
@@ -193,6 +197,8 @@
 
 ## 最近活动
 
+- **2026-08-06**: C# 新增 3 题 — LC875(吃香蕉) LC1011(运包裹) LC410(分割数组) 🎯 二分答案专题（最小化最大值三连）
+- **2026-08-05**: C# 新增 1 题 — LC34(查找元素第一和最后位置) 🎯 二分边界模板
 - **2026-07-29**: C# 新增 8 题 — LC5(最长回文) LC11(盛水) LC26(去重) LC42(接雨水) LC83(链表去重) LC167(两数和) LC283(移零) LC344(反转) 🎯 双指针专题
 - **2026-07-16**: C# 新增 230. Kth Smallest Element / 538. Convert BST to Greater Tree 🎯 BST专题
 - **2026-07-16**: C++ 新增 230. Kth Smallest Element / 538. Convert BST to Greater Tree (跨语言双刷)
