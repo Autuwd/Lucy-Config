@@ -830,7 +830,7 @@ ShaderLOD 50;  // 低
 
 ### 2.5 资源管理
 
-#### Q17: Resources 和 AssetBundle 的区别？
+#### Q17: Resources 和 AssetBundle 的区别？ ✅ 已学(08-10)
 
 **解答：**
 
