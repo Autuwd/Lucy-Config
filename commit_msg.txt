@@ -1,0 +1,13 @@
+Unity客户端 Day22-23：重生系统完善 + S5 UI Day1-2完成
+
+- HUD 伤害/命数显示完成 (DamageDisplay/StockDisplay)
+- 重生流程修复：
+  * StateMachine.Initialize 强制重置 Dead->Idle
+  * HashSet 注册表去重，防止重复 RegisterFighter
+  * gameOverDelay(90s) 改为 settings.respawnTime(3s)
+  * SetStock/SetPercent 统一 UI 同步
+- BlastZone 加防重入 _triggered 标记
+- StockDisplay/DamageDisplay 加空引用保护
+- 修复 StockDisplay/DamageDisplay 乱码 (UTF-8 无 BOM)
+- 完整日志链路追踪：Kill->OnKilled->RespawnAfterDelay->Respawn
+- 学习计划/知识库同步更新
