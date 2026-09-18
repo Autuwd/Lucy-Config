@@ -92,10 +92,10 @@ var modified = new LoggingVisitor().Visit(expr);
 // Unity IL2CPP 下 Expression.Compile() 不可用！
 // 因为 IL2CPP 不支持运行时生成代码
 
-// ❌ 不能在 Unity IL2CPP 构建中这样用：
+// 不能在 Unity IL2CPP 构建中这样用：
 var compiled = lambda.Compile();  // NotSupportedException!
 
-// ✅ 替代方案：
+// 替代方案：
 // 1. 直接用委托（编译时已知）
 // 2. 用反射（慢，但有）
 // 3. 用 Source Generators（编译时生成代码）
@@ -163,7 +163,7 @@ Console.WriteLine(ReferenceEquals(l1, l2));  // false（不同实例）
 someEvent += () => DoSomething();
 // someEvent -= () => DoSomething();  // 无法移除！不同委托实例！
 
-// ✅ 正确做法
+// 正确做法
 Action handler = () => DoSomething();
 someEvent += handler;
 someEvent -= handler;  // 可以移除
@@ -174,7 +174,7 @@ someEvent -= handler;  // 可以移除
 ```csharp
 public class AudioManager : MonoBehaviour
 {
-    // ❌ 坏：每次 OnEnable 创建新委托
+    // 坏：每次 OnEnable 创建新委托
     void OnEnable()
     {
         EventBus.Subscribe<DamageEvent>(OnDamage);  // 方法组没问题
@@ -187,7 +187,7 @@ public class AudioManager : MonoBehaviour
         // EventBus.Unsubscribe<HealEvent>(e => PlayHealSound(e.Amount));  // 无法移除！
     }
 
-    // ✅ 好：缓存 Lambda
+    // 好：缓存 Lambda
     private Action<HealEvent> _healHandler;
 
     void Awake()
@@ -478,10 +478,10 @@ public partial class Player
 // 委托不能直接捕获 Span<T>（因为 Span 是 ref struct）
 ReadOnlySpan<char> text = "Hello".AsSpan();
 
-// ❌ 编译错误
+// 编译错误
 // Action act = () => Console.WriteLine(text[0]);
 
-// ✅ 解决：转换为字符串或 Memory<T>
+// 解决：转换为字符串或 Memory<T>
 Memory<char> mem = new char[] { 'H', 'e', 'l', 'l', 'o' };
 Action act = () => Console.WriteLine(mem.Span[0]);  // Span 在 Lambda 中临时使用
 

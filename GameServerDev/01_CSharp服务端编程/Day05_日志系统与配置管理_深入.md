@@ -135,10 +135,10 @@ class StructuredLoggingConventions
 {
     // 游戏服务器日志属性命名规则：
 
-    // ❌ 坏习惯：动态拼接
+    // 坏习惯：动态拼接
     Log.Information($"Player {playerId} killed monster {monsterId}");
 
-    // ✅ 好习惯：模板 + 结构化参数
+    // 好习惯：模板 + 结构化参数
     Log.Information("Player {PlayerId} killed monster {MonsterId}",
         playerId, monsterId);
 

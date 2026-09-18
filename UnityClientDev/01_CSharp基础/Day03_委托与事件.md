@@ -190,18 +190,18 @@ Predicate<int>        // bool (int)
 ### 什么时候用 Action/Func，什么时候自定义 delegate？
 
 ```csharp
-// ✅ 简单的回调用 Action/Func
+// 简单的回调用 Action/Func
 public void DoSomething(Action onComplete)
 {
     // ...
     onComplete?.Invoke();
 }
 
-// ✅ 简单的判断用 Predicate
+// 简单的判断用 Predicate
 List<int> numbers = new List<int> { 1, 2, 3, 4, 5 };
 numbers.FindAll(x => x > 3);  // Predicate<int>
 
-// ❌ 当方法名需要表达意义时，用自定义 delegate
+// 当方法名需要表达意义时，用自定义 delegate
 public delegate void PlayerDeathHandler(Player player, DeathCause cause);
 // 比 Action<Player, DeathCause> 更清晰
 ```
@@ -239,9 +239,9 @@ player.OnDamagePublic = null;              // OK（清空所有！危险！）
 
 // 事件——只能 += 和 -=
 player.OnDamageEvent += UpdateHealthBar;   // OK
-player.OnDamageEvent = SomeOtherMethod;    // ❌ 编译错误！
-player.OnDamageEvent.Invoke(10);           // ❌ 编译错误！
-player.OnDamageEvent = null;               // ❌ 编译错误！
+player.OnDamageEvent = SomeOtherMethod;    // 编译错误！
+player.OnDamageEvent.Invoke(10);           // 编译错误！
+player.OnDamageEvent = null;               // 编译错误！
 ```
 
 ### 事件编译器生成的代码
@@ -298,13 +298,13 @@ public class UIManager : MonoBehaviour
 
     void UpdateHealthBar(int dmg) { }
 
-    // ❌ 问题：如果 UIManager 被销毁，但没有取消订阅
+    // 问题：如果 UIManager 被销毁，但没有取消订阅
     // player 仍然持有对 UpdateHealthBar 的引用
     // UIManager 无法被 GC 回收！= 内存泄漏！
 
     void OnDestroy()
     {
-        // ✅ 必须取消订阅
+        // 必须取消订阅
         player.OnDamageEvent -= UpdateHealthBar;
     }
 }
@@ -340,9 +340,9 @@ public class DamageTrigger : MonoBehaviour
 
 | | C# event | UnityEvent |
 |--|---------|------------|
-| 序列化 | ❌ 不能序列化 | ✅ 可以序列化 |
-| Inspector 绑定 | ❌ 不行 | ✅ 拖拽绑定 |
-| 动态绑定 | ✅ += 语法 | ✅ AddListener() |
+| 序列化 | 不能序列化 | 可以序列化 |
+| Inspector 绑定 | 不行 | 拖拽绑定 |
+| 动态绑定 | += 语法 | AddListener() |
 | 性能 | 高（直接 IL 调用） | 较低（反射调用） |
 | 用途 | 代码内部 | 暴露给 Inspector |
 
@@ -444,14 +444,14 @@ player.OnDamage += closure.<Main>b__0;
 **陷阱：** 因为闭包捕获的是变量引用（不是值），所以：
 
 ```csharp
-// ❌ 经典陷阱
+// 经典陷阱
 for (int i = 0; i < 5; i++)
 {
     button.onClick.AddListener(() => Debug.Log(i));
     // 所有按钮点击都输出 5！（循环结束时 i = 5）
 }
 
-// ✅ 修正：复制局部变量
+// 修正：复制局部变量
 for (int i = 0; i < 5; i++)
 {
     int copy = i;  // 每次循环创建一个新变量

@@ -20,7 +20,7 @@ Day04 讲了 List、Dictionary、LINQ 的基础用法。但大型项目中，你
 ```csharp
 // 当你从网络或数据库获取数据时，普通 IEnumerable 会阻塞线程
 
-// ❌ 不能这样：
+// 不能这样：
 // IEnumerable<Texture2D> LoadTextures(List<string> urls)
 // {
 //     foreach (var url in urls)
@@ -180,7 +180,7 @@ var result = data
 // Unity 主线程不能调用 Unity API 从 PLINQ！
 // PLINQ 在后台线程执行
 
-// ❌ 危险：PLINQ 中调用 Unity API
+// 危险：PLINQ 中调用 Unity API
 var results = data.AsParallel().Select(x =>
 {
     // 主线程要求！在后台线程调用会崩溃
@@ -188,7 +188,7 @@ var results = data.AsParallel().Select(x =>
     // return go;
 });
 
-// ✅ 安全：PLINQ 只做纯数据计算
+// 安全：PLINQ 只做纯数据计算
 var results = data.AsParallel().Select(x =>
 {
     // 纯数学计算——完全安全

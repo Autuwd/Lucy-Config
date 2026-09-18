@@ -6,7 +6,7 @@
 
 ---
 
-## 📋 目录
+## 目录
 
 1. [习惯 C++](#习惯-c)
 2. [构造/析构/赋值](#构造析构赋值)
@@ -33,35 +33,35 @@ C++ 由四个子语言组成：
 3. Template C++：泛型编程
 4. STL：模板库
 
-💡 每个子语言有自己的规则，不要混用！
+【补充】每个子语言有自己的规则，不要混用！
 ```
 
 ### 条款 2：尽量用 const、enum、inline 替换 #define
 
 ```cpp
-// ❌ 旧式宏
+// 旧式宏
 #define MAX_SIZE 100
 #define SQUARE(x) ((x) * (x))
 
-// ✅ 推荐方式
+// 推荐方式
 const int MAX_SIZE = 100;           // 类型安全
 inline int Square(int x) {          // 类型安全，调试友好
     return x * x;
 }
 
-// ✅ 类作用域内的常量
+// 类作用域内的常量
 class Player {
 public:
     static const int MAX_HEALTH = 100;  // 声明
 };
 
-// ✅ 枚举作为整型常量
+// 枚举作为整型常量
 class Player {
 public:
     enum { MAX_HEALTH = 100 };  // 枚举成员
 };
 
-// 💡 为什么？
+// 【补充】为什么？
 // 1. 宏没有类型检查
 // 2. 宏可能产生意外的副作用
 // 3. 宏不利于调试
@@ -70,15 +70,15 @@ public:
 ### 条款 3：尽量用 const
 
 ```cpp
-// ✅ const 修饰指针
+// const 修饰指针
 const int *p1;      // 指向常量的指针
 int *const p2;      // 常量指针
 const int *const p3;  // 指向常量的常量指针
 
-// ✅ const 修饰引用
+// const 修饰引用
 void Print(const std::string &s);  // 只读引用
 
-// ✅ const 修饰成员函数
+// const 修饰成员函数
 class Player {
 public:
     int GetHealth() const {  // 承诺不修改对象
@@ -86,7 +86,7 @@ public:
     }
 };
 
-// 💡 const 的好处
+// 【补充】const 的好处
 // 1. 编译器可以检查错误
 // 2. 提高代码可读性
 // 3. 允许操作 const 对象
@@ -95,29 +95,29 @@ public:
 ### 条款 4：确定对象被使用前已初始化
 
 ```cpp
-// ❌ 未定义行为
+// 未定义行为
 int x;              // x 可能是任意值
 std::string s;      // s 是空字符串（已初始化）
 
-// ✅ 使用初始化列表
+// 使用初始化列表
 class Player {
 public:
     int health;
     std::string name;
     
-    // ✅ 初始化列表（高效）
+    // 初始化列表（高效）
     Player(int h, const std::string &n) : health(h), name(n) {}
     
-    // ❌ 构造函数体内赋值（低效）
+    // 构造函数体内赋值（低效）
     Player(int h, const std::string &n) {
         health = h;      // 先默认构造，再赋值
         name = n;
     }
 };
 
-// ✅ 使用 std::make_shared 初始化智能指针
-auto sp = std::make_shared<int>(10);  // ✅ 推荐
-std::shared_ptr<int> sp2(new int(10));  // ⚠️ 可能泄漏
+// 使用 std::make_shared 初始化智能指针
+auto sp = std::make_shared<int>(10);  // 推荐
+std::shared_ptr<int> sp2(new int(10));  // 【注意】可能泄漏
 ```
 
 ---
@@ -127,7 +127,7 @@ std::shared_ptr<int> sp2(new int(10));  // ⚠️ 可能泄漏
 ### 条款 5：了解 C++ 自动生成的成员函数
 
 ```cpp
-// ✅ 编译器自动生成的函数
+// 编译器自动生成的函数
 class Player {
     // 1. 默认构造函数
     Player() {}
@@ -148,7 +148,7 @@ class Player {
     Player& operator=(Player &&other) noexcept {}
 };
 
-// 💡 自动生成条件
+// 【补充】自动生成条件
 // 只有当类没有显式声明时才会生成
 // 如果你声明了任何一个，其他可能不会生成
 ```
@@ -156,7 +156,7 @@ class Player {
 ### 条款 6：若不想使用编译器自动生成的函数，就该明确拒绝
 
 ```cpp
-// ❌ 旧式方法（C++03）
+// 旧式方法（C++03）
 class Player {
 private:
     Player(const Player &other);           // 声明为 private
@@ -166,7 +166,7 @@ public:
     Player() {}
 };
 
-// ✅ C++11 方法：使用 = delete
+// C++11 方法：使用 = delete
 class Player {
 public:
     Player(const Player &other) = delete;
@@ -175,7 +175,7 @@ public:
     Player() {}
 };
 
-// 💡 使用场景
+// 【补充】使用场景
 // 1. 单例模式
 // 2. 禁止拷贝的资源管理类
 // 3. 禁止赋值的不可变对象
@@ -184,7 +184,7 @@ public:
 ### 条款 7：为多态基类声明虚析构函数
 
 ```cpp
-// ❌ 错误示例
+// 错误示例
 class Base {
 public:
     // 没有虚析构函数
@@ -198,9 +198,9 @@ public:
 };
 
 Base *p = new Derived();
-delete p;  // ❌ 内存泄漏！Derived 的析构函数不会调用
+delete p;  // 内存泄漏！Derived 的析构函数不会调用
 
-// ✅ 正确示例
+// 正确示例
 class Base {
 public:
     virtual ~Base() {}  // 虚析构函数
@@ -210,13 +210,13 @@ class Derived : public Base {
 public:
     int *data;
     Derived() { data = new int[100]; }
-    ~Derived() { delete[] data; }  // ✅ 会调用
+    ~Derived() { delete[] data; }  // 会调用
 };
 
 Base *p = new Derived();
-delete p;  // ✅ 正确释放
+delete p;  // 正确释放
 
-// 🔴 Unity 对照
+// Unity 对照
 // Unity 的 MonoBehaviour 没有虚析构函数
 // Unity 使用垃圾回收，不需要手动析构
 ```
@@ -224,7 +224,7 @@ delete p;  // ✅ 正确释放
 ### 条款 8：别让异常逃离析构函数
 
 ```cpp
-// ❌ 危险示例
+// 危险示例
 class Database {
 public:
     ~Database() {
@@ -232,7 +232,7 @@ public:
     }
 };
 
-// ✅ 安全示例
+// 安全示例
 class Database {
 public:
     ~Database() {
@@ -245,7 +245,7 @@ public:
     }
 };
 
-// 💡 为什么？
+// 【补充】为什么？
 // 1. 析构函数在异常处理期间可能被调用
 // 2. 如果析构函数抛出异常，可能导致程序终止
 // 3. 应该在析构函数中处理所有异常
@@ -254,7 +254,7 @@ public:
 ### 条款 9：绝不在构造和析构过程中调用虚函数
 
 ```cpp
-// ❌ 错误示例
+// 错误示例
 class Base {
 public:
     Base() {
@@ -275,7 +275,7 @@ public:
 
 Derived d;  // 输出 "Base"，不是 "Derived"！
 
-// 💡 为什么？
+// 【补充】为什么？
 // 构造期间，对象类型还是 Base
 // Derived 的构造函数还没执行
 // 所以调用的是 Base::VirtualFunction()
@@ -284,7 +284,7 @@ Derived d;  // 输出 "Base"，不是 "Derived"！
 ### 条款 10：令 operator= 返回一个 reference to *this
 
 ```cpp
-// ✅ 链式赋值
+// 链式赋值
 class Player {
 public:
     int health;
@@ -295,26 +295,26 @@ public:
             health = other.health;
             attack = other.attack;
         }
-        return *this;  // ✅ 返回引用
+        return *this;  // 返回引用
     }
 };
 
 // 使用
 Player p1, p2, p3;
-p1 = p2 = p3;  // ✅ 链式赋值
+p1 = p2 = p3;  // 链式赋值
 ```
 
 ### 条款 11：在 operator= 中处理自我赋值
 
 ```cpp
-// ❌ 不安全示例
+// 不安全示例
 Player& operator=(const Player &other) {
     delete[] data;          // 如果 this == &other，数据被删除
     data = new int[other.size];  // 然后访问已删除的数据
     // ...
 }
 
-// ✅ 安全示例 1：证同测试
+// 安全示例 1：证同测试
 Player& operator=(const Player &other) {
     if (this == &other) return *this;  // 证同测试
     delete[] data;
@@ -322,7 +322,7 @@ Player& operator=(const Player &other) {
     return *this;
 }
 
-// ✅ 安全示例 2：copy-and-swap
+// 安全示例 2：copy-and-swap
 Player& operator=(Player other) {  // 注意：按值传递
     std::swap(data, other.data);
     std::swap(size, other.size);
@@ -333,7 +333,7 @@ Player& operator=(Player other) {  // 注意：按值传递
 ### 条款 12：复制对象时勿忘其每一个成分
 
 ```cpp
-// ❌ 不完整示例
+// 不完整示例
 class Player {
 public:
     std::string name;
@@ -344,7 +344,7 @@ public:
     }
 };
 
-// ✅ 完整示例
+// 完整示例
 class Player {
 public:
     std::string name;
@@ -377,21 +377,21 @@ public:
 ### 条款 13：以对象管理资源
 
 ```cpp
-// ❌ 裸指针容易泄漏
+// 裸指针容易泄漏
 void Process() {
     Investment *p = CreateInvestment();
     // ... 可能抛出异常
     delete p;  // 可能不会执行
 }
 
-// ✅ 使用智能指针
+// 使用智能指针
 void Process() {
     std::unique_ptr<Investment> p(CreateInvestment());
     // ... 即使抛出异常，也会自动删除
 }
 // 离开作用域时自动删除
 
-// ✅ 使用自定义 RAII 类
+// 使用自定义 RAII 类
 class Investment {
 public:
     static Investment* Create() {
@@ -408,7 +408,7 @@ public:
 ### 条款 14：在资源管理类中小心 copying 行为
 
 ```cpp
-// ✅ 禁止复制
+// 禁止复制
 class Lock {
 public:
     Lock(const std::string &mutex) : mutex(mutex) {
@@ -423,7 +423,7 @@ public:
     Lock& operator=(const Lock&) = delete;
 };
 
-// ✅ 深拷贝
+// 深拷贝
 class FileHandle {
 public:
     FileHandle(const char *filename) {
@@ -440,7 +440,7 @@ public:
     }
 };
 
-// ✅ 转移所有权
+// 转移所有权
 class Mutex {
 public:
     Mutex(const Mutex&) = delete;
@@ -455,11 +455,11 @@ public:
 ### 条款 15：在资源管理类中提供对原始资源的访问
 
 ```cpp
-// ✅ 使用 get() 访问原始指针
+// 使用 get() 访问原始指针
 std::unique_ptr<int> up = std::make_unique<int>(10);
 int *raw = up.get();  // 获取原始指针
 
-// ✅ 使用显式转换
+// 使用显式转换
 class Lock {
 public:
     explicit Lock(const std::string &mutex) : mutex(mutex) {
@@ -470,7 +470,7 @@ public:
         UnlockMutex(mutex);
     }
     
-    // ✅ 显式转换
+    // 显式转换
     explicit operator const std::string&() const {
         return mutex;
     }
@@ -479,7 +479,7 @@ private:
     std::string mutex;
 };
 
-// 💡 为什么需要访问原始资源？
+// 【补充】为什么需要访问原始资源？
 // 1. 与 C API 交互
 // 2. 性能优化
 // 3. 传递给期望原始资源的函数
@@ -488,28 +488,28 @@ private:
 ### 条款 16：成对使用 new 和 delete 时要采取相同形式
 
 ```cpp
-// ❌ 不匹配
+// 不匹配
 int *p1 = new int[100];
-delete p1;      // ❌ 应该用 delete[]
+delete p1;      // 应该用 delete[]
 
 int *p2 = new int;
-delete[] p2;    // ❌ 应该用 delete
+delete[] p2;    // 应该用 delete
 
-// ✅ 匹配
+// 匹配
 int *p1 = new int[100];
-delete[] p1;    // ✅ 数组形式
+delete[] p1;    // 数组形式
 
 int *p2 = new int;
-delete p2;      // ✅ 单个对象形式
+delete p2;      // 单个对象形式
 
-// 💡 使用智能指针避免问题
-std::vector<int> v(100);  // ✅ 推荐
+// 【补充】使用智能指针避免问题
+std::vector<int> v(100);  // 推荐
 ```
 
 ### 条款 17：以独立语句将 newed 对象置入智能指针
 
 ```cpp
-// ❌ 危险示例
+// 危险示例
 ProcessWidget(std::shared_ptr<Widget>(new Widget), ComputePriority());
 
 // 可能的执行顺序：
@@ -519,11 +519,11 @@ ProcessWidget(std::shared_ptr<Widget>(new Widget), ComputePriority());
 
 // 如果 2 抛出异常，1 的内存会泄漏！
 
-// ✅ 安全示例
+// 安全示例
 auto pw = std::make_shared<Widget>();
 ProcessWidget(pw, ComputePriority());
 
-// 💡 原则
+// 【补充】原则
 // 1. 使用 make_shared 或 make_unique
 // 2. 不要在同一个语句中混合 new 和智能指针
 ```
@@ -535,20 +535,20 @@ ProcessWidget(pw, ComputePriority());
 ### 条款 18：让接口容易被正确使用，不易被误用
 
 ```cpp
-// ❌ 容易误用
+// 容易误用
 Date(int month, int day, int year);
 
 Date d(30, 8, 2023);  // 顺序错误！
 
-// ✅ 使用类型安全的接口
+// 使用类型安全的接口
 enum class Month { Jan=1, Feb, Mar, ... };
 
-Date d(Month::Aug, 30, 2023);  // ✅ 清晰
+Date d(Month::Aug, 30, 2023);  // 清晰
 
-// ✅ 使用工厂函数
+// 使用工厂函数
 std::shared_ptr<Date> CreateDate(Month m, int d, int y);
 
-// 💡 设计原则
+// 【补充】设计原则
 // 1. 使用强类型
 // 2. 避免类型转换
 // 3. 提供有意义的错误信息
@@ -557,7 +557,7 @@ std::shared_ptr<Date> CreateDate(Month m, int d, int y);
 ### 条款 19：设计 class 犹如设计 type
 
 ```cpp
-// ✅ 设计一个新类型时考虑：
+// 设计一个新类型时考虑：
 // 1. 构造和析构函数
 // 2. 拷贝和移动操作
 // 3. 运算符重载
@@ -593,7 +593,7 @@ private:
     float x, y;
 };
 
-// 💡 问自己
+// 【补充】问自己
 // 1. 这个类型需要什么接口？
 // 2. 这个类型需要什么数据？
 // 3. 这个类型和其他类型有什么关系？
@@ -602,16 +602,16 @@ private:
 ### 条款 20：宁以 const& 传值取代传值
 
 ```cpp
-// ❌ 效率低
+// 效率低
 void Print(std::string s);  // 拷贝整个字符串
 
-// ✅ 高效
+// 高效
 void Print(const std::string &s);  // 只传递引用
 
-// ✅ 对于内置类型
-void Print(int x);  // ✅ 直接传递值更高效
+// 对于内置类型
+void Print(int x);  // 直接传递值更高效
 
-// 💡 规则
+// 【补充】规则
 // 1. 内置类型（int, double, 指针）：传值
 // 2. 用户定义类型：传 const&
 // 3. 不要传递空引用或空指针
@@ -620,18 +620,18 @@ void Print(int x);  // ✅ 直接传递值更高效
 ### 条款 21：必须返回对象时，别妄想返回其 reference
 
 ```cpp
-// ❌ 危险示例
+// 危险示例
 const Vector2D& operator+(const Vector2D &a, const Vector2D &b) {
     Vector2D result(a.x + b.x, a.y + b.y);
-    return result;  // ❌ 返回局部变量的引用！
+    return result;  // 返回局部变量的引用！
 }
 
-// ✅ 安全示例
+// 安全示例
 Vector2D operator+(const Vector2D &a, const Vector2D &b) {
     return Vector2D(a.x + b.x, a.y + b.y);  // 返回值
 }
 
-// 💡 规则
+// 【补充】规则
 // 1. 如果函数返回局部变量，必须返回值
 // 2. 不要返回局部变量的引用或指针
 // 3. 返回 const 引用可以防止意外修改
@@ -640,13 +640,13 @@ Vector2D operator+(const Vector2D &a, const Vector2D &b) {
 ### 条款 22：将成员变量声明为 private
 
 ```cpp
-// ❌ 不好
+// 不好
 class Player {
 public:
     int health;  // 可以直接访问，无法控制
 };
 
-// ✅ 好
+// 好
 class Player {
 public:
     int GetHealth() const { return health; }
@@ -661,7 +661,7 @@ private:
     int maxHealth;
 };
 
-// 💡 优点
+// 【补充】优点
 // 1. 可以控制访问权限
 // 2. 可以改变实现而不影响接口
 // 3. 可以添加约束和验证
@@ -670,7 +670,7 @@ private:
 ### 条款 23：宁以 non-member、non-friend 替换 member 函数
 
 ```cpp
-// ❌ Member 函数
+// Member 函数
 class WebBrowser {
 public:
     void ClearCache();
@@ -684,7 +684,7 @@ public:
     }
 };
 
-// ✅ Non-member 函数
+// Non-member 函数
 class WebBrowser {
 public:
     void ClearCache();
@@ -698,7 +698,7 @@ void ClearBrowser(WebBrowser &browser) {
     browser.ClearCookies();
 }
 
-// 💡 优点
+// 【补充】优点
 // 1. 封装性更好
 // 2. 可扩展性更强
 // 3. 可以放在单独的头文件中
@@ -707,7 +707,7 @@ void ClearBrowser(WebBrowser &browser) {
 ### 条款 24：若所有参数皆需类型转换，请为此采用 non-member 函数
 
 ```cpp
-// ❌ Member 函数
+// Member 函数
 class Rational {
 public:
     Rational(int numerator = 0, int denominator = 1);
@@ -722,10 +722,10 @@ private:
 };
 
 Rational r1(1, 2);
-Rational r2 = r1 * 2;    // ✅ 可以
-Rational r3 = 2 * r1;    // ❌ 错误！2 不能隐式转换为 Rational
+Rational r2 = r1 * 2;    // 可以
+Rational r3 = 2 * r1;    // 错误！2 不能隐式转换为 Rational
 
-// ✅ Non-member 函数
+// Non-member 函数
 class Rational {
 public:
     Rational(int numerator = 0, int denominator = 1);
@@ -743,14 +743,14 @@ const Rational operator*(const Rational &lhs, const Rational &rhs) {
 }
 
 Rational r1(1, 2);
-Rational r2 = r1 * 2;    // ✅ 可以
-Rational r3 = 2 * r1;    // ✅ 可以
+Rational r2 = r1 * 2;    // 可以
+Rational r3 = 2 * r1;    // 可以
 ```
 
 ### 条款 25：考虑实现 swap 的异常安全性
 
 ```cpp
-// ✅ 标准 swap 实现
+// 标准 swap 实现
 class Widget {
 public:
     void Swap(Widget &other) noexcept {
@@ -764,13 +764,13 @@ private:
     size_t size;
 };
 
-// ✅ 使用 swap 实现异常安全的赋值
+// 使用 swap 实现异常安全的赋值
 Widget& Widget::operator=(Widget other) {
     Swap(other);  // 交换内容
     return *this;
 }
 
-// 💡 异常安全保证
+// 【补充】异常安全保证
 // 1. 基本保证：状态有效，但可能改变
 // 2. 强保证：要么完全成功，要么保持原状态
 // 3. 不抛保证：不会抛出异常
@@ -779,7 +779,7 @@ Widget& Widget::operator=(Widget other) {
 ### 条款 26：尽可能延后变量定义式的出现
 
 ```cpp
-// ❌ 不好
+// 不好
 void Process(const std::string &filename) {
     std::string s;  // 定义但未使用
     
@@ -789,13 +789,13 @@ void Process(const std::string &filename) {
     s = ReadData(file);  // 定义时应该初始化
 }
 
-// ✅ 好
+// 好
 void Process(const std::string &filename) {
     std::ifstream file(filename);
     std::string s = ReadData(file);  // 定义时立即初始化
 }
 
-// 💡 优点
+// 【补充】优点
 // 1. 减少不必要的构造和析构
 // 2. 避免未定义行为
 // 3. 提高可读性
@@ -804,21 +804,21 @@ void Process(const std::string &filename) {
 ### 条款 27：尽量少做转型动作
 
 ```cpp
-// ❌ C 风格转型
+// C 风格转型
 double x = 3.14;
 int y = (int)x;  // 不安全
 
-// ✅ C++ 风格转型
+// C++ 风格转型
 double x = 3.14;
 int y = static_cast<int>(x);  // 明确意图
 
-// 🔴 常见问题
+// 常见问题
 // 1. const_cast：去除 const（危险）
 // 2. dynamic_cast：运行时类型检查（慢）
 // 3. reinterpret_cast：重新解释内存（极度危险）
 // 4. static_cast：编译时类型转换（相对安全）
 
-// 💡 规则
+// 【补充】规则
 // 1. 尽量避免转型
 // 2. 如果必须使用，使用 C++ 风格
 // 3. 不要使用 const_cast
@@ -827,7 +827,7 @@ int y = static_cast<int>(x);  // 明确意图
 ### 条款 28：避免返回 handles 指向对象内部成分
 
 ```cpp
-// ❌ 返回引用
+// 返回引用
 class Player {
 public:
     std::string name;
@@ -842,7 +842,7 @@ Player player;
 std::string &name = player.GetName();
 player.name = "Changed";  // name 也被修改！
 
-// ✅ 返回值
+// 返回值
 class Player {
 public:
     std::string GetName() const {
@@ -850,7 +850,7 @@ public:
     }
 };
 
-// 💡 原则
+// 【补充】原则
 // 1. 不要返回内部成员的引用或指针
 // 2. 返回值会创建副本，更安全
 // 3. 如果需要性能，考虑返回 const 引用
@@ -859,7 +859,7 @@ public:
 ### 条款 29：为"异常安全"而努力是值得的
 
 ```cpp
-// ❌ 不安全示例
+// 不安全示例
 class GUI {
 public:
     void AddWidget(Widget *w) {
@@ -868,7 +868,7 @@ public:
     }
 };
 
-// ✅ 安全示例
+// 安全示例
 class GUI {
 public:
     void AddWidget(std::shared_ptr<Widget> w) {
@@ -876,12 +876,12 @@ public:
     }
 };
 
-// 💡 异常安全保证
+// 【补充】异常安全保证
 // 1. 基本保证：操作失败时，对象处于有效状态
 // 2. 强保证：操作失败时，对象保持原状态
 // 3. 不抛保证：操作不会抛出异常
 
-// 🔴 Unity 对照
+// Unity 对照
 // Unity 的 C# 有异常处理机制
 // 但 Unity 不建议在 Update 中使用异常
 // 应该避免异常，使用条件判断代替
@@ -894,12 +894,12 @@ public:
 ### 条款 30：透彻了解 inlining 的里里外外
 
 ```cpp
-// ✅ inline 函数
+// inline 函数
 inline int Square(int x) {
     return x * x;
 }
 
-// 💡 inline 的优缺点
+// 【补充】inline 的优缺点
 // 优点：
 // 1. 避免函数调用开销
 // 2. 编译器可以优化
@@ -907,12 +907,12 @@ inline int Square(int x) {
 // 1. 代码膨胀
 // 2. 可能降低缓存命中率
 
-// 💡 使用场景
+// 【补充】使用场景
 // 1. 小型函数（1-5 行）
 // 2. 频繁调用的函数
 // 3. 简单的 getter/setter
 
-// ❌ 不要 inline
+// 不要 inline
 // 1. 大型函数
 // 2. 复杂的循环
 // 3. 递归函数
@@ -921,7 +921,7 @@ inline int Square(int x) {
 ### 条款 31：将文件间的编译依赖关系降至最低
 
 ```cpp
-// ❌ 不好：头文件包含太多
+// 不好：头文件包含太多
 // widget.h
 #include <string>
 #include <vector>
@@ -936,7 +936,7 @@ private:
     SomeClass sc;
 };
 
-// ✅ 好：使用前向声明
+// 好：使用前向声明
 // widget.h
 class SomeClass;  // 前向声明
 
@@ -949,7 +949,7 @@ private:
     SomeClass *sc;  // 指针或引用
 };
 
-// 💡 原则
+// 【补充】原则
 // 1. 使用指针或引用
 // 2. 前向声明代替 #include
 // 3. 使用 Pimpl 惯用法
@@ -962,7 +962,7 @@ private:
 ### 条款 32：确定你的 public 继承塑模出 is-a 关系
 
 ```cpp
-// ✅ 正确的 is-a 关系
+// 正确的 is-a 关系
 class Animal {
 public:
     virtual void Eat() = 0;
@@ -975,13 +975,13 @@ public:
     }
 };
 
-// ❌ 错误的 is-a 关系
+// 错误的 is-a 关系
 class Square : public Rectangle {
     // 正方形 is-a 矩形？
     // 但正方形的宽和高必须相等！
 };
 
-// 💡 原则
+// 【补充】原则
 // 1. public 继承表示 is-a 关系
 // 2. 子类必须能替代父类
 // 3. 不要违反 Liskov 替换原则
@@ -990,7 +990,7 @@ class Square : public Rectangle {
 ### 条款 33：避免遮掩继承而来的名称
 
 ```cpp
-// ❌ 名称遮掩
+// 名称遮掩
 class Base {
 public:
     void Function() { std::cout << "Base" << std::endl; }
@@ -1009,7 +1009,7 @@ d.Function();  // 输出 "Derived"
 Base *p = &d;
 p->Function();  // 输出 "Base"（非虚函数）
 
-// ✅ 使用 using 声明
+// 使用 using 声明
 class Derived : public Base {
 public:
     using Base::Function;  // 引入 Base 的 Function
@@ -1023,14 +1023,14 @@ public:
 ### 条款 34：区分接口继承和实现继承
 
 ```cpp
-// ✅ 纯接口继承
+// 纯接口继承
 class Shape {
 public:
     virtual void Draw() const = 0;  // 纯虚函数
     virtual double Area() const = 0;
 };
 
-// ✅ 接口 + 实现继承
+// 接口 + 实现继承
 class Circle : public Shape {
 public:
     void Draw() const override {
@@ -1045,7 +1045,7 @@ private:
     double radius;
 };
 
-// 💡 原则
+// 【补充】原则
 // 1. 纯虚函数：只定义接口
 // 2. 虚函数：定义接口和默认实现
 // 3. 非虚函数：定义接口和强制实现
@@ -1054,7 +1054,7 @@ private:
 ### 条款 35：考虑 virtual 函数以外的其他选择
 
 ```cpp
-// ✅ NVI（Non-Virtual Interface）惯用法
+// NVI（Non-Virtual Interface）惯用法
 class Base {
 public:
     // 公共接口（非虚函数）
@@ -1069,7 +1069,7 @@ private:
     }
 };
 
-// ✅ 使用函数指针
+// 使用函数指针
 class Base {
 public:
     using FunctionPtr = void (*)();
@@ -1088,7 +1088,7 @@ private:
     }
 };
 
-// 💡 优点
+// 【补充】优点
 // 1. NVI：分离接口和实现
 // 2. 函数指针：运行时可替换
 // 3. 避免虚函数的开销
@@ -1097,7 +1097,7 @@ private:
 ### 条款 36：绝不重新定义继承而来的非虚函数
 
 ```cpp
-// ❌ 错误示例
+// 错误示例
 class Base {
 public:
     void Function() {  // 非虚函数
@@ -1116,7 +1116,7 @@ Derived d;
 Base *p = &d;
 p->Function();  // 输出 "Base"（不是 "Derived"！）
 
-// 💡 为什么？
+// 【补充】为什么？
 // 非虚函数是静态绑定的
 // 编译时根据指针类型决定调用哪个函数
 // 与对象的实际类型无关
@@ -1125,7 +1125,7 @@ p->Function();  // 输出 "Base"（不是 "Derived"！）
 ### 条款 37：绝不重新定义继承而来的缺省参数值
 
 ```cpp
-// ❌ 错误示例
+// 错误示例
 class Base {
 public:
     virtual void Function(int x = 10) {
@@ -1144,12 +1144,12 @@ Derived d;
 Base *p = &d;
 p->Function();  // 输出 "Derived: 10"（不是 20！）
 
-// 💡 为什么？
+// 【补充】为什么？
 // 默认参数是静态绑定的
 // 对象类型是 Derived，但指针类型是 Base*
 // 所以使用 Base 的默认参数 10
 
-// ✅ 正确做法
+// 正确做法
 class Base {
 public:
     virtual void Function(int x = 10) {
@@ -1173,24 +1173,24 @@ protected:
 ### 条款 38：通过复合塑模出 has-a 或 is-implemented-in-terms-of 关系
 
 ```cpp
-// ✅ Has-a 关系
+// Has-a 关系
 class Car {
 private:
     Engine engine;  // Car has-a Engine
     std::vector<Wheel> wheels;
 };
 
-// ✅ Is-implemented-in-terms-of 关系
+// Is-implemented-in-terms-of 关系
 class Stack {
 private:
     std::vector<int> data;  // Stack 使用 vector 实现
 };
 
-// 💡 区别
+// 【补充】区别
 // Has-a：组合关系，整体和部分
 // Is-implemented-in-terms-of：实现细节，不暴露
 
-// 🔴 Unity 对照
+// Unity 对照
 // Unity 的组件系统就是 Has-a 关系
 // GameObject has-a Transform
 // GameObject has-a Renderer
@@ -1199,30 +1199,30 @@ private:
 ### 条款 39：明智而审慎地使用 private 继承
 
 ```cpp
-// ❌ 不好：private 继承
+// 不好：private 继承
 class Derived : private Base {
     // Derived 不是 Base 的子类
     // 只是复用 Base 的实现
 };
 
-// ✅ 好：使用组合
+// 好：使用组合
 class Derived {
 private:
     Base base;  // 组合关系
 };
 
-// 💡 什么时候用 private 继承？
+// 【补充】什么时候用 private 继承？
 // 1. 需要访问 protected 成员
 // 2. 需要重写虚函数
 // 3. 需要优化（空基类优化）
 
-// ⚠️ 一般情况下，优先使用组合
+// 【注意】一般情况下，优先使用组合
 ```
 
 ### 条款 40：明智而审慎地使用多重继承
 
 ```cpp
-// ❌ 菱形继承问题
+// 菱形继承问题
 class A {
 public:
     int data;
@@ -1232,7 +1232,7 @@ class B : public A {};
 class C : public A {};
 class D : public B, public C {};  // D 有两份 A::data
 
-// ✅ 使用虚继承
+// 使用虚继承
 class A {
 public:
     int data;
@@ -1242,7 +1242,7 @@ class B : public virtual A {};  // 虚继承
 class C : public virtual A {};
 class D : public B, public C {};  // D 只有一份 A::data
 
-// 💡 原则
+// 【补充】原则
 // 1. 尽量避免多重继承
 // 2. 如果必须使用，考虑虚继承
 // 3. 使用接口类（纯虚基类）
@@ -1255,24 +1255,24 @@ class D : public B, public C {};  // D 只有一份 A::data
 ### 条款 41：了解隐式接口和编译期多态
 
 ```cpp
-// ✅ 显式接口
+// 显式接口
 class Widget {
 public:
     void Function();  // 显式定义的接口
 };
 
-// ✅ 隐式接口（模板）
+// 隐式接口（模板）
 template <typename T>
 void Process(T &obj) {
     obj.Function();  // 隐式接口：T 必须有 Function()
     obj.data = 10;   // 隐式接口：T 必须有 data 成员
 }
 
-// 💡 区别
+// 【补充】区别
 // 显式接口：编译时检查
 // 隐式接口：编译时检查，但更灵活
 
-// 🔴 Unity 对照
+// Unity 对照
 // Unity 的泛型约束就是显式接口
 // Unity 的 duck typing 就是隐式接口
 ```
@@ -1280,25 +1280,25 @@ void Process(T &obj) {
 ### 条款 42：了解 typename 的双重意义
 
 ```cpp
-// ✅ typename 表示类型参数
+// typename 表示类型参数
 template <typename T>
 class Widget {
     T data;  // T 是类型
 };
 
-// ✅ typename 告诉编译器这是类型
+// typename 告诉编译器这是类型
 template <typename T>
 void Function() {
     typename T::value_type x;  // 告诉编译器这是类型
 }
 
-// ❌ 不用 typename
+// 不用 typename
 template <typename T>
 void Function() {
     T::value_type x;  // 编译器可能认为这是静态成员
 }
 
-// 💡 规则
+// 【补充】规则
 // 1. 在模板参数列表中，typename 和 class 相同
 // 2. 在模板定义中，typename 表示类型
 ```
@@ -1306,7 +1306,7 @@ void Function() {
 ### 条款 43：学习处理模板化基类内的名称
 
 ```cpp
-// ❌ 问题
+// 问题
 template <typename T>
 class Base {
 public:
@@ -1317,20 +1317,20 @@ template <typename T>
 class Derived : public Base<T> {
 public:
     void Call() {
-        Function();  // ❌ 找不到 Function
+        Function();  // 找不到 Function
     }
 };
 
-// ✅ 解决方案
+// 解决方案
 template <typename T>
 class Derived : public Base<T> {
 public:
     void Call() {
-        this->Function();  // ✅ 使用 this->
+        this->Function();  // 使用 this->
     }
 };
 
-// 💡 三种解决方案
+// 【补充】三种解决方案
 // 1. 使用 this->
 // 2. 使用 using 声明
 // 3. 使用 Base<T>::Function()
@@ -1339,7 +1339,7 @@ public:
 ### 条款 44：将与参数无关的代码抽离 templates
 
 ```cpp
-// ❌ 不好：代码膨胀
+// 不好：代码膨胀
 template <typename T>
 class Matrix {
 public:
@@ -1349,7 +1349,7 @@ public:
     }
 };
 
-// ✅ 好：抽离公共代码
+// 好：抽离公共代码
 template <typename T>
 class Matrix {
 public:
@@ -1363,7 +1363,7 @@ private:
     }
 };
 
-// 💡 原则
+// 【补充】原则
 // 1. 将与类型无关的代码抽离
 // 2. 使用非模板函数处理通用逻辑
 // 3. 减少代码膨胀
@@ -1372,7 +1372,7 @@ private:
 ### 条款 45：运用成员函数模板接受所有兼容类型
 
 ```cpp
-// ✅ 成员函数模板
+// 成员函数模板
 class Widget {
 public:
     template <typename U>
@@ -1387,11 +1387,11 @@ public:
     }
 };
 
-// ✅ 使用
+// 使用
 Widget<int> w1;
-Widget<double> w2 = w1;  // ✅ 可以转换
+Widget<double> w2 = w1;  // 可以转换
 
-// 💡 原则
+// 【补充】原则
 // 1. 使用成员函数模板实现类型转换
 // 2. 仍然需要显式声明拷贝构造函数和赋值运算符
 ```
@@ -1399,7 +1399,7 @@ Widget<double> w2 = w1;  // ✅ 可以转换
 ### 条款 46：需要类型转换时请为模板定义非成员函数
 
 ```cpp
-// ❌ 问题
+// 问题
 template <typename T>
 class Rational {
 public:
@@ -1415,10 +1415,10 @@ private:
 };
 
 Rational<int> r1(1, 2);
-Rational<int> r2 = r1 * 2;    // ✅ 可以
-Rational<int> r3 = 2 * r1;    // ❌ 错误！
+Rational<int> r2 = r1 * 2;    // 可以
+Rational<int> r3 = 2 * r1;    // 错误！
 
-// ✅ 解决方案：非成员函数
+// 解决方案：非成员函数
 template <typename T>
 class Rational {
 public:
@@ -1439,14 +1439,14 @@ const Rational<T> operator*(const Rational<T> &lhs,
 }
 
 Rational<int> r1(1, 2);
-Rational<int> r2 = r1 * 2;    // ✅ 可以
-Rational<int> r3 = 2 * r1;    // ✅ 可以
+Rational<int> r2 = r1 * 2;    // 可以
+Rational<int> r3 = 2 * r1;    // 可以
 ```
 
 ### 条款 47：使用 traits classes 表现类型信息
 
 ```cpp
-// ✅ Traits class
+// Traits class
 template <typename T>
 struct TypeTraits {
     static const bool isPointer = false;
@@ -1457,7 +1457,7 @@ struct TypeTraits<T*> {
     static const bool isPointer = true;
 };
 
-// ✅ 使用
+// 使用
 template <typename T>
 void Function(T value) {
     if (TypeTraits<T*>::isPointer) {
@@ -1467,7 +1467,7 @@ void Function(T value) {
     }
 }
 
-// 💡 用途
+// 【补充】用途
 // 1. 编译时类型检查
 // 2. 条件编译
 // 3. 模板特化
@@ -1476,7 +1476,7 @@ void Function(T value) {
 ### 条款 48：认识 template 元编程
 
 ```cpp
-// ✅ 编译时计算
+// 编译时计算
 template <int N>
 struct Factorial {
     static const int value = N * Factorial<N - 1>::value;
@@ -1490,7 +1490,7 @@ struct Factorial<0> {
 // 使用
 int x = Factorial<5>::value;  // x = 120
 
-// ✅ 编译时条件
+// 编译时条件
 template <bool B, typename T, typename F>
 struct If {
     typedef T type;
@@ -1501,7 +1501,7 @@ struct If<false, T, F> {
     typedef F type;
 };
 
-// 💡 元编程
+// 【补充】元编程
 // 1. 在编译时计算
 // 2. 生成模板代码
 // 3. 编译时类型检查
@@ -1514,7 +1514,7 @@ struct If<false, T, F> {
 ### 条款 49：了解 new-handler 的行为
 
 ```cpp
-// ✅ 设置 new-handler
+// 设置 new-handler
 void OutOfMemory() {
     std::cerr << "Out of memory!" << std::endl;
     std::abort();
@@ -1522,7 +1522,7 @@ void OutOfMemory() {
 
 std::set_new_handler(OutOfMemory);
 
-// ✅ 类特定的 new-handler
+// 类特定的 new-handler
 class Widget {
 public:
     static void *operator new(size_t size) {
@@ -1535,7 +1535,7 @@ public:
     }
 };
 
-// 💡 new-handler
+// 【补充】new-handler
 // 1. 当 new 失败时调用
 // 2. 可以尝试释放内存
 // 3. 可以抛出异常或终止程序
@@ -1544,12 +1544,12 @@ public:
 ### 条款 50：了解定制 new 和 delete 的时机和场境
 
 ```cpp
-// ✅ 何时需要定制？
+// 何时需要定制？
 // 1. 性能优化
 // 2. 调试内存问题
 // 3. 处理特殊内存需求
 
-// ✅ 示例：内存池
+// 示例：内存池
 class Widget {
 public:
     static void *operator new(size_t size) {
@@ -1580,7 +1580,7 @@ public:
 ### 条款 51：编写 new 和 delete 时要固守常规
 
 ```cpp
-// ✅ operator new 规则
+// operator new 规则
 void *operator new(size_t size) {
     // 1. 检查大小
     if (size == 0) {
@@ -1602,7 +1602,7 @@ void *operator new(size_t size) {
     }
 }
 
-// ✅ operator delete 规则
+// operator delete 规则
 void operator delete(void *p) noexcept {
     if (p) {
         free(p);
@@ -1613,17 +1613,17 @@ void operator delete(void *p) noexcept {
 ### 条款 52：写了 placement new 也要写 placement delete
 
 ```cpp
-// ✅ Placement new
+// Placement new
 void *operator new(size_t size, void *p) noexcept {
     return p;
 }
 
-// ✅ Placement delete
+// Placement delete
 void operator delete(void *p, void *place) noexcept {
     // 什么都不做
 }
 
-// 💡 原则
+// 【补充】原则
 // 1. 如果定义了 placement new，也要定义对应的 placement delete
 // 2. 否则可能导致内存泄漏
 ```
@@ -1631,7 +1631,7 @@ void operator delete(void *p, void *place) noexcept {
 ### 条款 53：不要轻忽编译器的警告
 
 ```cpp
-// ❌ 忽略警告
+// 忽略警告
 class Base {
 public:
     virtual void Function() {}
@@ -1642,13 +1642,13 @@ public:
     void Function() {}  // 编译器可能警告：缺少 override
 };
 
-// ✅ 修复警告
+// 修复警告
 class Derived : public Base {
 public:
-    void Function() override {}  // ✅ 显式 override
+    void Function() override {}  // 显式 override
 };
 
-// 💡 原则
+// 【补充】原则
 // 1. 以最高警告级别编译
 // 2. 修复所有警告
 // 3. 不要依赖警告消息
@@ -1657,7 +1657,7 @@ public:
 ### 条款 54：让自己熟悉包括 TR1 在内的标准程序库
 
 ```cpp
-// ✅ C++11 标准库
+// C++11 标准库
 #include <vector>
 #include <map>
 #include <set>
@@ -1665,13 +1665,13 @@ public:
 #include <memory>
 #include <functional>
 
-// ✅ C++11 新特性
+// C++11 新特性
 // 1. 智能指针：unique_ptr, shared_ptr, weak_ptr
 // 2. 容器：array, forward_list, unordered_map
 // 3. 算法：all_of, any_of, none_of
 // 4. Lambda 表达式
 
-// 💡 建议
+// 【补充】建议
 // 1. 熟悉标准库
 // 2. 使用 STL 算法
 // 3. 避免重复造轮子
@@ -1680,13 +1680,13 @@ public:
 ### 条款 55：让自己熟悉 Boost
 
 ```cpp
-// ✅ Boost 库推荐
+// Boost 库推荐
 // 1. Boost智能指针：scoped_ptr, shared_ptr
 // 2. Boost函数：function, bind
 // 3. Boost容器：unordered_map, circular_buffer
 // 4. Boost算法：range-based for, lambda
 
-// 💡 Boost 的意义
+// 【补充】Boost 的意义
 // 1. 标准库的试验场
 // 2. 补充标准库缺失的功能
 // 3. 高质量的开源库
@@ -1696,10 +1696,10 @@ public:
 
 ## 难点解析
 
-### 🔴 难点 1：虚函数表（vtable）
+### 难点 1：虚函数表（vtable）
 
 ```cpp
-// ✅ 虚函数表原理
+// 虚函数表原理
 class Base {
 public:
     virtual void Function1() {}
@@ -1721,49 +1721,49 @@ public:
 // [vptr][data]
 // vptr -> Derived vtable: [&Derived::Function1, &Derived::Function2]
 
-// 💡 为什么需要 vtable？
+// 【补充】为什么需要 vtable？
 // 1. 实现运行时多态
 // 2. 根据对象实际类型调用函数
 // 3. 开销：一次额外的间接寻址
 ```
 
-### 🔴 难点 2：异常安全保证
+### 难点 2：异常安全保证
 
 ```cpp
-// ✅ 基本保证
+// 基本保证
 // 操作失败时，对象处于有效状态
 // 可能改变了状态
 
-// ✅ 强保证
+// 强保证
 // 操作失败时，对象保持原状态
 // 要么完全成功，要么完全失败
 
-// ✅ 不抛保证
+// 不抛保证
 // 操作不会抛出异常
 // 通常用于析构函数和 swap
 
-// 💡 如何实现强保证？
+// 【补充】如何实现强保证？
 // 1. 使用 copy-and-swap
 // 2. 使用 RAII
 // 3. 使用智能指针
 ```
 
-### 🔴 难点 3：模板偏特化
+### 难点 3：模板偏特化
 
 ```cpp
-// ✅ 全特化
+// 全特化
 template <>
 class Widget<int> {
     // 针对 int 的特化版本
 };
 
-// ✅ 偏特化
+// 偏特化
 template <typename T>
 class Widget<T*> {
     // 针对指针类型的特化版本
 };
 
-// ✅ 成员偏特化
+// 成员偏特化
 template <typename T>
 class Widget {
 public:
@@ -1771,27 +1771,27 @@ public:
     void Function(U value);
 };
 
-// ✅ 成员全特化
+// 成员全特化
 template <>
 template <>
 void Widget<int>::Function<double>(double value) {
     // 针对 Widget<int> 和 Function<double> 的特化
 }
 
-// 💡 特化规则
+// 【补充】特化规则
 // 1. 先匹配全特化
 // 2. 再匹配偏特化
 // 3. 最后匹配通用模板
 ```
 
-### 🔴 难点 4：SFINAE（Substitution Failure Is Not An Error）
+### 难点 4：SFINAE（Substitution Failure Is Not An Error）
 
 ```cpp
-// ✅ SFINAE 原理
+// SFINAE 原理
 // 如果模板参数替换失败，不是错误
 // 而是尝试下一个可用的模板
 
-// ✅ 示例：检测类型是否有某个成员函数
+// 示例：检测类型是否有某个成员函数
 template <typename T>
 class HasFunction {
 private:
@@ -1808,7 +1808,7 @@ public:
     static const bool value = sizeof(Test<T>(0)) == sizeof(Yes);
 };
 
-// 💡 用途
+// 【补充】用途
 // 1. 编译时类型检查
 // 2. 条件模板实例化
 // 3. 模板元编程
@@ -1884,14 +1884,14 @@ public class Texture : MonoBehaviour {
     }
 }
 
-// 💡 区别
+// 【补充】区别
 // C++：手动管理，RAII 保证自动释放
 // Unity：垃圾回收，手动调用 Destroy()
 ```
 
 ---
 
-## 📝 学习建议
+## 学习建议
 
 ### 阅读顺序
 1. 先读习惯 C++（条款 1-5）

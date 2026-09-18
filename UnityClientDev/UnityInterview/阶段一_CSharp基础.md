@@ -4066,11 +4066,11 @@ class TemperatureMonitor
         // 检查是否触发警戒
         if (currentTemp >= CriticalThreshold)
         {
-            Console.WriteLine("🔴 温度达到危险级别！");
+            Console.WriteLine("温度达到危险级别！");
         }
         else if (currentTemp >= WarningThreshold)
         {
-            Console.WriteLine("🟡 温度达到警戒级别！");
+            Console.WriteLine("温度达到警戒级别！");
         }
     }
 }
@@ -4091,7 +4091,7 @@ class Program
         // 订阅警戒事件
         monitor.OnTemperatureWarning += (sender, e) =>
         {
-            Console.WriteLine($"⚠️ 温度警告: 当前 {e.Temperature:F1}°C，超过阈值 {monitor.WarningThreshold}°C");
+            Console.WriteLine($"【注意】温度警告: 当前 {e.Temperature:F1}°C，超过阈值 {monitor.WarningThreshold}°C");
         };
         
         // 模拟温度变化
@@ -4117,13 +4117,13 @@ class MessageSystem
     // 接收消息
     public void ReceiveMessage(string message)
     {
-        Console.WriteLine($"📥 接收原始消息: {message}");
+        Console.WriteLine($"接收原始消息: {message}");
         
         // 使用 Func 处理消息
         if (MessageProcessor != null)
         {
             message = MessageProcessor(message);
-            Console.WriteLine($"🔄 处理后消息: {message}");
+            Console.WriteLine($"处理后消息: {message}");
         }
         
         // 使用 Action 触发回调
@@ -4140,16 +4140,16 @@ class Program
         // 使用 Action 处理接收到的消息
         messageSystem.OnMessageReceived = msg =>
         {
-            Console.WriteLine($"📢 广播消息: {msg}");
+            Console.WriteLine($"广播消息: {msg}");
             
             // 根据消息内容做不同处理
             if (msg.Contains("紧急"))
             {
-                Console.WriteLine("🚨 发送紧急通知！");
+                Console.WriteLine("发送紧急通知！");
             }
             else if (msg.Contains("通知"))
             {
-                Console.WriteLine("📢 普通通知");
+                Console.WriteLine("普通通知");
             }
         };
         
@@ -4219,7 +4219,7 @@ class NewsAgency : ISubject
     public void PublishNews(string news)
     {
         latestNews = news;
-        Console.WriteLine($"\n📰 发布新闻: {news}");
+        Console.WriteLine($"\n发布新闻: {news}");
         Notify(news);
     }
     
@@ -5965,7 +5965,7 @@ new void Method() { }
 | `BindingFlags.FlattenHierarchy` | 平铺层次结构             | 用于获取继承链的上层静态成员（一般与 Static 组合） |
 | `BindingFlags.IgnoreCase`       | 忽略大小写               | 按名称查找时忽略名字大小写差异                     |
 
-### 📦 C# 内置常用特性
+### C# 内置常用特性
 
 | 特性                                                 | 作用                                     | 适用目标               |
 | :--------------------------------------------------- | :--------------------------------------- | :--------------------- |
@@ -5985,7 +5985,7 @@ new void Method() { }
 
 ------
 
-### 🎮 Unity 常用特性
+### Unity 常用特性
 
 #### Inspector 布局与序列化
 

@@ -442,11 +442,11 @@ SHOW SLAVE STATUS\G
 ## 六、SQL 注入防范
 
 ```csharp
-// ❌ 危险：字符串拼接
+// 危险：字符串拼接
 string sql = $"SELECT * FROM players WHERE name = '{userInput}'";
 // userInput = "'; DROP TABLE players; --"  → 灾难！
 
-// ✅ 安全：参数化查询
+// 安全：参数化查询
 using var cmd = new MySqlCommand(
     "SELECT * FROM players WHERE name = @name", conn);
 cmd.Parameters.AddWithValue("@name", userInput);

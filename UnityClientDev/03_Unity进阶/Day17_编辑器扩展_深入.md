@@ -817,7 +817,7 @@ public class CustomBuildProcessor :
         buildStartTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         
         UnityEngine.Debug.Log(
-            $"🛠 开始构建：{report.summary.platform}，" +
+            $"开始构建：{report.summary.platform}，" +
             $"输出：{report.summary.outputPath}");
         
         // 1. 版本号递增
@@ -843,7 +843,7 @@ public class CustomBuildProcessor :
         
         // 输出构建报告
         UnityEngine.Debug.Log(
-            $"✅ 构建完成！\n" +
+            $"构建完成！\n" +
             $"  平台：{report.summary.platform}\n" +
             $"  时长：{buildTimeMs / 1000}s\n" +
             $"  大小：{buildSizeMB}MB\n" +

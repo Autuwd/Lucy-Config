@@ -214,25 +214,25 @@ CREATE TABLE `recharge_logs` (
 
 ```
 字段不可再分
-❌ address = "广东省广州市天河区"
-✅ province = "广东", city = "广州", district = "天河区"
+address = "广东省广州市天河区"
+province = "广东", city = "广州", district = "天河区"
 ```
 
 ### 第二范式 (2NF)
 
 ```
 非主键字段必须完全依赖主键
-❌ inventory(id, player_id, item_id, player_name)
+inventory(id, player_id, item_id, player_name)
    player_name 只依赖 player_id，不是完全依赖主键
-✅ 拆成 inventory(id, player_id, item_id) 和 players(id, name)
+拆成 inventory(id, player_id, item_id) 和 players(id, name)
 ```
 
 ### 第三范式 (3NF)
 
 ```
 非主键字段不能传递依赖
-❌ players(id, guild_id, guild_name)  ← guild_name 通过 guild_id 传递依赖
-✅ 拆成 players(id, guild_id) 和 guilds(id, name)
+players(id, guild_id, guild_name)  ← guild_name 通过 guild_id 传递依赖
+拆成 players(id, guild_id) 和 guilds(id, name)
 ```
 
 ### 反范式设计（游戏服务器常用）

@@ -286,11 +286,11 @@ class SerializationBenchmark
 {
     /*
     方案          序列化时间   反序列化时间   大小     GC分配    跨语言
-    Protobuf      142ms       128ms         89B     32KB      ✅
-    FlatBuffers   213ms        62ms        120B     18KB      ✅ (生成快)
-    MessagePack    98ms        95ms         78B     56KB      ⚠️ 部分
-    MemoryPack     72ms        51ms         65B     12KB      ❌ 仅C#
-    JSON           280ms       312ms        245B    280KB     ✅
+    Protobuf      142ms       128ms         89B     32KB      
+    FlatBuffers   213ms        62ms        120B     18KB      (生成快)
+    MessagePack    98ms        95ms         78B     56KB      【注意】部分
+    MemoryPack     72ms        51ms         65B     12KB      仅C#
+    JSON           280ms       312ms        245B    280KB     
     */
 }
 
@@ -393,10 +393,10 @@ class PooledCodec
 ```csharp
 // 策略 1：Protobuf 自带的字段演化
 // 优缺点：
-//   ✅ 简单，不修改协议头
-//   ✅ 兼容现有客户端
-//   ❌ 无法处理"删除语义"的字段（旧客户端仍发送）
-//   ❌ 无法做大幅度的协议变更
+//   简单，不修改协议头
+//   兼容现有客户端
+//   无法处理"删除语义"的字段（旧客户端仍发送）
+//   无法做大幅度的协议变更
 
 // 策略 2：协议头加版本号
 class VersionedPacket

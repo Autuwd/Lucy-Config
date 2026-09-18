@@ -309,8 +309,8 @@ ASK（临时重定向）：
 Redis Cluster 的限制（游戏开发必须知道）：
 
 1. 不支持多 key 操作（除非所有 key 在同一个槽）
-   ❌ SUNION {key1} {key2}  ← 不同槽报错
-   ✅ 使用 hash tag 强制放在同一槽
+   SUNION {key1} {key2}  ← 不同槽报错
+   使用 hash tag 强制放在同一槽
       SUNION {player:1001}:items {player:1002}:items
       → {player:1001} 和 {player:1002} 在同一个槽
 

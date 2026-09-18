@@ -101,36 +101,36 @@ public class GCSources : MonoBehaviour
     void Update()
     {
         // ─── 1. 字符串操作 ───
-        // ❌ 每次产生新字符串 + 整数 ToString 装箱
+        // 每次产生新字符串 + 整数 ToString 装箱
         Debug.Log("Score: " + score.ToString());
 
-        // ✅ 字符串插值（Unity 2020+ 优化了字符串内插的内存）
+        // 字符串插值（Unity 2020+ 优化了字符串内插的内存）
         Debug.Log($"Score: {score}");
 
-        // ✅ 缓存字符串
+        // 缓存字符串
         cachedText.text = $"Score: {score}";
 
         // ─── 2. foreach 隐式分配枚举器 ───
-        // ❌ List<T> 的 foreach 会产生枚举器对象
+        // List<T> 的 foreach 会产生枚举器对象
         foreach (var item in GetComponents<Collider>()) { }
 
-        // ✅ for 循环
+        // for 循环
         Collider[] cols = GetComponents<Collider>();
         for (int i = 0; i < cols.Length; i++) { }
 
         // ─── 3. 临时数组 ───
-        // ❌ 每次 Update 分配新数组
+        // 每次 Update 分配新数组
         Vector3[] positions = new Vector3[] { a, b, c };
 
-        // ✅ 缓存数组
+        // 缓存数组
         if (cachedPos == null) cachedPos = new Vector3[3];
         cachedPos[0] = a; cachedPos[1] = b; cachedPos[2] = c;
 
         // ─── 4. 闭包分配 ───
-        // ❌ Lambda 闭包捕获变量 → 每次创建闭包类
+        // Lambda 闭包捕获变量 → 每次创建闭包类
         DoSomething(() => Debug.Log("Done"));
 
-        // ✅ 缓存委托
+        // 缓存委托
         if (onDone == null) onDone = () => Debug.Log("Done");
         DoSomething(onDone);
     }
@@ -317,14 +317,14 @@ CPU：    一般        好（编译器优化）
 
 public class Enemy : MonoBehaviour
 {
-    // ❌ 坏：每秒 60 次空调用
+    // 坏：每秒 60 次空调用
     void Update()
     {
         // 这个敌人 90% 的时间在 idle，不需要每帧检查
     }
 }
 
-// ✅ 好：用协程替代定时检查
+// 好：用协程替代定时检查
 public class EnemyOptimized : MonoBehaviour
 {
     void Start()
@@ -351,7 +351,7 @@ public class EnemyOptimized : MonoBehaviour
     }
 }
 
-// ✅ 更好：完全不需要 Update 时禁用脚本
+// 更好：完全不需要 Update 时禁用脚本
 // GetComponent<Enemy>().enabled = false;
 ```
 
@@ -383,7 +383,7 @@ public class EnemyOptimized : MonoBehaviour
 // Unity 中字符串操作的 GC 压力
 // 场景：显示 FPS 计数器
 
-// ❌ 坏：每帧分配
+// 坏：每帧分配
 void OnGUI()
 {
     GUI.Label(new Rect(10, 10, 100, 20), "FPS: " + fps.ToString());
@@ -392,7 +392,7 @@ void OnGUI()
     //      ：总计每帧 2 个 string + 其他
 }
 
-// ✅ 好：缓存 StringBuilder
+// 好：缓存 StringBuilder
 private StringBuilder sb = new StringBuilder(32);
 
 void OnGUI()
@@ -403,7 +403,7 @@ void OnGUI()
     GUI.Label(new Rect(10, 10, 100, 20), sb.ToString());
 }
 
-// ✅ 最好：只在变化时更新
+// 最好：只在变化时更新
 private int lastFPS;
 private string cachedFPS;
 
@@ -424,7 +424,7 @@ void Update()
 ```csharp
 // 协程的 GC 优化
 
-// ❌ 坏：每次 yield new 都分配
+// 坏：每次 yield new 都分配
 IEnumerator BadCoroutine()
 {
     yield return new WaitForSeconds(1f);
@@ -432,7 +432,7 @@ IEnumerator BadCoroutine()
     yield return new WaitForSeconds(1f);
 }
 
-// ✅ 好：缓存 WaitForSeconds 实例
+// 好：缓存 WaitForSeconds 实例
 private WaitForSeconds wait1 = new WaitForSeconds(1f);
 
 IEnumerator GoodCoroutine()

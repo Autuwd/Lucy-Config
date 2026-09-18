@@ -90,7 +90,7 @@ public class OverrideChecker : MonoBehaviour
 ### Prefab Variant——预制体变体
 
 ```csharp
-// 变体是"继��"了基础 Prefab 的新 Prefab
+// 变体是"继承"了基础 Prefab 的新 Prefab
 // 变体 = 基础 Prefab + 修改的属性 + 新增的组件
 
 // 创建 Variant：

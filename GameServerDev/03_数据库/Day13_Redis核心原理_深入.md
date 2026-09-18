@@ -510,17 +510,17 @@ DEBUG SET-ACTIVE-DEFRAG 1
 游戏开发中的内存优化建议：
 
 1. 使用 Hash 代替 String（对象压缩）
-   ❌ SET player:1001:name "Alice"
+   SET player:1001:name "Alice"
       SET player:1001:level 50
-   ✅ HMSET player:1001 name "Alice" level 50
+   HMSET player:1001 name "Alice" level 50
    → 一个 Hash 对象比多个 String 节省内存（减少 key 开销）
 
 2. 使用 ziplist 编码的 Hash
    → field-value 对少时大幅节省内存
 
 3. 批量操作
-   ❌ 1000 次 SET
-   ✅ MSET/管道（减少网络 IO + 减少 SDS 分配次数）
+   1000 次 SET
+   MSET/管道（减少网络 IO + 减少 SDS 分配次数）
 
 4. 合理设置 maxmemory
    maxmemory 4gb

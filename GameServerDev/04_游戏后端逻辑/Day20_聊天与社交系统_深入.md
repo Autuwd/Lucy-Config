@@ -245,12 +245,12 @@ public class RichTextChat
     // Emoji 表
     private readonly Dictionary<int, string> _emojiTable = new()
     {
-        { 1, "😊" }, { 2, "😂" }, { 3, "❤️" }, { 4, "👍" },
-        { 5, "🎉" }, { 6, "🔥" }, { 7, "💀" }, { 8, "😭" },
+        { 1, "" }, { 2, "" }, { 3, "❤" }, { 4, "" },
+        { 5, "" }, { 6, "" }, { 7, "" }, { 8, "" },
     };
 
     public string ReplaceEmoticons(string content) =>
-        new Regex(@"\[emoji:(\d+)\]").Replace(content, m => _emojiTable.GetValueOrDefault(int.Parse(m.Groups[1].Value), "❓"));
+        new Regex(@"\[emoji:(\d+)\]").Replace(content, m => _emojiTable.GetValueOrDefault(int.Parse(m.Groups[1].Value), ""));
 }
 ```
 

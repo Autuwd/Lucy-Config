@@ -405,7 +405,7 @@ IEnumerator ExpensiveCoroutine()
     yield return new WaitForSeconds(1f);  // 又一个堆分配
 }
 
-// ✅ 优化：缓存 WaitForSeconds 实例
+// 优化：缓存 WaitForSeconds 实例
 private WaitForSeconds waitOneSecond = new WaitForSeconds(1f);
 
 IEnumerator OptimizedCoroutine()
@@ -501,12 +501,12 @@ public class OldUnityAsync : MonoBehaviour
 **Unity 中的线程安全问题：**
 ```csharp
 // Unity 的 API 不是线程安全的！
-// ❌ 不能在后台线程中调用：
+// 不能在后台线程中调用：
 // transform.position = ...;
 // GetComponent<Renderer>();
 // Debug.Log(...);
 
-// ✅ 只能在主线程中调用 Unity API
+// 只能在主线程中调用 Unity API
 ```
 
 ---

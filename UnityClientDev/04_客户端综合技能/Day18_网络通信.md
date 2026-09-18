@@ -492,7 +492,7 @@ public class HeartbeatManager
 ### 不要在 Update 里发网络请求
 
 ```csharp
-// ❌ 错误：每帧发请求
+// 错误：每帧发请求
 void Update()
 {
     StartCoroutine(GetData());  // 每秒 60 次请求，服务器直接挂掉
@@ -502,7 +502,7 @@ void Update()
 ### 不要在主线程做同步网络请求
 
 ```csharp
-// ❌ 错误：阻塞主线程
+// 错误：阻塞主线程
 void Start()
 {
     client.Receive();  // 卡住直到收到数据，游戏假死

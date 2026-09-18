@@ -616,7 +616,7 @@ public class BadExample : MonoBehaviour
 {
     void Update()
     {
-        // ❌ 每帧调用，开销大
+        // 每帧调用，开销大
         GetComponent<Rigidbody>().velocity = Vector3.forward;
     }
 }
@@ -627,7 +627,7 @@ public class GoodExample : MonoBehaviour
     
     void Awake()
     {
-        // ✅ 缓存引用
+        // 缓存引用
         rb = GetComponent<Rigidbody>();
     }
     
@@ -830,7 +830,7 @@ ShaderLOD 50;  // 低
 
 ### 2.5 资源管理
 
-#### Q17: Resources 和 AssetBundle 的区别？ ✅ 已学(08-10)
+#### Q17: Resources 和 AssetBundle 的区别？ 已学(08-10)
 
 **解答：**
 

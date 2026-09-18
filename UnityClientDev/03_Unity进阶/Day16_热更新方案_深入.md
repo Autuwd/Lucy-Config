@@ -400,26 +400,26 @@ public class AOTGenericTypes : MonoBehaviour
 
 public class HotUpdateGenericUser
 {
-    // ✅ 安全：int、float、string 等基础类型
+    // 安全：int、float、string 等基础类型
     // 这些通常在 AOT 中已经展开了
     List<int> intList = new List<int>();
     Dictionary<string, int> dict = new Dictionary<string, int>();
     
-    // ✅ 安全：Unity 常用类型
+    // 安全：Unity 常用类型
     List<Vector3> positions = new List<Vector3>();
     List<GameObject> objects = new List<GameObject>();
     
-    // ⚠️ 有风险：自定义值类型
+    // 【注意】有风险：自定义值类型
     // 需要确保 AOT 中补充了 MyStruct 的泛型展开
     // List<MyStruct> customList;
     
-    // ❌ 不安全：运行时才确定的泛型参数
+    // 不安全：运行时才确定的泛型参数
     // Type t = typeof(float);
     // var list = Activator.CreateInstance(
     //     typeof(List<>).MakeGenericType(t));
     // → 如果 List<float> 没有 AOT 展开，会报错！
     
-    // ✅ 推荐的补全方式
+    // 推荐的补全方式
     // 在 AOTGenericTypes 中强制使用一次
 }
 ```

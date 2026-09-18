@@ -272,7 +272,7 @@ class GamePipeline
 // 什么情况下 ValueTask 真正节省分配？
 class ValueTaskOptimization
 {
-    // ✅ 适用：经常同步完成的操作
+    // 适用：经常同步完成的操作
     // 例：缓存命中、内存操作、条件判断后直接返回值
     private int _cachedPlayerCount;
     private readonly Database _db;
@@ -291,11 +291,11 @@ class ValueTaskOptimization
         return _cachedPlayerCount;
     }
 
-    // ❌ 不适用：几乎总是异步完成的操作
+    // 不适用：几乎总是异步完成的操作
     // 网络 IO、数据库 IO → 基本不会同步完成
     // 用 ValueTask 没有意义，因为绝大多数情况还是会分配 Task
 
-    // ❌ 不适用：await 多次
+    // 不适用：await 多次
     // ValueTask 设计为只 await 一次
     public async Task BadUse()
     {
@@ -602,14 +602,14 @@ public ValueTask<bool> TryUpdateEfficient(long playerId, PlayerData data)
 ```csharp
 class GameTickLoop
 {
-    // ❌ 错误：async void + await 导致主循环失控
+    // 错误：async void + await 导致主循环失控
     public async void Tick()
     {
         await ProcessNetwork(); // 这里等待 → 主循环停了
         UpdateGameState();
     }
 
-    // ✅ 正确：同步 Tick + 异步操作排队
+    // 正确：同步 Tick + 异步操作排队
     public void Tick()
     {
         ProcessNetworkSync();   // Channel 读取，不等待

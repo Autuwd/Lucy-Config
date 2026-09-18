@@ -266,13 +266,13 @@ public class FlatBuffersExample
 ### FlatBuffers 的适用场景
 
 ```
-✅ 适合：
+适合：
 - 大型配置表（怪物数据、道具数据、关卡配置）
 - 频繁读取的网络数据包
 - 需要直接内存映射的文件
 - 对 GC 敏感的场景（零分配）
 
-❌ 不适合：
+不适合：
 - 小数据量（构建开销 > 读取收益）
 - 需要频繁修改的数据（不可变）
 - 嵌套层次太深（访问链长）
@@ -427,7 +427,7 @@ if (msg.Payload.Is(LoginRequest.Descriptor))
 ```csharp
 // .NET 官方已经标记 BinaryFormatter 为过时/危险
 
-// ❌ 危险用法
+// 危险用法
 BinaryFormatter formatter = new();
 
 // 反序列化时可能执行任意代码！
@@ -436,12 +436,12 @@ using FileStream fs = File.OpenRead("save.dat");
 PlayerData data = (PlayerData)formatter.Deserialize(fs);
 // 如果 save.dat 被篡改 → 可能会执行恶意代码
 
-// ❌ 问题 2：版本兼容差
+// 问题 2：版本兼容差
 // 改了类的命名空间 → 反序列化失败
 // 改了字段名 → 反序列化失败
 // 删除字段 → 反序列化失败
 
-// ❌ 问题 3：性能差
+// 问题 3：性能差
 // 使用反射，比手动序列化慢 10~50 倍
 ```
 
@@ -629,7 +629,7 @@ public class IntegritySaveManager
 ```
 ┌──────────┐      ┌──────────┐      ┌──────────┐
 │  本地存档  │      │ 云存档服务 │      │  备用存档  │
-│  (最快)   │ ◀──▶ │  (安全)  │ ◀──▶ │  (容错)  │
+│  (最快)   │ ◀──│  (安全)  │ ◀──│  (容错)  │
 └──────────┘      └──────────┘      └──────────┘
      ↓                 ↓                 ↓
   快速读写           跨设备同步         损坏恢复

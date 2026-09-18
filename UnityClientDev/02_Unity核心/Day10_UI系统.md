@@ -366,7 +366,7 @@ UI 的性能消耗主要来自：
 ### 动静分离
 
 ```csharp
-// ❌ 坏：一个 Canvas 包含所有 UI
+// 坏：一个 Canvas 包含所有 UI
 // 一个 UI 元素变化 → 整个 Canvas 重建
 Canvas singleCanvas (有很多子元素)
   ├── 静态背景 (不变)
@@ -374,7 +374,7 @@ Canvas singleCanvas (有很多子元素)
   ├── 动态伤害数字 (频繁变化)
   └── 静态菜单 (不变)
 
-// ✅ 好：分离静态和动态 Canvas
+// 好：分离静态和动态 Canvas
 Canvas staticCanvas (不会变化)
   ├── 背景
   ├── 边框
@@ -442,7 +442,7 @@ public class HealthBar : MonoBehaviour
         if (currentHP <= 20)
         {
             hpText.color = Color.red;
-            hpText.text += " ⚠";
+            hpText.text += " ";
         }
         else
         {

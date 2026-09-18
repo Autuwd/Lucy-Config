@@ -381,7 +381,7 @@ public class Player : Character
 }
 
 // 不能实例化抽象类：
-// Character c = new Character();  // ❌ 编译错误！
+// Character c = new Character();  // 编译错误！
 ```
 
 ### sealed——阻止继承
@@ -391,7 +391,7 @@ public sealed class FinalClass : Character
 {
     // 不能再有子类
 }
-// public class SubClass : FinalClass { }  // ❌ 编译错误！
+// public class SubClass : FinalClass { }  // 编译错误！
 
 public class Player : Character
 {
@@ -657,20 +657,20 @@ GC 根包括：
 // 1. 避免在 Update 中分配内存
 void Update()
 {
-    // ❌ 坏：每帧分配新字符串
+    // 坏：每帧分配新字符串
     Debug.Log("HP: " + hp.ToString());
 
-    // ✅ 好：复用
+    // 好：复用
     Debug.Log($"HP: {hp}");  // 编译器优化
 }
 
 // 2. 缓存
 void Update()
 {
-    // ❌ 坏：每帧 GetComponent
+    // 坏：每帧 GetComponent
     GetComponent<Rigidbody>().velocity = ...;
 
-    // ✅ 好：缓存到字段
+    // 好：缓存到字段
     rb.velocity = ...;
 }
 
@@ -700,10 +700,10 @@ public class Player : MonoBehaviour
     public int hp;
 }
 
-// ❌ 不能直接 new
+// 不能直接 new
 Player p = new Player();  // 编译错误！
 
-// ✅ 必须挂载到 GameObject
+// 必须挂载到 GameObject
 GameObject go = new GameObject("Player");
 Player p = go.AddComponent<Player>();
 
@@ -717,13 +717,13 @@ Player p = go.AddComponent<Player>();
 ```csharp
 public class Player : MonoBehaviour
 {
-    // ❌ 不要用构造函数
+    // 不要用构造函数
     public Player()
     {
         hp = 100;  // 可能不会按预期工作！
     }
 
-    // ✅ 用 Awake 或 Start
+    // 用 Awake 或 Start
     void Awake()
     {
         hp = 100;

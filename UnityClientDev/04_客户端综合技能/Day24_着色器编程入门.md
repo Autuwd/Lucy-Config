@@ -248,9 +248,9 @@ Unity 的 **Shader Graph** 让你不用写代码就能创建 Shader：
 
 ```
                  ┌─────────────┐
-Noise 节点 ─────▶│ Step 比较     │───▶ Alpha（透明度）
+Noise 节点 ─────│ Step 比较     │───Alpha（透明度）
                  │ threshold   │
-Time 节点 ───────▶│ (溶解进度)    │
+Time 节点 ───────│ (溶解进度)    │
                  └─────────────┘
 
 等价于 HLSL：

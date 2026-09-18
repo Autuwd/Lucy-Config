@@ -80,7 +80,7 @@ public class ThreadExample
         Thread.Sleep(2000);
         Debug.Log("工作完成");
 
-        // ❌ 不能在这里调用 Unity API！
+        // 不能在这里调用 Unity API！
         // transform.position = newPos;  // 会报错
     }
 
@@ -246,7 +246,7 @@ using UnityEngine.SceneManagement;
 
 public class AsyncOperationExample : MonoBehaviour
 {
-    // ❌ 错误：AsyncOperation 不是 Task，不能直接 await
+    // 错误：AsyncOperation 不是 Task，不能直接 await
     async void LoadSceneBad()
     {
         // SceneManager.LoadSceneAsync("Level2") 返回 AsyncOperation
@@ -254,7 +254,7 @@ public class AsyncOperationExample : MonoBehaviour
         // await SceneManager.LoadSceneAsync("Level2"); // 编译错误
     }
 
-    // ✅ 正确：用协程
+    // 正确：用协程
     IEnumerator LoadSceneGood()
     {
         AsyncOperation op = SceneManager.LoadSceneAsync("Level2");
@@ -351,14 +351,14 @@ public class UniTaskExample : MonoBehaviour
 ### async void 的陷阱
 
 ```csharp
-// ❌ 危险：async void 的异常无法捕获
+// 危险：async void 的异常无法捕获
 async void OnButtonClick()
 {
     await Task.Run(() => throw new Exception("崩溃"));
     // 异常不会被 try-catch 捕获，直接崩溃进程
 }
 
-// ✅ 安全：async Task 的异常可捕获
+// 安全：async Task 的异常可捕获
 async Task SafeMethod()
 {
     await Task.Run(() => throw new Exception("错误"));
@@ -576,13 +576,13 @@ Interlocked.Increment(ref counter);
 ### Task 未等待
 
 ```csharp
-// ❌ 忘记 await
+// 忘记 await
 void Start()
 {
     DoWork(); // Task 被触发但没人等，可能被 GC 回收
 }
 
-// ✅ 正确处理
+// 正确处理
 async void Start()
 {
     await DoWork(); // await 确保完成

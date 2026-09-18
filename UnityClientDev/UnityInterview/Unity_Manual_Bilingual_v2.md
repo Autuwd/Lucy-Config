@@ -32,7 +32,7 @@
 
 ---
 
-> ### 📋 Corrections and Additions vs. v1 (相对于 v1 版的修正与补充)
+> ### Corrections and Additions vs. v1 (相对于 v1 版的修正与补充)
 >
 > | # | Section (章节) | Issue type (问题类型) | Detail (详情) |
 > |---|---|---|---|
@@ -243,7 +243,7 @@ Unity 使用 **C#** 作为主要脚本语言。脚本作为组件附加到游戏
 
 ### Event Functions (事件函数)
 
-> 📖 **Official page:** [Event functions](https://docs.unity3d.com/Manual/event-functions.html)
+> 【引用】**Official page:** [Event functions](https://docs.unity3d.com/Manual/event-functions.html)
 
 MonoBehaviour provides "magic" methods that Unity calls automatically at defined points in the game loop. The official documentation organises them into five groups: **Regular update events**, **Initialization events**, **GUI events**, **Input events**, and **Physics events**.
 
@@ -506,8 +506,8 @@ Unity 集成了用于 3D 物理的 **NVIDIA PhysX** 和用于 2D 物理的 **Box
 
 ### Introduction to Rigid Body Physics (刚体物理简介)
 
-> ✅ **v2 correction (v2 修正):** Official page title is *"Introduction to rigid body physics"* — corrected from "Rigidbody Component" in v1.
-> 📖 **Official page:** [RigidbodiesOverview](https://docs.unity3d.com/Manual/RigidbodiesOverview.html)
+> **v2 correction (v2 修正):** Official page title is *"Introduction to rigid body physics"* — corrected from "Rigidbody Component" in v1.
+> 【引用】**Official page:** [RigidbodiesOverview](https://docs.unity3d.com/Manual/RigidbodiesOverview.html)
 
 #### Rigid body GameObjects with physics-based movement (具有基于物理运动的刚体游戏对象)
 
@@ -588,7 +588,7 @@ bool sleeping = rb.IsSleeping();
 
 ### Introduction to Collision (碰撞简介)
 
-> ✅ **v2 correction (v2 修正):** Added "Collider surfaces" sub-section (omitted in v1). Official page: [CollidersOverview](https://docs.unity3d.com/Manual/CollidersOverview.html)
+> **v2 correction (v2 修正):** Added "Collider surfaces" sub-section (omitted in v1). Official page: [CollidersOverview](https://docs.unity3d.com/Manual/CollidersOverview.html)
 
 #### Collider types (碰撞体类型)
 
@@ -615,7 +615,7 @@ Unity 3D 提供**基元**形状（Box、Sphere、Capsule——最快）、**网�
 
 #### Collider surfaces — PhysicsMaterial (碰撞体表面——物理材质)
 
-> ✅ **v2 addition (v2 新增):** This sub-section was missing from v1.
+> **v2 addition (v2 新增):** This sub-section was missing from v1.
 
 A **PhysicsMaterial** (create via **Assets → Create → PhysicsMaterial**) controls how a surface behaves on contact.
 
@@ -706,7 +706,7 @@ Configure via **Edit → Project Settings → Physics**:
 
 ### Animation State Machine (动画状态机)
 
-> 📖 **Official page:** [AnimationStateMachines](https://docs.unity3d.com/Manual/AnimationStateMachines.html)
+> 【引用】**Official page:** [AnimationStateMachines](https://docs.unity3d.com/Manual/AnimationStateMachines.html)
 
 It's common for a character or a GameObject to have several animations for the different actions it performs. Mecanim uses a **state machine** — a graph of nodes and connecting lines that resembles a flowchart — to arrange these actions. A state machine plays the animation linked to the current action and determines the next action.
 
@@ -714,7 +714,7 @@ It's common for a character or a GameObject to have several animations for the d
 
 **Official sub-topics (官方子主题):**
 
-> ✅ **v2 addition (v2 新增):** Sub-topic structure added per official page.
+> **v2 addition (v2 新增):** Sub-topic structure added per official page.
 
 | Topic (主题) | Description (描述) |
 |---|---|
@@ -796,7 +796,7 @@ anim.SetLayerWeight(1, 0.8f);
 
 ### Animation Parameters — Official Code Example (动画参数——官方代码示例)
 
-> ✅ **v2 addition (v2 新增):** Official code example added from [AnimationParameters](https://docs.unity3d.com/Manual/AnimationParameters.html).
+> **v2 addition (v2 新增):** Official code example added from [AnimationParameters](https://docs.unity3d.com/Manual/AnimationParameters.html).
 
 Animation Parameters are variables defined within an Animator Controller that can be accessed and assigned values from scripts. This is how a script controls or affects the flow of the state machine.
 
@@ -878,8 +878,8 @@ public class SimplePlayer : MonoBehaviour
 
 ### Animation Blend Trees (动画混合树)
 
-> 📖 **Official page:** [animation-blend-trees](https://docs.unity3d.com/Manual/animation-blend-trees.html)
-> ✅ **v2 addition (v2 新增):** Official sub-type breakdown added.
+> 【引用】**Official page:** [animation-blend-trees](https://docs.unity3d.com/Manual/animation-blend-trees.html)
+> **v2 addition (v2 新增):** Official sub-type breakdown added.
 
 Use blend trees to blend between two or more similar motions, such as between walking and running animations. The Animator window contains a visual blend tree which you can use to smoothly blend multiple animations together.
 
@@ -1014,7 +1014,7 @@ mainMixer.FindSnapshot("Underwater").TransitionTo(1.5f);
 ![A scene with photo-realistic lighting.](https://docs.unity3d.com/uploads/Main/ProgressiveLightmapper-0.jpg)
 *Official Unity docs image — Progressive Lightmapper example scene (官方 Unity 文档图片 — 渐进式光照贴图烘焙器示例场景)*
 
-> 📖 **Official page:** [LightingOverview](https://docs.unity3d.com/Manual/LightingOverview.html)
+> 【引用】**Official page:** [LightingOverview](https://docs.unity3d.com/Manual/LightingOverview.html)
 
 With Unity, you can achieve realistic lighting that is suitable for a range of art styles. Lighting in Unity encompasses a broad set of tools and settings. Choosing the right light sources, rendering methods, and shadow techniques directly impacts both visual quality and performance.
 
@@ -1063,7 +1063,7 @@ Cookie：           光源投影的纹理遮罩
 
 ### Light Modes (光照模式)
 
-> 📖 **Official page:** [LightModes](https://docs.unity3d.com/Manual/LightModes.html)
+> 【引用】**Official page:** [LightModes](https://docs.unity3d.com/Manual/LightModes.html)
 
 - **Realtime (实时)**: Calculated every frame. Supports dynamic objects. Higher cost. (每帧计算，支持动态对象，成本较高)
 - **Baked (烘焙)**: Pre-calculated and stored in lightmaps. Cannot affect moving objects at runtime. Zero runtime cost. (预计算并存储在光照贴图中，不能影响运行时移动的对象，运行时零成本)
@@ -1077,7 +1077,7 @@ Open **Window → Rendering → Lighting** to configure GI. Click **Generate Lig
 
 ### Shadows (阴影)
 
-> 📖 **Official page:** [Shadows](https://docs.unity3d.com/Manual/Shadows.html) *(corrected from ShadowOverview.html in v1)*
+> 【引用】**Official page:** [Shadows](https://docs.unity3d.com/Manual/Shadows.html) *(corrected from ShadowOverview.html in v1)*
 
 Shadow Distance controls how far from the camera shadows are rendered (**Edit → Project Settings → Quality → Shadow Distance**). Cascaded Shadow Maps (CSM) improve shadow quality by using higher-resolution shadow maps close to the camera and lower-resolution ones farther away — configure **Shadow Cascades** (2 or 4) in Quality Settings.
 
@@ -1104,7 +1104,7 @@ A Reflection Probe captures a 360° view as a Cubemap to provide reflections on 
 ![HDRP scene template](https://docs.unity3d.com/uploads/Main/hdrp-scene-template.png)
 *Official Unity docs image — HDRP scene template (官方 Unity 文档图片 — HDRP 场景模板)*
 
-> 📖 **Official page:** [render-pipelines](https://docs.unity3d.com/Manual/render-pipelines.html)
+> 【引用】**Official page:** [render-pipelines](https://docs.unity3d.com/Manual/render-pipelines.html)
 
 A render pipeline performs a series of operations that take the contents of a scene and display them on screen.
 
@@ -1112,7 +1112,7 @@ A render pipeline performs a series of operations that take the contents of a sc
 
 ### Choosing a Render Pipeline (选择渲染管线)
 
-> ✅ **v2 note (v2 说明):** `urp-introduction.html` and `hdrp-introduction.html` return 404 in Unity 6.4. Use the package-level documentation instead:
+> **v2 note (v2 说明):** `urp-introduction.html` and `hdrp-introduction.html` return 404 in Unity 6.4. Use the package-level documentation instead:
 > - URP: `com.unity.render-pipelines.universal` package docs
 > - HDRP: `com.unity.render-pipelines.high-definition` package docs
 
@@ -1182,7 +1182,7 @@ HDRP 面向高端平台（PC、PS5、Xbox Series X/S），默认使用基于物�
 ![2D game development example](https://docs.unity3d.com/uploads/Main/2dGames.jpg)
 *Official Unity docs image — 2D game development (官方 Unity 文档图片 — 2D 游戏开发)*
 
-> 📖 **Official page:** [Unity2D](https://docs.unity3d.com/Manual/Unity2D.html)
+> 【引用】**Official page:** [Unity2D](https://docs.unity3d.com/Manual/Unity2D.html)
 
 You can use the Unity Editor to create projects in 3D and 2D. This section focuses on 2D-specific features including gameplay, sprites, tilemaps, and 2D physics.
 
@@ -1190,7 +1190,7 @@ You can use the Unity Editor to create projects in 3D and 2D. This section focus
 
 ### Sprites (精灵图)
 
-> 📖 **Official page:** [Sprites](https://docs.unity3d.com/Manual/Sprites.html)
+> 【引用】**Official page:** [Sprites](https://docs.unity3d.com/Manual/Sprites.html)
 
 A **Sprite** is a 2D graphic used in 2D games. Import an image (PNG, JPG, etc.) and set **Texture Type → Sprite (2D and UI)** in the Inspector.
 
@@ -1387,7 +1387,7 @@ field.onEndEdit.AddListener(val => Debug.Log("Submitted: " + val));
 ![The holo table in Unity's Spaceship demo, made with the Visual Effect Graph.](https://docs.unity3d.com/uploads/Main/ParticleSystems-HoloTable.png)
 *Official Unity docs image — Particle systems / Visual Effect Graph demo (官方 Unity 文档图片 — 粒子系统 / 视觉效果图演示)*
 
-> 📖 **Official page:** [ParticleSystems](https://docs.unity3d.com/Manual/ParticleSystems.html)
+> 【引用】**Official page:** [ParticleSystems](https://docs.unity3d.com/Manual/ParticleSystems.html)
 
 Unity has two particle systems: the built-in **Particle System** (Shuriken, CPU-driven) and the **Visual Effect Graph** (VFX Graph, GPU-driven). The built-in system is compatible with all platforms; VFX Graph requires Shader Model 4.5+.
 
@@ -1445,7 +1445,7 @@ emission.SetBursts(new[]{ new ParticleSystem.Burst(0f, 30) });
 ![Scene that uses post-processing effects.](https://docs.unity3d.com/uploads/Main/PostProcessing-1.jpg)
 *Official Unity docs image — Post-processing effects (官方 Unity 文档图片 — 后期处理效果)*
 
-> 📖 **Official page:** [post-processing-and-full-screen-effects](https://docs.unity3d.com/Manual/post-processing-and-full-screen-effects.html)
+> 【引用】**Official page:** [post-processing-and-full-screen-effects](https://docs.unity3d.com/Manual/post-processing-and-full-screen-effects.html)
 
 In URP, add a **Volume** component, create a **Volume Profile**, and add effect overrides.
 
@@ -1564,7 +1564,7 @@ foreach (var l in qr.Results)
 ![Sample XR scene view](https://docs.unity3d.com/uploads/Main/xr-hero-img.png)
 *Official Unity docs image — XR scene view (官方 Unity 文档图片 — XR 场景视图)*
 
-> 📖 **Official page:** [XR](https://docs.unity3d.com/Manual/XR.html)
+> 【引用】**Official page:** [XR](https://docs.unity3d.com/Manual/XR.html)
 
 Develop augmented, mixed, and virtual reality experiences with the Unity Editor. Unity provides extensive XR support through dedicated packages.
 
@@ -1653,9 +1653,9 @@ public class SentisExample : MonoBehaviour
 
 ### NavMesh — AI Navigation (NavMesh — AI 导航)
 
-> ✅ **v2 correction (v2 修正):** `Navigation.html` returns 404 in Unity 6.4. The built-in NavMesh is supplemented by the **AI Navigation** package (`com.unity.ai.navigation`). Install via Package Manager.
+> **v2 correction (v2 修正):** `Navigation.html` returns 404 in Unity 6.4. The built-in NavMesh is supplemented by the **AI Navigation** package (`com.unity.ai.navigation`). Install via Package Manager.
 
-> ✅ **v2 修正：** `Navigation.html` 在 Unity 6.4 中返回 404。内置 NavMesh 由 **AI Navigation** 包（`com.unity.ai.navigation`）补充，通过包管理器安装。
+> **v2 修正：** `Navigation.html` 在 Unity 6.4 中返回 404。内置 NavMesh 由 **AI Navigation** 包（`com.unity.ai.navigation`）补充，通过包管理器安装。
 
 **Setup (设置):**
 
@@ -1820,7 +1820,7 @@ void Fire()
 ### Performance Checklist (性能检查清单)
 
 ```
-✅ DO (应该做):
+DO (应该做):
    Cache GetComponent<T>() in Awake/Start — never in Update
    Use FixedUpdate for physics, LateUpdate for camera
    Use TryGetComponent instead of GetComponent + null check
@@ -1831,7 +1831,7 @@ void Fire()
    Use Addressables for large asset loading
    Profile FIRST, optimize second
 
-❌ DON'T (不应该做):
+DON'T (不应该做):
    Call GetComponent<T>() every frame
    Use GameObject.Find / FindObjectOfType in Update
    Allocate with `new` inside Update (creates GC pressure)

@@ -530,12 +530,12 @@ public class DDOLManager : MonoBehaviour
 ### DontDestroyOnLoad 的正确架构
 
 ```
-❌ 错误架构：
+错误架构：
 DDOL_Manager (root)
   └── SceneObject (引用场景中的对象)
        └── 场景卸载后 → 引用悬空
 
-✅ 正确架构：
+正确架构：
 DDOL_Manager (root——唯一全局)
   ├── 不引用任何场景对象
   ├── 用 ScriptableObject 存全局数据
@@ -654,12 +654,12 @@ public class FindAdvanced : MonoBehaviour
     // 不要每帧调用 FindObjectsByType
     void Update()
     {
-        // ❌ 坏：每帧查找
+        // 坏：每帧查找
         var players = FindObjectsByType<Player>(
             FindObjectsSortMode.None);
         foreach (var p in players) { /* ... */ }
 
-        // ✅ 好：用单例或管理器注册
+        // 好：用单例或管理器注册
         // 在 Awake 中注册，在 OnDestroy 中注销
     }
 }

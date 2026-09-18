@@ -96,7 +96,7 @@ Burst 不擅长：
 - 托管对象访问
 
 如果 Job 中有大量分支，Burst 的优化效果会下降：
-// ❌ 每个粒子走不同分支 → 导致 SIMD 向量化失效
+// 每个粒子走不同分支 → 导致 SIMD 向量化失效
 if (particle.type == 0) DoA();
 else if (particle.type == 1) DoB();
 else DoC();
@@ -146,7 +146,7 @@ public struct MatrixTransformJob : IJobParallelFor
 
 // 手动布局优化
 // Burst 对 struct 的布局敏感：
-// ✅ 好的布局（连续内存 + 对齐）
+// 好的布局（连续内存 + 对齐）
 public struct ParticleData
 {
     public float3 position;  // 12 字节（float4 对齐到 16 字节）
@@ -155,7 +155,7 @@ public struct ParticleData
     public float mass;       // 4 字节 → 凑到 16 字节
 }
 
-// ❌ 不好的布局（填充浪费）
+// 不好的布局（填充浪费）
 public struct BadParticle
 {
     public float x;          // 4
@@ -187,7 +187,7 @@ Unity 的 Job System 有内置安全检查（Editor 模式）：
 ### 常见安全错误
 
 ```csharp
-// ❌ 错误 1：两个 Job 同时写同一个数据
+// 错误 1：两个 Job 同时写同一个数据
 public struct JobA : IJob
 {
     public NativeArray<int> data;
@@ -205,19 +205,19 @@ var a = new JobA { data = sharedData }.Schedule();
 var b = new JobB { data = sharedData }.Schedule();
 // ↑ 运行时可能报错：WriteAccessConflict
 
-// ✅ 正确：加依赖
+// 正确：加依赖
 var b = new JobB { data = sharedData }.Schedule(a);
 b.Complete();
 
-// ❌ 错误 2：主线程写 Job 正在读的数据
+// 错误 2：主线程写 Job 正在读的数据
 job.Schedule();     // Job 在后台执行
 sharedData[0] = 5;  // 主线程也在写！（Editor 会报错）
 
-// ✅ 正确：等 Job 完成再写
+// 正确：等 Job 完成再写
 jobHandle.Complete();
 sharedData[0] = 5;
 
-// ❌ 错误 3：忘记 Dispose
+// 错误 3：忘记 Dispose
 NativeArray<int> arr = new(10, Allocator.TempJob);
 var job = new MyJob { data = arr }.Schedule();
 // ... 忘记 Complete 和 Dispose
@@ -312,7 +312,7 @@ NativeArray<int> persistent = new(100, Allocator.Persistent);
 // 在整个场景生命周期中使用
 // 场景切换时 Dispose
 
-// ⚠️ Persistent 的分配/释放开销最大
+// 【注意】Persistent 的分配/释放开销最大
 // 不要在每帧创建 Persistent 的 NativeArray
 ```
 
@@ -532,22 +532,22 @@ IJobParallelFor 把数组分成多个 Batch
 // 如果每个元素都很重 → Batch = 8~32
 
 // 2. 避免 Job 碎片（很多小 Job）
-// ❌ 不推荐：每帧调度 100 个小 Job
+// 不推荐：每帧调度 100 个小 Job
 for (int i = 0; i < 100; i++)
 {
     var job = new TinyJob { ... }.Schedule();
 }
 // 调度 100 次有 100 次上下文切换开销
 
-// ✅ 推荐：合并成大 Job
+// 推荐：合并成大 Job
 var bigJob = new BigJob { ... }.Schedule(elements.Length, 64);
 
 // 3. 尽早 Schedule，晚 Complete
-// ❌ 错误：立即 Complete
+// 错误：立即 Complete
 var handle = job.Schedule();
 handle.Complete();  // = 在主线程执行，没有任何并行效果
 
-// ✅ 正确：先调度，做点别的事，最后 Complete
+// 正确：先调度，做点别的事，最后 Complete
 JobHandle handle = job.Schedule();
 // 做一些不依赖 Job 结果的主线程工作...
 UpdateUI();

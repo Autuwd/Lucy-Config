@@ -390,10 +390,10 @@ public class Movement : MonoBehaviour
         // FixedUpdate 中处理物理（固定时间步，帧率无关）
         float h = Input.GetAxis("Horizontal");
 
-        // ✅ 物理移动：用 velocity 或 AddForce
+        // 物理移动：用 velocity 或 AddForce
         rb.velocity = new Vector3(h * speed, rb.velocity.y, 0);
 
-        // ✅ 跳跃：用 AddForce 加冲量
+        // 跳跃：用 AddForce 加冲量
         if (shouldJump)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);

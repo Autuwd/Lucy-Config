@@ -5,7 +5,7 @@
 
 ---
 
-## 📋 目录
+## 目录
 
 1. [线程管理](#线程管理)
 2. [共享数据](#共享数据)
@@ -27,7 +27,7 @@
 #include <thread>
 #include <iostream>
 
-// ✅ 基本线程启动
+// 基本线程启动
 void Function() {
     std::cout << "Hello from thread!" << std::endl;
 }
@@ -38,7 +38,7 @@ int main() {
     return 0;
 }
 
-// ✅ Lambda 启动线程
+// Lambda 启动线程
 int main() {
     std::thread t([]() {
         std::cout << "Hello from Lambda!" << std::endl;
@@ -47,7 +47,7 @@ int main() {
     return 0;
 }
 
-// ✅ 带参数的线程
+// 带参数的线程
 void Function(int x, std::string s) {
     std::cout << x << ": " << s << std::endl;
 }
@@ -58,28 +58,28 @@ int main() {
     return 0;
 }
 
-// ⚠️ 重要：始终 join 或 detach
+// 【注意】重要：始终 join 或 detach
 // 否则程序终止时会调用 std::terminate()
 ```
 
 ### 等待线程完成
 
 ```cpp
-// ✅ join：等待线程结束
+// join：等待线程结束
 std::thread t(Function);
 t.join();  // 阻塞直到线程结束
 
-// ✅ detach：分离线程
+// detach：分离线程
 std::thread t(Function);
 t.detach();  // 线程在后台运行
 
-// ✅ 检查线程是否可 join
+// 检查线程是否可 join
 std::thread t(Function);
 if (t.joinable()) {
     t.join();
 }
 
-// ✅ 超时等待（C++11 不支持，C++20 支持）
+// 超时等待（C++11 不支持，C++20 支持）
 // std::jthread 自动 join
 std::jthread t(Function);  // 析构时自动 join
 ```
@@ -87,7 +87,7 @@ std::jthread t(Function);  // 析构时自动 join
 ### 特殊情况下的线程管理
 
 ```cpp
-// ✅ 后台线程
+// 后台线程
 void BackgroundTask() {
     // 长时间运行的任务
 }
@@ -100,7 +100,7 @@ int main() {
     return 0;
 }
 
-// ✅ 中断线程
+// 中断线程
 std::atomic<bool> stop{false};
 
 void InterruptibleTask() {
@@ -119,7 +119,7 @@ int main() {
     return 0;
 }
 
-// ✅ C++20：使用 std::jthread
+// C++20：使用 std::jthread
 std::jthread t([](std::stop_token token) {
     while (!token.stop_requested()) {
         // 工作...
@@ -142,13 +142,13 @@ std::jthread t([](std::stop_token token) {
 std::mutex mtx;
 std::vector<int> data;
 
-// ✅ 使用 std::lock_guard
+// 使用 std::lock_guard
 void AddData(int value) {
     std::lock_guard<std::mutex> lock(mtx);  // RAII 锁
     data.push_back(value);
 }
 
-// ✅ 使用 std::unique_lock
+// 使用 std::unique_lock
 void ProcessData() {
     std::unique_lock<std::mutex> lock(mtx);
     
@@ -161,7 +161,7 @@ void ProcessData() {
     // 处理数据...
 }
 
-// ⚠️ 死锁
+// 【注意】死锁
 // 两个线程互相等待对方释放锁
 // 解决方案：总是以相同顺序加锁
 ```
@@ -169,7 +169,7 @@ void ProcessData() {
 ### 死锁预防
 
 ```cpp
-// ❌ 死锁示例
+// 死锁示例
 std::mutex mtx1, mtx2;
 
 void Thread1() {
@@ -184,7 +184,7 @@ void Thread2() {
     // 工作...
 }
 
-// ✅ 解决方案 1：固定加锁顺序
+// 解决方案 1：固定加锁顺序
 void Thread1() {
     std::lock_guard<std::mutex> lock1(mtx1);
     std::lock_guard<std::mutex> lock2(mtx2);
@@ -195,14 +195,14 @@ void Thread2() {
     std::lock_guard<std::mutex> lock2(mtx2);
 }
 
-// ✅ 解决方案 2：同时加锁
+// 解决方案 2：同时加锁
 void Thread1() {
     std::lock(mtx1, mtx2);  // 同时加锁
     std::lock_guard<std::mutex> lock1(mtx1, std::adopt_lock);
     std::lock_guard<std::mutex> lock2(mtx2, std::adopt_lock);
 }
 
-// ✅ 解决方案 3：使用 std::scoped_lock（C++17）
+// 解决方案 3：使用 std::scoped_lock（C++17）
 void Thread1() {
     std::scoped_lock lock(mtx1, mtx2);  // 自动处理死锁
 }
@@ -217,7 +217,7 @@ std::mutex mtx;
 std::condition_variable cv;
 bool ready = false;
 
-// ✅ 生产者-消费者模式
+// 生产者-消费者模式
 void Producer() {
     std::unique_lock<std::mutex> lock(mtx);
     ready = true;
@@ -230,7 +230,7 @@ void Consumer() {
     // 处理数据...
 }
 
-// ✅ 使用 wait_for
+// 使用 wait_for
 void WaitForData() {
     std::unique_lock<std::mutex> lock(mtx);
     if (cv.wait_for(lock, std::chrono::seconds(1), []() { return ready; })) {
@@ -250,7 +250,7 @@ void WaitForData() {
 ```cpp
 #include <future>
 
-// ✅ std::promise 和 std::future
+// std::promise 和 std::future
 std::promise<int> promise;
 std::future<int> future = promise.get_future();
 
@@ -263,14 +263,14 @@ std::cout << value << std::endl;  // 42
 
 t.join();
 
-// ✅ std::async
+// std::async
 std::future<int> f = std::async(std::launch::async, []() {
     return 42;
 });
 
 int result = f.get();  // 获取结果
 
-// ✅ std::packaged_task
+// std::packaged_task
 std::packaged_task<int(int, int)> task([](int a, int b) {
     return a + b;
 });
@@ -284,7 +284,7 @@ std::cout << result.get() << std::endl;  // 3
 ### 任务包装器和异常
 
 ```cpp
-// ✅ 异常处理
+// 异常处理
 std::promise<int> promise;
 std::future<int> future = promise.get_future();
 
@@ -304,7 +304,7 @@ try {
 
 t.join();
 
-// ✅ std::async 的异常处理
+// std::async 的异常处理
 auto f = std::async(std::launch::async, []() {
     throw std::runtime_error("Error");
 });
@@ -319,7 +319,7 @@ try {
 ### 等待条件
 
 ```cpp
-// ✅ 条件变量
+// 条件变量
 std::mutex mtx;
 std::condition_variable cv;
 bool ready = false;
@@ -335,7 +335,7 @@ void Consumer() {
     cv.wait(lock, []() { return ready; });
 }
 
-// ✅ 超时等待
+// 超时等待
 void WaitForData() {
     std::unique_lock<std::mutex> lock(mtx);
     if (cv.wait_for(lock, std::chrono::seconds(1), []() { return ready; })) {
@@ -349,7 +349,7 @@ void WaitForData() {
 ### 期望值和承诺的高级用法
 
 ```cpp
-// ✅ 获取多个结果
+// 获取多个结果
 std::promise<int> p1, p2;
 std::future<int> f1 = p1.get_future();
 std::future<int> f2 = p2.get_future();
@@ -363,7 +363,7 @@ std::thread t2([&p2]() { p2.set_value(2); });
 t1.join();
 t2.join();
 
-// ✅ 链式调用
+// 链式调用
 std::future<int> f = std::async(std::launch::async, []() {
     return 42;
 });
@@ -381,25 +381,25 @@ std::future<int> f = std::async(std::launch::async, []() {
 ### 内存模型
 
 ```cpp
-// ✅ 内存模型基础
+// 内存模型基础
 // 1. 顺序一致性：所有线程看到相同的执行顺序
 // 2. 松弛一致性：不同线程可能看到不同的执行顺序
 
-// ✅ 原子操作
+// 原子操作
 std::atomic<int> counter{0};
 
 void Increment() {
     counter++;  // 原子操作
 }
 
-// ✅ 非原子操作
+// 非原子操作
 int counter = 0;
 
 void Increment() {
     counter++;  // 非原子操作，可能竞争
 }
 
-// ⚠️ 数据竞争
+// 【注意】数据竞争
 // 两个线程同时访问同一数据，至少一个写入
 // 结果未定义
 ```
@@ -409,23 +409,23 @@ void Increment() {
 ```cpp
 #include <atomic>
 
-// ✅ 基本原子操作
+// 基本原子操作
 std::atomic<int> a{0};
 std::atomic<bool> b{false};
 std::atomic<double> c{0.0};
 
-// ✅ 原子操作
+// 原子操作
 a++;                    // 原子递增
 a.fetch_add(1);         // 原子加
 a.load();               // 原子读取
 a.store(10);            // 原子存储
 
-// ✅ CAS 操作
+// CAS 操作
 int expected = 0;
 int desired = 1;
 a.compare_exchange_strong(expected, desired);  // 比较交换
 
-// ✅ 原子标志
+// 原子标志
 std::atomic_flag flag = ATOMIC_FLAG_INIT;
 
 void SetFlag() {
@@ -442,14 +442,14 @@ void Wait() {
 ### 内存序
 
 ```cpp
-// ✅ 内存序类型
+// 内存序类型
 // 1. memory_order_relaxed：宽松序
 // 2. memory_order_acquire：获取序
 // 3. memory_order_release：发布序
 // 4. memory_order_acq_rel：获取-发布序
 // 5. memory_order_seq_cst：顺序一致序（默认）
 
-// ✅ 使用示例
+// 使用示例
 std::atomic<int> data{0};
 std::atomic<bool> ready{false};
 
@@ -463,7 +463,7 @@ while (!ready.load(std::memory_order_acquire)) {
 }
 int value = data.load(std::memory_order_acquire);  // 42
 
-// 💡 内存序选择
+// 【补充】内存序选择
 // 1. 默认使用 seq_cst
 // 2. 需要性能时，考虑其他内存序
 // 3. 总是进行正确的内存序分析
@@ -472,12 +472,12 @@ int value = data.load(std::memory_order_acquire);  // 42
 ### 原子操作的同步
 
 ```cpp
-// ✅ 同步关系
+// 同步关系
 // 1. 同步：一个操作发生在另一个操作之前
 // 2. 获取-发布：发布操作同步于获取操作
 // 3. 顺序一致：所有线程看到相同的执行顺序
 
-// ✅ 使用示例
+// 使用示例
 std::atomic<int> data{0};
 std::atomic<bool> ready{false};
 
@@ -491,7 +491,7 @@ while (!ready.load(std::memory_order_acquire)) {  // 获取
 }
 int value = data.load(std::memory_order_acquire);  // 获取
 
-// 💡 同步规则
+// 【补充】同步规则
 // 1. 发布-获取：发布操作同步于获取操作
 // 2. 顺序一致：所有线程看到相同的执行顺序
 // 3. 松弛：没有同步关系
@@ -568,7 +568,7 @@ private:
     bool stop_ = false;
 };
 
-// ✅ 使用
+// 使用
 ThreadPool pool(4);
 
 for (int i = 0; i < 8; i++) {
@@ -588,7 +588,7 @@ std::this_thread::sleep_for(std::chrono::seconds(1));
 #include <vector>
 #include <thread>
 
-// ✅ 并行 for_each
+// 并行 for_each
 template <typename Iterator, typename Func>
 void ParallelForEach(Iterator first, Iterator last, Func f) {
     unsigned long distance = std::distance(first, last);
@@ -620,7 +620,7 @@ void ParallelForEach(Iterator first, Iterator last, Func f) {
     }
 }
 
-// ✅ 使用
+// 使用
 std::vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8};
 ParallelForEach(v.begin(), v.end(), [](int &x) {
     x *= 2;
@@ -634,7 +634,7 @@ ParallelForEach(v.begin(), v.end(), [](int &x) {
 #include <vector>
 #include <thread>
 
-// ✅ 并行 reduce
+// 并行 reduce
 template <typename Iterator, typename T>
 T ParallelReduce(Iterator first, Iterator last, T init) {
     unsigned long distance = std::distance(first, last);
@@ -670,7 +670,7 @@ T ParallelReduce(Iterator first, Iterator last, T init) {
     return std::accumulate(results.begin(), results.end(), init);
 }
 
-// ✅ 使用
+// 使用
 std::vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8};
 int sum = ParallelReduce(v.begin(), v.end(), 0);
 ```
@@ -684,7 +684,7 @@ int sum = ParallelReduce(v.begin(), v.end(), 0);
 ```cpp
 #include <thread>
 
-// ✅ thread_local 变量
+// thread_local 变量
 thread_local int thread_id = 0;
 
 void Function() {
@@ -702,7 +702,7 @@ int main() {
     return 0;
 }
 
-// 💡 线程本地存储
+// 【补充】线程本地存储
 // 每个线程有自己的副本
 // 线程之间不共享
 // 适用于线程特定的数据
@@ -734,7 +734,7 @@ int main() {
     return 0;
 }
 
-// ✅ C++20：使用 std::jthread
+// C++20：使用 std::jthread
 std::jthread t([](std::stop_token token) {
     while (!token.stop_requested()) {
         // 工作...
@@ -789,7 +789,7 @@ int main() {
 #include <mutex>
 #include <vector>
 
-// ✅ 线程安全的栈
+// 线程安全的栈
 template <typename T>
 class ThreadSafeStack {
 public:
@@ -825,7 +825,7 @@ private:
 ```cpp
 #include <atomic>
 
-// ✅ 无锁栈
+// 无锁栈
 template <typename T>
 class LockFreeStack {
 public:
@@ -869,10 +869,10 @@ private:
 
 ## 难点解析
 
-### 🔴 难点 1：死锁
+### 难点 1：死锁
 
 ```cpp
-// ❌ 死锁示例
+// 死锁示例
 std::mutex mtx1, mtx2;
 
 void Thread1() {
@@ -885,7 +885,7 @@ void Thread2() {
     std::lock_guard<std::mutex> lock2(mtx1);
 }
 
-// ✅ 解决方案 1：固定加锁顺序
+// 解决方案 1：固定加锁顺序
 void Thread1() {
     std::lock_guard<std::mutex> lock1(mtx1);
     std::lock_guard<std::mutex> lock2(mtx2);
@@ -896,23 +896,23 @@ void Thread2() {
     std::lock_guard<std::mutex> lock2(mtx2);
 }
 
-// ✅ 解决方案 2：同时加锁
+// 解决方案 2：同时加锁
 void Thread1() {
     std::lock(mtx1, mtx2);
     std::lock_guard<std::mutex> lock1(mtx1, std::adopt_lock);
     std::lock_guard<std::mutex> lock2(mtx2, std::adopt_lock);
 }
 
-// ✅ 解决方案 3：使用 std::scoped_lock（C++17）
+// 解决方案 3：使用 std::scoped_lock（C++17）
 void Thread1() {
     std::scoped_lock lock(mtx1, mtx2);
 }
 ```
 
-### 🔴 难点 2：数据竞争
+### 难点 2：数据竞争
 
 ```cpp
-// ❌ 数据竞争
+// 数据竞争
 int counter = 0;
 
 void Increment() {
@@ -925,7 +925,7 @@ std::thread t2(Increment);
 // 两个线程同时执行 counter++
 // 结果未定义
 
-// ✅ 解决方案 1：使用互斥锁
+// 解决方案 1：使用互斥锁
 std::mutex mtx;
 int counter = 0;
 
@@ -934,7 +934,7 @@ void Increment() {
     counter++;
 }
 
-// ✅ 解决方案 2：使用原子操作
+// 解决方案 2：使用原子操作
 std::atomic<int> counter{0};
 
 void Increment() {
@@ -942,17 +942,17 @@ void Increment() {
 }
 ```
 
-### 🔴 难点 3：内存序
+### 难点 3：内存序
 
 ```cpp
-// ✅ 内存序类型
+// 内存序类型
 // 1. memory_order_relaxed：宽松序
 // 2. memory_order_acquire：获取序
 // 3. memory_order_release：发布序
 // 4. memory_order_acq_rel：获取-发布序
 // 5. memory_order_seq_cst：顺序一致序（默认）
 
-// ✅ 使用示例
+// 使用示例
 std::atomic<int> data{0};
 std::atomic<bool> ready{false};
 
@@ -966,34 +966,34 @@ while (!ready.load(std::memory_order_acquire)) {  // 获取
 }
 int value = data.load(std::memory_order_acquire);  // 获取
 
-// 💡 内存序选择
+// 【补充】内存序选择
 // 1. 默认使用 seq_cst
 // 2. 需要性能时，考虑其他内存序
 // 3. 总是进行正确的内存序分析
 ```
 
-### 🔴 难点 4：条件变量虚假唤醒
+### 难点 4：条件变量虚假唤醒
 
 ```cpp
-// ❌ 虚假唤醒
+// 虚假唤醒
 std::mutex mtx;
 std::condition_variable cv;
 bool ready = false;
 
 void Wait() {
     std::unique_lock<std::mutex> lock(mtx);
-    cv.wait(lock);  // ❌ 可能虚假唤醒
+    cv.wait(lock);  // 可能虚假唤醒
     // 处理数据...
 }
 
-// ✅ 使用谓词
+// 使用谓词
 void Wait() {
     std::unique_lock<std::mutex> lock(mtx);
-    cv.wait(lock, []() { return ready; });  // ✅ 使用谓词
+    cv.wait(lock, []() { return ready; });  // 使用谓词
     // 处理数据...
 }
 
-// 💡 原则
+// 【补充】原则
 // 1. 总是使用谓词
 // 2. 谓词应该是无副作用的
 // 3. 谓词应该快速返回
@@ -1028,7 +1028,7 @@ void Wait() {
 // Unity 的渲染是多线程的
 // 理解 C++ 并发 API 可以帮助理解渲染管线
 
-// 💡 学习建议
+// 【补充】学习建议
 // 1. 先理解 C++ 并发 API
 // 2. 对比 Unity Jobs System
 // 3. 思考为什么 Unity 要这样设计
@@ -1049,7 +1049,7 @@ IJob job = new MyJob();
 JobHandle handle = job.Schedule();
 handle.Complete();
 
-// 💡 区别
+// 【补充】区别
 // C++：手动管理线程
 // Unity：Job System 自动管理线程
 // Unity：Burst Compiler 优化性能
@@ -1057,7 +1057,7 @@ handle.Complete();
 
 ---
 
-## 📝 学习建议
+## 学习建议
 
 ### 阅读顺序
 1. 先读线程管理（基本概念）

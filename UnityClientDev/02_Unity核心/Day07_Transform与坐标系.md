@@ -61,13 +61,13 @@ Vector3 pos = transform.position;  // 读取——此时 recalc 如果 dirty
 **性能影响：** 频繁修改 transform 会触发矩阵重算。如果要设置多个属性，一次设置完：
 
 ```csharp
-// ❌ 坏：每次赋值都触发矩阵重算
+// 坏：每次赋值都触发矩阵重算
 transform.position = new Vector3(1, 0, 0);
 transform.rotation = Quaternion.Euler(0, 90, 0);
 transform.localScale = new Vector3(2, 2, 2);
 // dirty 了 3 次，重算了 3 次
 
-// ✅ 好：使用 SetPositionAndRotation 一次设置
+// 好：使用 SetPositionAndRotation 一次设置
 // 注意：没有 SetScale，但可以用中间变量
 Vector3 newPos = new Vector3(1, 0, 0);
 Quaternion newRot = Quaternion.Euler(0, 90, 0);

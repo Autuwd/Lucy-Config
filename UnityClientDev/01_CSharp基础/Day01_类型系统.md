@@ -206,7 +206,7 @@ int y = (int)obj;  // unboxing
 
 **常见装箱陷阱：**
 ```csharp
-// ❌ 坏：每次循环装箱
+// 坏：每次循环装箱
 int sum = 0;
 ArrayList list = new ArrayList();  // ArrayList 存储 object
 for (int i = 0; i < 1000; i++)
@@ -214,7 +214,7 @@ for (int i = 0; i < 1000; i++)
     list.Add(i);  // 每次 Add 都是装箱！
 }
 
-// ✅ 好：用泛型避免装箱
+// 好：用泛型避免装箱
 List<int> list2 = new List<int>();  // List<int> 专门存 int
 for (int i = 0; i < 1000; i++)
 {
@@ -377,14 +377,14 @@ string s4 = s3 + "lo";     // 运行时拼接，新对象！
 **性能影响：** string 拼接创建大量临时对象
 
 ```csharp
-// ❌ 坏：每次 += 创建新 string 对象
+// 坏：每次 += 创建新 string 对象
 string s = "";
 for (int i = 0; i < 1000; i++)
 {
     s += i.ToString();  // 创建 1000 个临时字符串！
 }
 
-// ✅ 好：StringBuilder 内部用 char[] 缓冲区
+// 好：StringBuilder 内部用 char[] 缓冲区
 System.Text.StringBuilder sb = new System.Text.StringBuilder();
 for (int i = 0; i < 1000; i++)
 {
@@ -619,7 +619,7 @@ if (a == 0.3f) { }      // 可能为 false！
 // 0.1 在二进制中是无限循环小数：0.00011001100110011...
 // float 只有 23 位有效位，精度损失不可避免
 
-// ✅ 正确做法：
+// 正确做法：
 if (Mathf.Approximately(a, 0.3f)) { }
 
 // Mathf.Approximately 的底层：
@@ -641,7 +641,7 @@ var result = players.Where(p => p.Level > 5).First();  // 推断为 Player
 
 ```csharp
 var x = 10;
-x = "hello";  // ❌ 编译错误！x 已经是 int 了，不能赋值为 string
+x = "hello";  // 编译错误！x 已经是 int 了，不能赋值为 string
 ```
 
 `var` 的 IL 层面——完全等价的：

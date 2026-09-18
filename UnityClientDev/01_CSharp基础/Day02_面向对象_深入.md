@@ -93,7 +93,7 @@ Func<Cat, Animal> getAnimal = getCat;  // 协变（返回值）
 ### 在自定义接口中使用 in/out
 
 ```csharp
-// ❌ 没有 in/out：不支持协变/逆变
+// 没有 in/out：不支持协变/逆变
 public interface IRepository<T>
 {
     T Get();
@@ -101,7 +101,7 @@ public interface IRepository<T>
 }
 // IRepository<Cat> 不能转 IRepository<Animal>
 
-// ✅ 协变接口：只读
+// 协变接口：只读
 public interface IReadOnlyRepository<out T>
 {
     T Get();
@@ -109,7 +109,7 @@ public interface IReadOnlyRepository<out T>
 }
 // IReadOnlyRepository<Cat> → IReadOnlyRepository<Animal>
 
-// ✅ 逆变接口：只写
+// 逆变接口：只写
 public interface IWriteOnlyRepository<in T>
 {
     void Save(T item);
@@ -414,10 +414,10 @@ public class PlayerRecord : IEquatable<PlayerRecord>
 ```csharp
 var original = new PlayerRecord("Alice", 10);
 
-// ❌ 不能修改：
+// 不能修改：
 // original.Level = 15;  // 编译错误！init-only 属性不能在声明后修改
 
-// ✅ with 表达式——创建新实例，修改指定字段
+// with 表达式——创建新实例，修改指定字段
 var leveledUp = original with { Level = 15 };
 // original 不变：("Alice", 10)
 // leveledUp: ("Alice", 15)
@@ -525,7 +525,7 @@ var settings = new GameSettings
     Difficulty = 2         // 不写就编译错误！
 };
 
-// ❌ 缺少 Required 成员：
+// 缺少 Required 成员：
 // var bad = new GameSettings { PlayerName = "Bob" };
 // 编译错误：'Required member GameSettings.Difficulty must be set'
 ```
@@ -679,7 +679,7 @@ public struct Vector2D : IAddable<Vector2D>
 // 现在可以通用地加了！
 T AddAny<T>(T a, T b) where T : IAddable<T>
 {
-    return a + b;  // ✅ 可以了！
+    return a + b;  // 可以了！
 }
 ```
 

@@ -228,7 +228,7 @@ public Component GetComponent(Type type)
 ```csharp
 public class Player : MonoBehaviour
 {
-    // ❌ 坏：每帧调用 GetComponent
+    // 坏：每帧调用 GetComponent
     void Update()
     {
         Rigidbody rb = GetComponent<Rigidbody>();  // 每帧分配 + 查找！
@@ -238,7 +238,7 @@ public class Player : MonoBehaviour
 
 public class Player : MonoBehaviour
 {
-    // ✅ 好：Awake 中缓存
+    // 好：Awake 中缓存
     private Rigidbody rb;
 
     void Awake()

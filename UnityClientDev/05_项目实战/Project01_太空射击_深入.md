@@ -2319,7 +2319,7 @@ public class MobileInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 // PerformanceCheatSheet.cs — 性能优化清单
 
 太空射击优化清单:
-├── 对象池 ✅
+├── 对象池 
 │   ├─ 所有子弹走对象池
 │   ├─ 所有敌人走对象池
 │   └─ 爆炸特效走对象池（预热 20 个）
@@ -2327,7 +2327,7 @@ public class MobileInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 │   ├─ 使用 Sprite Atlas 合批
 │   ├─ 所有敌人共享同一材质（Sprite Default）
 │   └─ 背景用 Tilemap 而非独立 Sprite
-├── 物理 ✅
+├── 物理 
 │   ├─ Collision2D 用 Trigger 而非普通碰撞
 │   ├─ Rigidbody2D 的 Simulation Mode = FixedUpdate
 │   └─ 减少同时活跃的 Collider（超出屏幕自动回收）
@@ -2409,17 +2409,17 @@ public class MobileInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 ```
 完成本指南后，你应该能:
-├── ✅ 独立实现 GameManager 状态机管理游戏流程
-├── ✅ 自己写出通用对象池并用 IPoolable 接口规范回收
-├── ✅ 设计波次系统 + 难度自动递增逻辑
-├── ✅ 实现 4 种道具效果（护盾/加速/散弹/全屏Bomb）
-├── ✅ 用状态机实现 Boss 三阶段战斗
-├── ✅ 连击计分 + 屏幕震动 + 击中停顿增强打击感
-├── ✅ 多层视差背景滚动
-├── ✅ 完整的 UI 流程 + BGM 交叉淡入淡出
-├── ✅ PlayerPrefs 存读最高分
-├── ✅ 摇杆输入支持移动端
-└── ✅ 知晓 10+ 性能优化手段
+├── 独立实现 GameManager 状态机管理游戏流程
+├── 自己写出通用对象池并用 IPoolable 接口规范回收
+├── 设计波次系统 + 难度自动递增逻辑
+├── 实现 4 种道具效果（护盾/加速/散弹/全屏Bomb）
+├── 用状态机实现 Boss 三阶段战斗
+├── 连击计分 + 屏幕震动 + 击中停顿增强打击感
+├── 多层视差背景滚动
+├── 完整的 UI 流程 + BGM 交叉淡入淡出
+├── PlayerPrefs 存读最高分
+├── 摇杆输入支持移动端
+└── 知晓 10+ 性能优化手段
 
 下个项目: Project02_俯视角Roguelike（将引入更多系统: 背包、技能树、地图生成）
 ```

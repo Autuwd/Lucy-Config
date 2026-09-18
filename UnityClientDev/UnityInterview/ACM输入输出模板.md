@@ -546,7 +546,7 @@ while (n--) {
 ```cpp
 int n;
 cin >> n;
-cin.ignore();  // ⚠ 吃掉第一行末尾的换行符！
+cin.ignore();  // 【注意】吃掉第一行末尾的换行符！
 
 vector<string> lines(n);
 for (int i = 0; i < n; i++) {
@@ -2063,8 +2063,8 @@ int[] arr = line.Split(' ', StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse).ToArray();
 
 // 2. 大输入用 LINQ 很慢
-// ❌ 10^5 级别：Console.ReadLine().Split().Select(int.Parse).ToArray()
-// ✅ 用 FastReader（见 2.2）或手动 for 循环解析
+// 10^5 级别：Console.ReadLine().Split().Select(int.Parse).ToArray()
+// 用 FastReader（见 2.2）或手动 for 循环解析
 
 // 3. StringBuilder 比多次 Console.WriteLine 快很多
 ```
@@ -2078,19 +2078,19 @@ cin >> n;
 // 缓冲区: "42\n"
 string s;
 getline(cin, s);  // 读到的是 ""（空串）！
-// ✅ 正确：
+// 正确：
 cin >> n;
 cin.ignore();     // 吃掉 \n
 getline(cin, s);
 
 // 2. endl 会 flush，大量输出巨慢
-// ❌ cout << x << endl;
-// ✅ cout << x << "\n";
+// cout << x << endl;
+// cout << x << "\n";
 
 // 3. vector<bool> 不是 bool 数组，是 bitset！
 // 用 vector<char> 或 deque<bool> 代替
 
 // 4. 开数组注意栈溢出
-// ❌ int arr[1000000];   // 本地可能爆栈
-// ✅ vector<int> arr(1000000);  // 堆分配
+// int arr[1000000];   // 本地可能爆栈
+// vector<int> arr(1000000);  // 堆分配
 ```

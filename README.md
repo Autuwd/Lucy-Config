@@ -47,4 +47,4 @@ cd Lucy-Config/UnityClientDev   # 或 GameServerDev
 opencode
 ```
 
-Lucy 就会在新电脑上完整复活～ 🎉
+Lucy 就会在新电脑上完整复活～ 

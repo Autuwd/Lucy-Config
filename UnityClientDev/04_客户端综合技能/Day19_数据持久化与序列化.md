@@ -7,7 +7,7 @@
 ```
 内存中的对象：              磁盘上的文件：
 Player {                   存档.sav → 二进制字节
-  hp: 100    ──序列化──▶    [01 64 00 00 00 ...]
+  hp: 100    ──序列化──   [01 64 00 00 00 ...]
   name: "Lucy"             存档.json → 文本字符串
   gold: 500                {"hp":100,"name":"Lucy","gold":500}
 }              ◀──反序列化──
@@ -109,27 +109,27 @@ public class SaveManager : MonoBehaviour
 ### JsonUtility 的局限
 
 ```csharp
-// ❌ 不支持：Dictionary
+// 不支持：Dictionary
 [System.Serializable]
 public class BadData
 {
     public Dictionary<string, int> scores; // JsonUtility 序列化不了！
 }
 
-// ❌ 不支持：继承多态
+// 不支持：继承多态
 [System.Serializable]
 public class Weapon { }
 [System.Serializable]
 public class Sword : Weapon { }
 // JsonUtility 只序列化基类字段，丢失子类数据
 
-// ❌ 不支持：属性（Property），只认字段（Field）
+// 不支持：属性（Property），只认字段（Field）
 public class PropertyData
 {
     public int Value { get; set; } // JSON 会丢失这个！
 }
 
-// ✅ 替代方案：使用 Newtonsoft.Json（第三方）
+// 替代方案：使用 Newtonsoft.Json（第三方）
 // Package Manager → 搜索 Newtonsoft.Json
 ```
 

@@ -53,8 +53,8 @@ ALTER TABLE `players`
 -- 方案 1：提前预留字段（不推荐）
 CREATE TABLE `players` (
   ...
-  `reserve1` INT DEFAULT 0,       -- ❌ 语义不明，容易误用
-  `reserve2` VARCHAR(255),        -- ❌ 类型和业务不匹配
+  `reserve1` INT DEFAULT 0,       -- 语义不明，容易误用
+  `reserve2` VARCHAR(255),        -- 类型和业务不匹配
   `reserve3` VARCHAR(255)
 );
 

@@ -226,7 +226,7 @@ public class GameManager : MonoBehaviour
 ### 为什么需要对象池？
 
 ```csharp
-// ❌ 不用对象池：每次射击都 Instantiate + Destroy
+// 不用对象池：每次射击都 Instantiate + Destroy
 void Shoot()
 {
     GameObject bullet = Instantiate(bulletPrefab, ...);
@@ -237,7 +237,7 @@ void Shoot()
     // 频繁 GC → 卡顿！
 }
 
-// ✅ 对象池：预创建 + 复用
+// 对象池：预创建 + 复用
 void Shoot()
 {
     GameObject bullet = pool.Get();  // 从池中取一个

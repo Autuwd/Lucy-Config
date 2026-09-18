@@ -52,14 +52,14 @@
 ```csharp
 public class ServerValidation
 {
-    // ❌ 错误：相信客户端发送的伤害值
+    // 错误：相信客户端发送的伤害值
     public async Task ApplyDamage(long attackerId, long targetId, int damage)
     {
         var target = await GetPlayer(targetId);
         target.Hp -= damage; // 如果客户端发送了 999999 伤害？
     }
 
-    // ✅ 正确：服务器重新计算伤害
+    // 正确：服务器重新计算伤害
     public async Task<DamageResult> ApplyDamage(DamageRequest clientRequest)
     {
         // 忽略客户端传来的伤害值，服务器重新算

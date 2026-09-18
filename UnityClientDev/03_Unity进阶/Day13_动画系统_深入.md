@@ -798,7 +798,7 @@ public class AnimatorOptimization : MonoBehaviour
 {
     private Animator animator;
     
-    // ❌ 坏：每帧用字符串查找
+    // 坏：每帧用字符串查找
     void BadUpdate()
     {
         // SetFloat/SetBool/SetTrigger 内部是字符串哈希
@@ -808,7 +808,7 @@ public class AnimatorOptimization : MonoBehaviour
         animator.SetTrigger("Jump");
     }
     
-    // ✅ 好：缓存哈希值
+    // 好：缓存哈希值
     private static readonly int SpeedHash = Animator.StringToHash("Speed");
     private static readonly int GroundedHash = Animator.StringToHash("IsGrounded");
     private static readonly int JumpHash = Animator.StringToHash("Jump");

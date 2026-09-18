@@ -1,4 +1,4 @@
-﻿# 第 2 章 Transform 与坐标系
+# 第 2 章 Transform 与坐标系
 
 > **本章管辖**：位置/旋转/缩放 → `Transform`，以及世界坐标 vs 本地坐标、父子层级、坐标转换。
 > **一句话**：**每个** GameObject 身上都必挂一个 `Transform`（第一个组件，无法删除），它决定了物体在哪、朝哪、多大。
@@ -40,18 +40,18 @@
 | `eulerAngles` | 旋转（欧拉角常见于开销小但易万向锁） | 世界 |
 | `localEulerAngles` | 局部欧拉角 | 局部 |
 
-【⚠️ 注意】**为什么不要直接用 `gameObject.transform.position.x = 5`**：因为 `position` 返回的是 `Vector3`（值类型），直接改 `.x` 是改一个临时副本，不会生效。**务必整体赋值：**
+【注意】**为什么不要直接用 `gameObject.transform.position.x = 5`**：因为 `position` 返回的是 `Vector3`（值类型），直接改 `.x` 是改一个临时副本，不会生效。**务必整体赋值：**
 
 ```csharp
-// ❌ 编译错误！CS1612「无法修改非变量表达式返回值」
+// 编译错误！CS1612「无法修改非变量表达式返回值」
 transform.position.x = 5;            // position 是值类型（Vector3），.x 改的是临时副本，编译都不让过
 
-// ✅
+// 
 Vector3 p = transform.position;      
 p.x = 5;
 transform.position = p;               // 整体赋值才生效
 
-// ✅ 或一行
+// 或一行
 transform.position += new Vector3(5, 0, 0);
 ```
 
@@ -85,7 +85,7 @@ transform.Translate(speed, 0, 0, Space.World);                     // 沿世界 
 transform.Translate(Vector3.forward * speed * Time.deltaTime);     // 向前
 ```
 
-【⚠️ 注意】真正物理移动用 `Rigidbody`（见第 5 章），不要用 `Transform.Translate` 直接操作有 `Rigidbody` 的物体。
+【注意】真正物理移动用 `Rigidbody`（见第 5 章），不要用 `Transform.Translate` 直接操作有 `Rigidbody` 的物体。
 
 ---
 
@@ -94,7 +94,7 @@ transform.Translate(Vector3.forward * speed * Time.deltaTime);     // 向前
 ### 2.3.1 `rotation` / `localRotation`（Quaternion 四元数）
 
 ```csharp
-transform.rotation = Quaternion.Euler(0, 90, 0);   // ✅ 转 90 度常用写法
+transform.rotation = Quaternion.Euler(0, 90, 0);   // 转 90 度常用写法
 ```
 
 - `rotation`：世界旋转；`localRotation`：局部。
@@ -154,7 +154,7 @@ transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime * 
 ```csharp
 transform.localScale = new Vector3(2, 2, 2);    // 放大2倍
 ```
-【⚠️ 注意】只有 `localScale`，没有 `scale` 属性。父缩放会被继承，局部缩放是"相对父"的。
+【注意】只有 `localScale`，没有 `scale` 属性。父缩放会被继承，局部缩放是"相对父"的。
 
 ---
 
@@ -175,7 +175,7 @@ transform.SetParent(parent, false);   // 局部位置不变
 - `parent`：新的父物体 Transform。
 - `worldPositionStays`（默认 `true`）：若为 true，**世界坐标保持不变**（只是把父子关系挂上）；若 false，**局部坐标不变**（物体会随父移动改变世界位置）。
 
-【⚠️ 注意】`SetParent(null)` 会脱离父物体，成为根级物体。
+【注意】`SetParent(null)` 会脱离父物体，成为根级物体。
 
 ---
 

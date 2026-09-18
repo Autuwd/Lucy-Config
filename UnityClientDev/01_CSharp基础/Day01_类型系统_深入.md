@@ -52,17 +52,17 @@ Console.WriteLine(numbers[2]);  // 输出 99
 ### Span&lt;T&gt; 的约束——为什么只能存在于栈上？
 
 ```csharp
-// ❌ Span 不能作为类的字段
+// Span 不能作为类的字段
 public class Player
 {
     private Span<int> _data;  // 编译错误！Span 是 ref struct
 }
 
-// ❌ Span 不能装箱
+// Span 不能装箱
 Span<int> s = stackalloc int[10];
 object o = s;  // 编译错误！
 
-// ❌ Span 不能在 Lambda 中捕获
+// Span 不能在 Lambda 中捕获
 int[] arr = { 1, 2, 3 };
 Action a = () =>
 {
@@ -188,7 +188,7 @@ public class Transform
 ### 什么时候该用 ref struct？
 
 ```csharp
-// ✅ 好的场景：临时缓冲区
+// 好的场景：临时缓冲区
 ref struct BufferWriter
 {
     private Span<byte> _buffer;
@@ -203,7 +203,7 @@ ref struct BufferWriter
     }
 }
 
-// ✅ 好的场景：高性能解析器
+// 好的场景：高性能解析器
 ref struct JsonParser
 {
     private ReadOnlySpan<char> _input;
@@ -240,10 +240,10 @@ int* ptr = stackalloc int[10];  // 需要 unsafe 上下文
 Span<int> safe = stackalloc int[10];  // span 包装
 
 // 限制 2：栈空间有限（默认 1MB）
-// ❌ 危险：尝试分配 100 万个 int（4MB），超出栈容量
+// 危险：尝试分配 100 万个 int（4MB），超出栈容量
 Span<int> tooBig = stackalloc int[1_000_000];  // StackOverflowException!
 
-// ✅ 安全：小批量使用
+// 安全：小批量使用
 Span<int> fine = stackalloc int[256];  // 1KB，完全安全
 
 // 限制 3：不能返回 stackalloc 的 Span（会逃逸）
@@ -252,7 +252,7 @@ Span<int> BadAlloc()
     return stackalloc int[10];  // 编译错误！返回后栈数据被销毁
 }
 
-// ✅ 正确：通过 ref 参数传出
+// 正确：通过 ref 参数传出
 void GoodAlloc(out Span<int> buffer)
 {
     buffer = stackalloc int[10];  // 调用者负责确保不逃逸
@@ -496,21 +496,21 @@ void OnCriticalGameplay()
 ```csharp
 // 知道什么时候触发 GC 比手动触发更重要
 
-// ❌ 坏：每帧检查并触发
+// 坏：每帧检查并触发
 void Update()
 {
     if (Time.frameCount % 60 == 0)
         GC.Collect();  // 每 60 帧触发一次 GC！卡顿！
 }
 
-// ✅ 较好：场景切换后
+// 较好：场景切换后
 void OnSceneUnloaded(Scene scene)
 {
     // 场景卸载后，大量对象变成垃圾
     GC.Collect();
 }
 
-// ✅ 最好：让 GC 自己管理
+// 最好：让 GC 自己管理
 // 大多数时候不需要手动 GC.Collect()
 ```
 

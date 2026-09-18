@@ -249,7 +249,7 @@ class TwoLevelCache
 // 场景：玩家购买限时礼包，只有 100 份
 // 多个服务器同时处理，需要跨进程互斥
 
-// ❌ 问题：没有锁
+// 问题：没有锁
 async Task BuyGiftPacket(long playerId)
 {
     var stock = await _redis.StringGetAsync("gift:stock");

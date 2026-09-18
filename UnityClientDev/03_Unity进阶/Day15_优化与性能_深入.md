@@ -91,10 +91,10 @@ Day15 的基础篇介绍了 Profiler 的基本使用和 GC 优化。但真正优
 
 public class MemoryLeakFix : MonoBehaviour
 {
-    // ⚠️ 错误的做法：挂载在 DontDestroyOnLoad 单例上
+    // 【注意】错误的做法：挂载在 DontDestroyOnLoad 单例上
     // Sprite cachedSprite;  // ← 引用一直存在，场景卸载了也不释放
     
-    // ✅ 正确的做法
+    // 正确的做法
     // 1. 场景卸载时调用下面这个方法
     public void OnSceneUnloaded()
     {
@@ -212,7 +212,7 @@ public class AutomatedMemoryTest
   (同一 Shader)  (同一 Shader)     (不同Shader!)
         │              │              │
         ▼              ▼              ▼
-   SRP Batcher    SRP Batcher       ❌ 单独 Draw
+   SRP Batcher    SRP Batcher       单独 Draw
    (合批 OK!)     (合批 OK!)         (无法合批)
 */
 ```
@@ -311,12 +311,12 @@ public class ColorfulObjects : MonoBehaviour
 
 /*
  对比：
- ❌ renderer.material.color = Color.red;
+ renderer.material.color = Color.red;
     → 每次访问 .material 时，Unity 会创建新的 Material 实例！
     → 1000 个物体 = 1000 个材质实例！Draw Call 爆炸！
     → 破坏了 SRP Batcher 合批！
  
- ✅ renderer.SetPropertyBlock(block);
+ renderer.SetPropertyBlock(block);
     → 不创建新材质
     → 1000 个物体仍然共享一个材质
     → SRP Batcher 正常工作！

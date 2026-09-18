@@ -3490,10 +3490,10 @@ public static ResourceManager Instance
 
 | 方式 | 线程安全 | 懒加载 | 性能 | 适用场景 |
 |------|---------|--------|------|---------|
-| 静态初始化 | ✅ CLR保证 | ❌ 类型加载时创建 | ★★★ 最高 | 大多数情况 |
-| Lazy\<T\> | ✅ Lazy保证 | ✅ 首次访问 | ★★☆ 中 | 初始化耗时长的对象 |
-| UnitySingleton | ✅ Awake检查 | ✅ 首次访问 | ★★☆ 中 | Unity MonoBehaviour |
-| 双重检查锁 | ✅ 手动实现 | ✅ 首次访问 | ★☆☆ 低 | 兼容旧框架(不推荐) |
+| 静态初始化 | CLR保证 | 类型加载时创建 | ★★★ 最高 | 大多数情况 |
+| Lazy\<T\> | Lazy保证 | 首次访问 | ★★☆ 中 | 初始化耗时长的对象 |
+| UnitySingleton | Awake检查 | 首次访问 | ★★☆ 中 | Unity MonoBehaviour |
+| 双重检查锁 | 手动实现 | 首次访问 | ★☆☆ 低 | 兼容旧框架(不推荐) |
 
 ## Unity Application / Unity 应用场景
 
@@ -14541,12 +14541,12 @@ public class AchievementSystem
 
 | 机制 | 解耦类型 | 线程安全 | 性能 | 推荐场景 |
 |------|---------|---------|------|---------|
-| **Event Queue** | 静态 + 时间 | ✅ | ⭐⭐⭐ | 跨线程通信、系统间解耦 |
-| **UnityEvent** | 静态 | ❌ | ⭐⭐ | Inspector 绑定、UI 事件 |
-| **C# event/delegate** | 静态 | ❌ | ⭐⭐⭐ | 同一线程内解耦 |
-| **SendMessage** | 动态 | ❌ | ⭐ | 快速原型（不推荐生产） |
-| **Interface** | 静态 | ✅ | ⭐⭐⭐⭐ | 强类型组件间通信 |
-| **ScriptableObject 事件** | 静态 + 资源化 | ❌ | ⭐⭐ | 解耦预制体间通信 |
+| **Event Queue** | 静态 + 时间 | 是 | ★★★ | 跨线程通信、系统间解耦 |
+| **UnityEvent** | 静态 | 否 | ★★ | Inspector 绑定、UI 事件 |
+| **C# event/delegate** | 静态 | 否 | ★★★ | 同一线程内解耦 |
+| **SendMessage** | 动态 | 否 | ★ | 快速原型（不推荐生产） |
+| **Interface** | 静态 | 是 | ★★★★ | 强类型组件间通信 |
+| **ScriptableObject 事件** | 静态 + 资源化 | 否 | ★★ | 解耦预制体间通信 |
 
 ---
 

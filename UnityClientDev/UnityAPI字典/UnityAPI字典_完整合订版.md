@@ -74,7 +74,7 @@ empty.transform.SetParent(cam.transform, false);
 | `new GameObject()` 与 `Instantiate()` | `new` 创建全新空物体；`Instantiate` 用于克隆已有 Prefab/物体（见第 7 章） |
 | `GameObject` 与 `Transform` | GameObject 是容器；Transform 是它自己的位置组件，二者通过 `gameObject.transform` / `transform.gameObject` 互取 |
 
-【⚠️ 注意】Unity 是单线程的，`Awake` 在对象实例化时被**同步**调用；不要在 `Awake` 里依赖"场景已完全加载完毕"的状态（某些对象可能还没 `Awake`），需要跨对象通信时用 `Start` 或订阅事件。
+【注意】Unity 是单线程的，`Awake` 在对象实例化时被**同步**调用；不要在 `Awake` 里依赖"场景已完全加载完毕"的状态（某些对象可能还没 `Awake`），需要跨对象通信时用 `Start` 或订阅事件。
 
 ---
 
@@ -151,14 +151,14 @@ if (enemy.activeInHierarchy) {...} // 判断它在这个层级是否真的有效
 
 **【用途】** 提供**实例管理 + 预定义比较 + 通用工具**。
 
-**【经典陷阱🚨】**：`if (obj == null)` 用的是 **Unity 的 == 运算符**（C++ 底层帮你判断，不是真正的 C# 引用为 null）。所以一个"被销毁的"对象，在 C# 看来 `== null` 为 true，但 `??` 之类运算会有区别。**一定要用 `== null` 判断"被销毁"**，不要用 `.Equals(null)`。
+**【经典陷阱】**：`if (obj == null)` 用的是 **Unity 的 == 运算符**（C++ 底层帮你判断，不是真正的 C# 引用为 null）。所以一个"被销毁的"对象，在 C# 看来 `== null` 为 true，但 `??` 之类运算会有区别。**一定要用 `== null` 判断"被销毁"**，不要用 `.Equals(null)`。
 
 **【代码示例】**
 ```csharp
 Destroy(box);
-if (box == null) Debug.Log("box 已被销毁");  // ✅ 正确：Unity 陷阱
+if (box == null) Debug.Log("box 已被销毁");  // 正确：Unity 陷阱
 
-// ❌ 错误示范：很多人以为 box 还是有效的
+// 错误示范：很多人以为 box 还是有效的
 // if (!box.Equals(null))  // 不是标准做法
 ```
 
@@ -186,7 +186,7 @@ Destroy(GetComponent<Collider>());          // 销毁组件
 
 **【返回值】** 无（void）。
 
-【⚠️ 注意】在 `Update` 中调用它不会立即执行销毁逻辑，因为销毁发生在帧末。如果想**立即销毁**（编辑器工具）用 `DestroyImmediate`。
+【注意】在 `Update` 中调用它不会立即执行销毁逻辑，因为销毁发生在帧末。如果想**立即销毁**（编辑器工具）用 `DestroyImmediate`。
 
 ---
 
@@ -212,7 +212,7 @@ public class GameManager : MonoBehaviour
     {
         if (Instance != null) { Destroy(gameObject); return; }
         Instance = this;
-        DontDestroyOnLoad(gameObject);   // ✅ 关键：切场景不销毁自己
+        DontDestroyOnLoad(gameObject);   // 关键：切场景不销毁自己
     }
 }
 ```
@@ -364,7 +364,7 @@ this.transform    // Transform
 
 **【是什么】** 调用当前物体上**所有组件**里同名的方法。
 
-**【⚠️ 不推荐】** 用字符串传递，编辑期无法检查、性能差、还可能炸错消息。找不到接收者时默认会报 `MissingMethodException`（错误级）；传 `SendMessageOptions.DontRequireReceiver` 才可避免报错。
+**【不推荐】** 用字符串传递，编辑期无法检查、性能差、还可能炸错消息。找不到接收者时默认会报 `MissingMethodException`（错误级）；传 `SendMessageOptions.DontRequireReceiver` 才可避免报错。
 
 **【代码示例】**
 ```csharp
@@ -401,10 +401,10 @@ gameObject.SendMessage("OnHit", 10, SendMessageOptions.DontRequireReceiver);
 
 | API | 标记 |
 |-----|------|
-| `Object.FindObjectsByType` / `FindFirstObjectByType` | ✅ Unity 2021.3.18 引入（新查找 API，替代旧的数组/单例 `FindObject*` 系列，后者在 Unity 2023.1 起弃用） |
+| `Object.FindObjectsByType` / `FindFirstObjectByType` | Unity 2021.3.18 引入（新查找 API，替代旧的数组/单例 `FindObject*` 系列，后者在 Unity 2023.1 起弃用） |
 | `Object.Destroy` | 老 API（稳定可用） |
-| `Input`（旧） | ⚠️ 旧，推荐 `Input System` |
-| `Resources.Load` | ⚠️ 仍可用但推荐 `Addressables` |
+| `Input`（旧） | 【注意】旧，推荐 `Input System` |
+| `Resources.Load` | 【注意】仍可用但推荐 `Addressables` |
 
 > 具体版本细节以官方手册为准，这里只给推理方向。
 
@@ -462,18 +462,18 @@ gameObject.SendMessage("OnHit", 10, SendMessageOptions.DontRequireReceiver);
 | `eulerAngles` | 旋转（欧拉角常见于开销小但易万向锁） | 世界 |
 | `localEulerAngles` | 局部欧拉角 | 局部 |
 
-【⚠️ 注意】**为什么不要直接用 `gameObject.transform.position.x = 5`**：因为 `position` 返回的是 `Vector3`（值类型），直接改 `.x` 是改一个临时副本，不会生效。**务必整体赋值：**
+【注意】**为什么不要直接用 `gameObject.transform.position.x = 5`**：因为 `position` 返回的是 `Vector3`（值类型），直接改 `.x` 是改一个临时副本，不会生效。**务必整体赋值：**
 
 ```csharp
-// ❌ 编译错误！CS1612「无法修改非变量表达式返回值」
+// 编译错误！CS1612「无法修改非变量表达式返回值」
 transform.position.x = 5;            // position 是值类型（Vector3），.x 改的是临时副本，编译都不让过
 
-// ✅
+// 
 Vector3 p = transform.position;      
 p.x = 5;
 transform.position = p;               // 整体赋值才生效
 
-// ✅ 或一行
+// 或一行
 transform.position += new Vector3(5, 0, 0);
 ```
 
@@ -507,7 +507,7 @@ transform.Translate(speed, 0, 0, Space.World);                     // 沿世界 
 transform.Translate(Vector3.forward * speed * Time.deltaTime);     // 向前
 ```
 
-【⚠️ 注意】真正物理移动用 `Rigidbody`（见第 5 章），不要用 `Transform.Translate` 直接操作有 `Rigidbody` 的物体。
+【注意】真正物理移动用 `Rigidbody`（见第 5 章），不要用 `Transform.Translate` 直接操作有 `Rigidbody` 的物体。
 
 ---
 
@@ -516,7 +516,7 @@ transform.Translate(Vector3.forward * speed * Time.deltaTime);     // 向前
 ### 2.3.1 `rotation` / `localRotation`（Quaternion 四元数）
 
 ```csharp
-transform.rotation = Quaternion.Euler(0, 90, 0);   // ✅ 转 90 度常用写法
+transform.rotation = Quaternion.Euler(0, 90, 0);   // 转 90 度常用写法
 ```
 
 - `rotation`：世界旋转；`localRotation`：局部。
@@ -576,7 +576,7 @@ transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime * 
 ```csharp
 transform.localScale = new Vector3(2, 2, 2);    // 放大2倍
 ```
-【⚠️ 注意】只有 `localScale`，没有 `scale` 属性。父缩放会被继承，局部缩放是"相对父"的。
+【注意】只有 `localScale`，没有 `scale` 属性。父缩放会被继承，局部缩放是"相对父"的。
 
 ---
 
@@ -597,7 +597,7 @@ transform.SetParent(parent, false);   // 局部位置不变
 - `parent`：新的父物体 Transform。
 - `worldPositionStays`（默认 `true`）：若为 true，**世界坐标保持不变**（只是把父子关系挂上）；若 false，**局部坐标不变**（物体会随父移动改变世界位置）。
 
-【⚠️ 注意】`SetParent(null)` 会脱离父物体，成为根级物体。
+【注意】`SetParent(null)` 会脱离父物体，成为根级物体。
 
 ---
 
@@ -777,7 +777,7 @@ float d = Vector3.Distance(transform.position, target.position);
 - `Vector3.Normalize(v)`（静态）：传入的 `v` 作为**参数**，返回一个新的单位向量，**不修改原向量**。
 - `v.Normalize()`（实例方法）：原地规范化，修改 v 本身，返回 void。两种要分清。
 ```csharp
-Vector3 dir = (target - transform.position).normalized;   // ✅ 常用：单位方向
+Vector3 dir = (target - transform.position).normalized;   // 常用：单位方向
 
 Vector3 n1 = Vector3.Normalize(v);   // 静态：不改 v，返回新向量
 v.Normalize();                        // 实例：直接改 v（v 变单位向量）
@@ -864,7 +864,7 @@ transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaT
 Vector3 rotated = rotation * Vector3.forward;   // 把 forward 按当前旋转转出来
 ```
 
-【⚠️ 注意】**欧拉角 `eulerAngles` 与四元数 `rotation` 是同一个旋转的两种表示**。多次叠加欧拉角容易触发万向锁，旋转尽量用四元数。
+【注意】**欧拉角 `eulerAngles` 与四元数 `rotation` 是同一个旋转的两种表示**。多次叠加欧拉角容易触发万向锁，旋转尽量用四元数。
 
 ---
 
@@ -1005,14 +1005,14 @@ Unity 早期只有一套 `UnityEngine.Input` 静态类，简单但**写死**：�
 | 维度 | 老 `Input` 类 | 新 `Input System` 包 |
 |------|--------------|---------------------|
 | 命名空间 | `UnityEngine` | `UnityEngine.InputSystem` |
-| 引入时间 | 远古就有 | ✅ Unity 2019.1+（包） |
+| 引入时间 | 远古就有 | Unity 2019.1+（包） |
 | 读取方式 | 每帧轮询（`Update` 里查） | 事件回调 + 轮询都支持 |
 | 按键绑定 | 字符串写死（`"Jump"`） | 可视化 Binding，可改可存 |
 | 触摸/手柄 | 支持但简陋 | 统一、完善 |
 | 性能 | 每帧全量查询 | 按需、可裁剪 |
-| 新项目推荐 | ❌ 不推荐 | ✅ 官方推荐 |
+| 新项目推荐 | 不推荐 | 官方推荐 |
 
-> 【⚠️ 注意】老 `Input` 类**不会消失**，仍可用。但新项目、尤其是要上手机/手柄/多平台的，强烈建议用 Input System。
+> 【注意】老 `Input` 类**不会消失**，仍可用。但新项目、尤其是要上手机/手柄/多平台的，强烈建议用 Input System。
 
 ### 4.1.2 如何启用 Input System（关键步骤）
 
@@ -1023,13 +1023,13 @@ Unity 早期只有一套 `UnityEngine.Input` 静态类，简单但**写死**：�
 3. 选 `**Input Manager (Old)**`（只用老）、`**Input System Package (New)**`（只用新）、或 `**Both**`（两套共存，推荐过渡期）。
 4. 改完会提示**重启编辑器**。
 
-> 【⚠️ 注意】选 `Both` 时两套 API 都能用，但会有轻微性能开销。选 `New` 后老 `Input` 类会**报错不可用**。
+> 【注意】选 `Both` 时两套 API 都能用，但会有轻微性能开销。选 `New` 后老 `Input` 类会**报错不可用**。
 
 ---
 
 ## 4.2 老版输入：`UnityEngine.Input` 类
 
-> 【版本标记】⚠️ **老 API**（Unity 2019.1 前主流）。新项目推荐用 Input System 包。以下词条仍可用，但请优先看 4.3 节。
+> 【版本标记】【注意】**老 API**（Unity 2019.1 前主流）。新项目推荐用 Input System 包。以下词条仍可用，但请优先看 4.3 节。
 
 ### 4.2.1 `Input.GetKey` / `GetKeyDown` / `GetKeyUp`
 
@@ -1121,7 +1121,7 @@ screenPos.z = 10f; // 距摄像机距离
 Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
 ```
 
-> 【⚠️ 注意】`z` 恒为 0，做 `ScreenToWorldPoint` 前必须手动给 `z` 赋值，否则结果在摄像机位置。
+> 【注意】`z` 恒为 0，做 `ScreenToWorldPoint` 前必须手动给 `z` 赋值，否则结果在摄像机位置。
 
 ---
 
@@ -1211,7 +1211,7 @@ void Update()
 }
 ```
 
-> 【⚠️ 注意】`TouchPhase` 枚举：`Began`（按下）、`Moved`（移动）、`Stationary`（静止）、`Ended`（抬起）、`Canceled`（取消）。
+> 【注意】`TouchPhase` 枚举：`Began`（按下）、`Moved`（移动）、`Stationary`（静止）、`Ended`（抬起）、`Canceled`（取消）。
 
 ---
 
@@ -1238,7 +1238,7 @@ transform.Translate(acc.x * speed * Time.deltaTime, 0, 0);
 
 ## 4.3 新版 Input System 包（`UnityEngine.InputSystem`）
 
-> 【版本标记】✅ **Unity 2019.1+ 引入的新包**，官方推荐替代老 `Input`。需先安装包并启用（见 4.1.2）。
+> 【版本标记】**Unity 2019.1+ 引入的新包**，官方推荐替代老 `Input`。需先安装包并启用（见 4.1.2）。
 
 ### 4.3.1 `PlayerInput` 组件
 
@@ -1269,7 +1269,7 @@ public class PlayerController : MonoBehaviour
 }
 ```
 
-> 【⚠️ 注意】`PlayerInput` 通过**方法名匹配**动作名（`OnMove` 对应动作 `Move`），方法签名可带 `InputValue` 参数。
+> 【注意】`PlayerInput` 通过**方法名匹配**动作名（`OnMove` 对应动作 `Move`），方法签名可带 `InputValue` 参数。
 
 ---
 
@@ -1365,7 +1365,7 @@ void Update()
 | 手柄 | `Gamepad.current` |
 | 触摸 | `Touchscreen.current` |
 
-> 【⚠️ 注意】`current` 可能为 `null`（设备未连接），使用前判空。
+> 【注意】`current` 可能为 `null`（设备未连接），使用前判空。
 
 ---
 
@@ -1418,7 +1418,7 @@ action.AddBinding("<Gamepad>/buttonSouth");   // 再加一个手柄绑定
 action.Enable();
 ```
 
-> 【⚠️ 注意】绑定字符串格式：`<设备>/<控件>`，如 `<Keyboard>/w`、`<Mouse>/leftButton`、`<Gamepad>/buttonSouth`。
+> 【注意】绑定字符串格式：`<设备>/<控件>`，如 `<Keyboard>/w`、`<Mouse>/leftButton`、`<Gamepad>/buttonSouth`。
 
 ---
 
@@ -1555,8 +1555,8 @@ void Update()
 
 | API | 标记 |
 |-----|------|
-| `UnityEngine.Input`（`GetKey`/`GetAxis`/`GetTouch`…） | ⚠️ 老 API（2019.1 前主流），新项目不推荐 |
-| `UnityEngine.InputSystem`（`PlayerInput`/`InputAction`/`Keyboard.current`…） | ✅ Unity 2019.1+ 引入，官方推荐 |
+| `UnityEngine.Input`（`GetKey`/`GetAxis`/`GetTouch`…） | 【注意】老 API（2019.1 前主流），新项目不推荐 |
+| `UnityEngine.InputSystem`（`PlayerInput`/`InputAction`/`Keyboard.current`…） | Unity 2019.1+ 引入，官方推荐 |
 | `Active Input Handling` 设置 | 需在 Project Settings 手动启用（Both/New） |
 
 > 具体版本细节以官方手册为准，这里只给推理方向。
@@ -2238,13 +2238,13 @@ Physics.gravity = new Vector3(0, -1.6f, 0);
 
 **【用途】** 让"每帧执行一次"的代码，其**速度不再受帧率影响**。
 
-**【为什么是关键🚨】** 假设你要让物体每秒移动 1 米：
+**【为什么是关键】** 假设你要让物体每秒移动 1 米：
 
 ```csharp
-// ❌ 帧相关写法：60 FPS 时每秒走 60，30 FPS 时每秒只走 30，低配电脑慢、高刷屏快
+// 帧相关写法：60 FPS 时每秒走 60，30 FPS 时每秒只走 30，低配电脑慢、高刷屏快
 transform.position += Vector3.right * 1f;
 
-// ✅ 帧独立写法：无论 30 还是 120 FPS，都是每秒 1 米
+// 帧独立写法：无论 30 还是 120 FPS，都是每秒 1 米
 // 速度 1 米/秒 × 这一帧过了多少秒 = 这一帧该走的距离
 transform.position += Vector3.right * 1f * Time.deltaTime;
 ```
@@ -2253,7 +2253,7 @@ transform.position += Vector3.right * 1f * Time.deltaTime;
 
 **【C++/Raylib 类比】** 手写游戏循环里常见的 `float dt = GetFrameTime();`（Raylib）或 `GetDeltaTime()`，就是同一个东西。区别只是 Unity 帮你把这个值预置好了，不用自己测。
 
-【⚠️ 注意】`deltaTime` 在 `Update` 里取的是"上一帧到这一帧"的时间；在 `FixedUpdate` 里它恒等于 `fixedDeltaTime`（固定值）。
+【注意】`deltaTime` 在 `Update` 里取的是"上一帧到这一帧"的时间；在 `FixedUpdate` 里它恒等于 `fixedDeltaTime`（固定值）。
 
 ---
 
@@ -2272,13 +2272,13 @@ transform.position += Vector3.right * 1f * Time.deltaTime;
 **【核心成员一览】**
 | 成员 | 类型 | 受 `timeScale` 影响 | 一句话 |
 |------|------|:---:|--------|
-| `Time.deltaTime` | `float` | ✅ | 本帧经过的（缩放后）秒数 |
-| `Time.fixedDeltaTime` | `float` | ❌ 值不变（恒为固定步长），但物理节奏随 timeScale 缩放 | 物理固定步进时长（默认 0.02 秒），不随 timeScale 变值 |
-| `Time.time` | `float` | ✅ | 游戏开始后累计时间（缩放后） |
-| `Time.unscaledTime` | `float` | ❌ | 忽略缩放的累计时间 |
-| `Time.unscaledDeltaTime` | `float` | ❌ | 忽略缩放的帧间秒数 |
+| `Time.deltaTime` | `float` | 是 | 本帧经过的（缩放后）秒数 |
+| `Time.fixedDeltaTime` | `float` | 值不变（恒为固定步长），但物理节奏随 timeScale 缩放 | 物理固定步进时长（默认 0.02 秒），不随 timeScale 变值 |
+| `Time.time` | `float` | 是 | 游戏开始后累计时间（缩放后） |
+| `Time.unscaledTime` | `float` | 否 | 忽略缩放的累计时间 |
+| `Time.unscaledDeltaTime` | `float` | 否 | 忽略缩放的帧间秒数 |
 | `Time.timeScale` | `float` | — | 时间缩放系数（0 即暂停） |
-| `Time.realtimeSinceStartup` | `float` | ❌ | 从引擎启动起的真实秒数 |
+| `Time.realtimeSinceStartup` | `float` | 否 | 从引擎启动起的真实秒数 |
 
 ---
 
@@ -2308,7 +2308,7 @@ void Update()
 
 **【返回值】** 上一帧到本帧的秒数（`float`）。数值很小（约 `0.016` @60FPS），所以永远要"乘上它"而不是"直接用它"。
 
-【⚠️ 注意】在 `Awake`/`Start` 里读它没有意义（此时还没有"上一帧"）。也别在 `FixedUpdate` 里用它做物理——那里应该用 `Time.fixedDeltaTime`。
+【注意】在 `Awake`/`Start` 里读它没有意义（此时还没有"上一帧"）。也别在 `FixedUpdate` 里用它做物理——那里应该用 `Time.fixedDeltaTime`。
 
 ---
 
@@ -2360,7 +2360,7 @@ void Update()
 }
 ```
 
-【⚠️ 注意】`Time.time` 是 `float`，精度有限；跑几小时后误差会累积，**长时间统计别用 float 累计**，可用 `Time.realtimeSinceStartup` 或 `double` 自己累加。
+【注意】`Time.time` 是 `float`，精度有限；跑几小时后误差会累积，**长时间统计别用 float 累计**，可用 `Time.realtimeSinceStartup` 或 `double` 自己累加。
 
 ---
 
@@ -2389,8 +2389,8 @@ void Update()
 **【相似 API 区别】**
 | API | 缩放？ | 语义 |
 |-----|:---:|------|
-| `Time.deltaTime` | ✅ 被缩放 | 暂停时为 0，所有用它推进的东西全停 |
-| `Time.unscaledDeltaTime` | ❌ 不缩放 | 暂停时依然有值，UI/音效等继续走 |
+| `Time.deltaTime` | 被缩放 | 暂停时为 0，所有用它推进的东西全停 |
+| `Time.unscaledDeltaTime` | 不缩放 | 暂停时依然有值，UI/音效等继续走 |
 
 **【版本标记】** 长期 API（很早就存在，稳定）。
 
@@ -2414,7 +2414,7 @@ Time.timeScale = 1f;
 Time.timeScale = 0.3f;
 ```
 
-【⚠️ 注意】`timeScale` 影响 `Update` 的 `deltaTime`、`WaitForSeconds`、`Animator`、`Rigidbody` 物理等**几乎所有时间驱动的东西**。想让"某一块"不受影响，必须用 `unscaled` 系列，或挂到不受缩放的 UI/管理器上。另外 `timeScale = 0` 时**协程的 `WaitForSeconds` 永远不会结束**，这是面试高频坑。
+【注意】`timeScale` 影响 `Update` 的 `deltaTime`、`WaitForSeconds`、`Animator`、`Rigidbody` 物理等**几乎所有时间驱动的东西**。想让"某一块"不受影响，必须用 `unscaled` 系列，或挂到不受缩放的 UI/管理器上。另外 `timeScale = 0` 时**协程的 `WaitForSeconds` 永远不会结束**，这是面试高频坑。
 
 ---
 
@@ -2436,11 +2436,11 @@ Debug.Log($"本帧真实耗时 {elapsedMs:F1} ms");
 **【相似 API 区别】**
 | API | 起点 | 受缩放 | 用途 |
 |-----|------|:---:|------|
-| `Time.time` | 进入 Play | ✅ | 游戏内计时（可暂停） |
-| `Time.realtimeSinceStartup` | 引擎启动 | ❌ | 真实耗时、性能测量 |
-| `System.Environment.TickCount` / `Stopwatch` | 进程/任意 | ❌ | C# 层面测量（不依赖 Unity） |
+| `Time.time` | 进入 Play | 是 | 游戏内计时（可暂停） |
+| `Time.realtimeSinceStartup` | 引擎启动 | 否 | 真实耗时、性能测量 |
+| `System.Environment.TickCount` / `Stopwatch` | 进程/任意 | 否 | C# 层面测量（不依赖 Unity） |
 
-【⚠️ 注意】`realtimeSinceStartup` 是 `float`，单位秒，长时间运行精度有限。做精确毫秒级测量建议用 `System.Diagnostics.Stopwatch`（见 6.5 节）。
+【注意】`realtimeSinceStartup` 是 `float`，单位秒，长时间运行精度有限。做精确毫秒级测量建议用 `System.Diagnostics.Stopwatch`（见 6.5 节）。
 
 ---
 
@@ -2521,7 +2521,7 @@ IEnumerator MyRoutine()
 }
 ```
 
-【⚠️ 注意】`yield return` 后面**跟着什么，决定了"什么时候继续"**：
+【注意】`yield return` 后面**跟着什么，决定了"什么时候继续"**：
 - `null` → 下一帧继续；
 - `WaitForSeconds(2f)` → 2 秒后继续；
 - 一个子协程 `IEnumerator` → 等那个协程跑完；
@@ -2544,10 +2544,10 @@ IEnumerator MyRoutine()
 ```csharp
 void Start()
 {
-    // ✅ 标准写法：传方法调用后的 IEnumerator
+    // 标准写法：传方法调用后的 IEnumerator
     Coroutine c = StartCoroutine(DelayedAttack());
 
-    // ❌ 常见错误：漏了括号
+    // 常见错误：漏了括号
     // StartCoroutine(DelayedAttack);  // 编译报错，IEnumerator 和 method group 不匹配
 }
 
@@ -2558,7 +2558,7 @@ IEnumerator DelayedAttack()
 }
 ```
 
-【⚠️ 注意】挂协程的 `MonoBehaviour` 如果 `enabled=false`，协程**继续跑**（不受影响）；但 `gameObject.SetActive(false)` 或销毁物体后协程会**停止**。
+【注意】挂协程的 `MonoBehaviour` 如果 `enabled=false`，协程**继续跑**（不受影响）；但 `gameObject.SetActive(false)` 或销毁物体后协程会**停止**。
 
 ---
 
@@ -2653,7 +2653,7 @@ IEnumerator TakeScreenshot()
 }
 ```
 
-【⚠️ 注意】这是协程里"最晚"的暂停点之一（比 `null` 晚一整段渲染）。如果是跑在编辑器未运行时或非渲染环境，行为可能不符合预期。
+【注意】这是协程里"最晚"的暂停点之一（比 `null` 晚一整段渲染）。如果是跑在编辑器未运行时或非渲染环境，行为可能不符合预期。
 
 ---
 
@@ -2724,7 +2724,7 @@ IEnumerator Charge()
 }
 ```
 
-【⚠️ 注意】
+【注意】
 - 用字符串启动的协程要用字符串停：`StopCoroutine("Name")`。
 - `StopAllCoroutines` 只停**这个脚本**上的协程，不会影响其他脚本。
 - 协程结束时（跑完或被停），其内部资源由引擎自动清理。
@@ -2735,11 +2735,11 @@ IEnumerator Charge()
 
 | 维度 | 普通方法 | 协程 | `async Task` |
 |------|---------|------|-------------|
-| 是否可暂停续跑 | ❌ | ✅ | ✅ |
+| 是否可暂停续跑 | 否 | 是 | |
 | 暂停语法 | — | `yield return ...` | `await ...` |
 | 谁调度 | 调用者 | Unity 引擎（帧循环） | C# 线程池 / 同步上下文 |
 | 返回值类型 | `void`/任意 | `IEnumerator` | `Task<T>` / `void` |
-| 是否跑主线程 | ✅ | ✅（始终主线程） | 续跑可能跨线程（注意） |
+| 是否跑主线程 | 是 | （始终主线程） | 续跑可能跨线程（注意） |
 | 异常处理 | try/catch 正常 | try/catch 正常 | `try/catch` + `async void` 的异常会炸 |
 | 适合 | 同步逻辑 | 帧/时间驱动的时序 | IO、网络、跨线程 |
 
@@ -2760,7 +2760,7 @@ IEnumerator Charge()
 | 路线 | 说明 | 版本 |
 |------|------|------|
 | 原生 `Task` + 手动回主线程 | 用 `await Task.Run(...)` 后手动切回，繁琐 | C# 5（Unity 2017+ 可用） |
-| `Awaitable` | Unity 官方原生异步类型，自动回主线程 | ✅ Unity 2022.2+ |
+| `Awaitable` | Unity 官方原生异步类型，自动回主线程 | Unity 2022.2+ |
 | `UniTask` | 第三方库，零 GC、性能好、主线程保证 | 第三方，需导入 |
 
 **【名称含义】** `async` = 异步；`await` = 等待。合起来："这个方法是异步的，跑到 `await` 先让出，好了再回来"。
@@ -2794,13 +2794,13 @@ async void OnLoginButtonClick()   // 事件回调通常 async void
 
 | 返回类型 | 可被 await？ | 异常 | 适用场景 |
 |---------|:---:|------|---------|
-| `async Task<T>` | ✅ | 异常被封装进 `Task`，可由调用方捕获 | **几乎所有业务方法** |
-| `async Task` | ✅ | 同上（无返回值版本） | 不需要返回值的异步操作 |
-| `async void` | ❌ | **异常直接抛到同步上下文，没人能接住，进程可能崩** | 仅限事件处理器/回调 |
+| `async Task<T>` | 是 | 异常被封装进 `Task`，可由调用方捕获 | **几乎所有业务方法** |
+| `async Task` | 是 | 同上（无返回值版本） | 不需要返回值的异步操作 |
+| `async void` | 否 | **异常直接抛到同步上下文，没人能接住，进程可能崩** | 仅限事件处理器/回调 |
 
 **【代码示例】**
 ```csharp
-// ✅ 推荐：返回 Task，调用方可 await / catch
+// 推荐：返回 Task，调用方可 await / catch
 async Task SaveAsync()
 {
     await Task.Delay(100);
@@ -2815,11 +2815,11 @@ async void OnSaveButton()
     }
     catch (Exception e)
     {
-        Debug.LogError($"保存失败：{e.Message}"); // ✅ 能接住
+        Debug.LogError($"保存失败：{e.Message}"); // 能接住
     }
 }
 
-// ❌ 危险：async void 的异常无人接住
+// 危险：async void 的异常无人接住
 async void BadSave()
 {
     await Task.Delay(100);
@@ -2858,11 +2858,11 @@ async Task GoToBattleSceneAsync()
 }
 ```
 
-【⚠️ 注意】**场景切换会销毁 MonoBehaviour**。`await` 续跑时如果脚本已随旧场景销毁，访问 `transform` 会报错。所以跨场景异步要么把代码放在 `DontDestroyOnLoad` 的单例上，要么用 `SceneManager.LoadSceneAsync` 完成回调继续。
+【注意】**场景切换会销毁 MonoBehaviour**。`await` 续跑时如果脚本已随旧场景销毁，访问 `transform` 会报错。所以跨场景异步要么把代码放在 `DontDestroyOnLoad` 的单例上，要么用 `SceneManager.LoadSceneAsync` 完成回调继续。
 
 ---
 
-### 6.3.4 `Awaitable`（✅ Unity 2022.2+ 引入，较新）
+### 6.3.4 `Awaitable`（Unity 2022.2+ 引入，较新）
 
 **【是什么】** Unity **官方原生的异步类型**，专门解决原生 `Task` 不自动回主线程、性能一般的问题。它自动在**主线程**续跑，可以直接 `await` 引擎对象。
 
@@ -2876,7 +2876,7 @@ using UnityEngine;
 async void Demo()
 {
     Debug.Log("起手");
-    await Awaitable.WaitForSecondsAsync(1f);   // ✅ 官方延迟
+    await Awaitable.WaitForSecondsAsync(1f);   // 官方延迟
     transform.Rotate(0f, 90f, 0f);             // 主线程，安全
     Debug.Log("1 秒后旋转完成");
 }
@@ -2889,15 +2889,15 @@ async void LoadSceneAsync()
 }
 ```
 
-> ⚠️ 注意：直接 `await SceneManager.LoadSceneAsync(...)` 依赖 **`AsyncOperation` 实现 `GetAwaiter()`（Unity 2023.1 起提供）**，与 6.3 里 `Awaitable` 无关——`Awaitable`（2022.2+）只提供 `WaitForSecondsAsync`/`NextFrameAsync`/`EndOfFrameAsync` 等原语，**不会帮你 await 一个 AsyncOperation**。2023.1 前直接用 `op.completed += ...` 或协程 `yield return op`。
+> 【注意】注意：直接 `await SceneManager.LoadSceneAsync(...)` 依赖 **`AsyncOperation` 实现 `GetAwaiter()`（Unity 2023.1 起提供）**，与 6.3 里 `Awaitable` 无关——`Awaitable`（2022.2+）只提供 `WaitForSecondsAsync`/`NextFrameAsync`/`EndOfFrameAsync` 等原语，**不会帮你 await 一个 AsyncOperation**。2023.1 前直接用 `op.completed += ...` 或协程 `yield return op`。
 
 **【相似 API 区别】**
 | | `Task.Delay` | `WaitForSeconds`（协程） | `Awaitable.WaitForSecondsAsync` |
 |--|:---:|:---:|:---:|
 | 语法 | `await` | `yield return` | `await` |
-| 回主线程？ | ✅ 经同步上下文回主线程（下一帧执行） | ✅（始终主线程） | ✅（同帧立即续跑） |
-| 受 `timeScale` 影响？ | ❌ 不受 | ✅ 受 | ❌ 不受 |
-| 版本 | C# 通用 | 长期 | ✅ Unity 2022.2+ |
+| 回主线程？ | 经同步上下文回主线程（下一帧执行） | （始终主线程） | （同帧立即续跑） |
+| 受 `timeScale` 影响？ | 不受 | 受 | 不受 |
+| 版本 | C# 通用 | 长期 | Unity 2022.2+ |
 
 **【版本标记】** `Awaitable` 是 **Unity 2022.2 引入**的相对较新 API。2022 LTS 起可用，旧项目（2019/2020）不支持，需用 UniTask 或协程。
 
@@ -2959,7 +2959,7 @@ static async Task RunAsync()
 }
 ```
 
-【⚠️ 注意】`Task.Delay` **不受 `Time.timeScale` 影响**；续跑经同步上下文回主线程（下一帧）。Unity 项目里做"游戏内延迟"首选比较合时机的 `Awaitable`/`UniTask` 或协程；`Task.Delay` 多用于编辑器/测试/纯逻辑。
+【注意】`Task.Delay` **不受 `Time.timeScale` 影响**；续跑经同步上下文回主线程（下一帧）。Unity 项目里做"游戏内延迟"首选比较合时机的 `Awaitable`/`UniTask` 或协程；`Task.Delay` 多用于编辑器/测试/纯逻辑。
 
 ---
 
@@ -3017,7 +3017,7 @@ void ScheduleParallelMove()
 
 **【核心规则】** Job 在工作线程上跑，**不能直接碰主线程的东西**：
 
-| ❌ 不能在 Job 里做 | ✅ 应该怎么做 |
+| 不能在 Job 里做 | 应该怎么做 |
 |-------------------|------------|
 | 调用 `transform` / `GetComponent` | 只读写 `NativeArray` 等纯数据 |
 | 调用 `Instantiate` / `Destroy` | 在 Job 里算结果，回主线程再实例化 |
@@ -3040,7 +3040,7 @@ struct ParallelMoveJob : IJobParallelFor
 }
 ```
 
-【⚠️ 注意】`NativeArray` 用 `Allocator.TempJob` 必须在主线程 `Dispose()`；忘释放会报 `LeakDetection` 警告甚至崩溃。Job 里永远不要 `Debug.Log`（跨线程打日志会卡且乱序）。
+【注意】`NativeArray` 用 `Allocator.TempJob` 必须在主线程 `Dispose()`；忘释放会报 `LeakDetection` 警告甚至崩溃。Job 里永远不要 `Debug.Log`（跨线程打日志会卡且乱序）。
 
 ---
 
@@ -3096,9 +3096,9 @@ void OnAttack() { lastAttackTime = Time.time; }
 **【相似 API 区别：三种测时长方式】**
 | 方式 | 精度 | 受暂停影响 | 适用 |
 |------|------|:---:|------|
-| `Stopwatch` | 微秒级 | ❌ | 性能测量、调试 |
-| `Time.time` 差值 | 帧级（~16ms） | ✅ | 游戏内冷却、计时 |
-| `Time.realtimeSinceStartup` 差值 | 帧级 | ❌ | 真实经过时间（含暂停期间） |
+| `Stopwatch` | 微秒级 | 否 | 性能测量、调试 |
+| `Time.time` 差值 | 帧级（~16ms） | 是 | 游戏内冷却、计时 |
+| `Time.realtimeSinceStartup` 差值 | 帧级 | 否 | 真实经过时间（含暂停期间） |
 
 ---
 
@@ -3115,13 +3115,13 @@ void OnAttack() { lastAttackTime = Time.time; }
 // 暂停游戏（timeScale=0）后：
 IEnumerator ScaledTimer()
 {
-    yield return new WaitForSeconds(1f);           // ❌ 永不结束（时间被冻结）
+    yield return new WaitForSeconds(1f);           // 永不结束（时间被冻结）
     Debug.Log("不会到这行");
 }
 
 IEnumerator RealtimeTimer()
 {
-    yield return new WaitForSecondsRealtime(1f);   // ✅ 真实 1 秒后照常继续
+    yield return new WaitForSecondsRealtime(1f);   // 真实 1 秒后照常继续
     Debug.Log("暂停中也能到，1 秒后执行");
 }
 ```
@@ -3155,12 +3155,12 @@ IEnumerator RealtimeTimer()
 | 协程（`StartCoroutine`/`WaitForSeconds`…） | 长期稳定 API（2017 前就存在） |
 | `WaitUntil` / `WaitWhile` / `CustomYieldInstruction` | Unity 5.3+ 引入，长期稳定 |
 | `async`/`await`（原生 `Task`） | 依赖 C#（Unity 2017 起 .NET 4.x 可用） |
-| `Awaitable` | ✅ **Unity 2022.2 引入**（较新，2022 LTS 可用） |
+| `Awaitable` | **Unity 2022.2 引入**（较新，2022 LTS 可用） |
 | `UniTask` | 第三方库（非官方，需导入 Cysharp/UniTask） |
-| C# Job System（`IJob`/`JobHandle`） | ✅ **Unity 2018.1 引入**（进阶/DOTS 生态） |
+| C# Job System（`IJob`/`JobHandle`） | **Unity 2018.1 引入**（进阶/DOTS 生态） |
 | `WaitForSecondsRealtime` | 长期稳定（和 `WaitForSeconds` 同代） |
 
-> 具体版本细节以官方手册为准，这里只给推理方向。凡标 ✅ 的，面试时可强调"较新能力"。
+> 具体版本细节以官方手册为准，这里只给推理方向。凡标 的，面试时可强调"较新能力"。
 
 ---
 
@@ -3255,7 +3255,7 @@ public class ResourceLoader : MonoBehaviour
 | `Resources.Load<T>` | 老 API，路径寻址，打包全随包，运行时可用 |
 | `Addressables.LoadAssetAsync<T>` | 新方案，地址寻址，可远程/按需，异步（见 7.4） |
 
-【⚠️ 注意】`Resources.Load` 是**同步**的，会阻塞主线程；且 `Resources` 文件夹里的东西**全部打进包**，项目一大就臃肿。新项目优先 `Addressables`。
+【注意】`Resources.Load` 是**同步**的，会阻塞主线程；且 `Resources` 文件夹里的东西**全部打进包**，项目一大就臃肿。新项目优先 `Addressables`。
 
 ---
 
@@ -3300,7 +3300,7 @@ IEnumerator Cleanup()
 }
 ```
 
-【⚠️ 注意】它只卸载"确实没被引用"的资源；被 `Instantiate` 出来的物体、被脚本持有的引用都不会被卸载。别指望它解决所有内存问题。
+【注意】它只卸载"确实没被引用"的资源；被 `Instantiate` 出来的物体、被脚本持有的引用都不会被卸载。别指望它解决所有内存问题。
 
 ---
 
@@ -3320,7 +3320,7 @@ Assets/
          └── Icon.png
 ```
 
-【⚠️ 注意】`Resources` 目录里的资源**全部打进包**，且**不能**用 `AssetDatabase` 之外的方式在编辑器外修改。隐藏/改名该目录会导致 `Resources.Load` 全部失效。
+【注意】`Resources` 目录里的资源**全部打进包**，且**不能**用 `AssetDatabase` 之外的方式在编辑器外修改。隐藏/改名该目录会导致 `Resources.Load` 全部失效。
 
 ---
 
@@ -3388,7 +3388,7 @@ static void FindPrefabs()
 }
 ```
 
-【⚠️ 注意】返回的是 GUID，要拿路径需用 `AssetDatabase.GUIDToAssetPath(guid)` 转换。
+【注意】返回的是 GUID，要拿路径需用 `AssetDatabase.GUIDToAssetPath(guid)` 转换。
 
 ---
 
@@ -3434,7 +3434,7 @@ AssetDatabase.SaveAssets();   // 保存所有改动
 AssetDatabase.Refresh();      // 刷新，让改动在编辑器里生效
 ```
 
-【⚠️ 注意】`AssetDatabase` 全家桶**只能在编辑器代码里用**（`using UnityEditor`），打包后的游戏运行时调用会报错。运行时加载资源请用 `Resources` 或 `Addressables`。
+【注意】`AssetDatabase` 全家桶**只能在编辑器代码里用**（`using UnityEditor`），打包后的游戏运行时调用会报错。运行时加载资源请用 `Resources` 或 `Addressables`。
 
 ---
 
@@ -3468,7 +3468,7 @@ public class SceneSwitcher : MonoBehaviour
 }
 ```
 
-【⚠️ 注意】同步加载会**阻塞主线程**，大场景会明显卡顿。加载前记得把场景加进 **Build Settings**，否则运行时找不到。
+【注意】同步加载会**阻塞主线程**，大场景会明显卡顿。加载前记得把场景加进 **Build Settings**，否则运行时找不到。
 
 ---
 
@@ -3579,7 +3579,7 @@ void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 }
 ```
 
-【⚠️ 注意】记得在 `OnDisable` 里退订事件，避免重复订阅导致回调多次执行。
+【注意】记得在 `OnDisable` 里退订事件，避免重复订阅导致回调多次执行。
 
 ---
 
@@ -3694,7 +3694,7 @@ async void LoadAndRelease()
 }
 ```
 
-【⚠️ 注意】`InstantiateAsync` 实例化的物体，销毁时要用 `Addressables.ReleaseInstance(handle)` 而不是直接 `Destroy`，否则引用计数不归还。
+【注意】`InstantiateAsync` 实例化的物体，销毁时要用 `Addressables.ReleaseInstance(handle)` 而不是直接 `Destroy`，否则引用计数不归还。
 
 ---
 
@@ -3802,7 +3802,7 @@ void AddItem()
 | `Instantiate` | 克隆已有物体/预制体，运行时生成实例 |
 | `AssetBundle` | 打包加载资源（旧方案），不负责克隆，只负责加载 |
 
-【⚠️ 注意】`Instantiate` 克隆的是**模板**，克隆出的副本与模板**互不影响**（改副本不会改模板）。配合 `Prefab` 理解：Prefab 是"模板"，`Instantiate` 是"按模板造实例"。
+【注意】`Instantiate` 克隆的是**模板**，克隆出的副本与模板**互不影响**（改副本不会改模板）。配合 `Prefab` 理解：Prefab 是"模板"，`Instantiate` 是"按模板造实例"。
 
 ---
 
@@ -3823,10 +3823,10 @@ void AddItem()
 
 | API | 标记 |
 |-----|------|
-| `Resources.Load` / `LoadAll` / `UnloadUnusedAssets` | ⚠️ 老 API，方便但打包全随包，推荐 `Addressables` |
+| `Resources.Load` / `LoadAll` / `UnloadUnusedAssets` | 【注意】老 API，方便但打包全随包，推荐 `Addressables` |
 | `AssetDatabase` 系列 | 仅编辑器，稳定 |
-| `SceneManager` 系列 | ✅ 稳定，长期可用 |
-| `Addressables` 系列 | ✅ Unity 2018.2+（预览）/ 2019.1+（稳定）官方推荐资源管理方案 |
+| `SceneManager` 系列 | 稳定，长期可用 |
+| `Addressables` 系列 | Unity 2018.2+（预览）/ 2019.1+（稳定）官方推荐资源管理方案 |
 | `Object.Instantiate` | 老 API，稳定可用 |
 
 > 具体版本细节以官方手册为准，这里只给推理方向。
@@ -3948,7 +3948,7 @@ SceneManager.SetActiveScene(target);   // 之后 Instantiate 的物体默认进 
 GameObject enemy = Instantiate(enemyPrefab);   // 会挂到 Gameplay 场景
 ```
 
-【⚠️ 注意】`SetActiveScene` 传入的场景必须**已加载**，否则报错。活动场景通常只有一个。
+【注意】`SetActiveScene` 传入的场景必须**已加载**，否则报错。活动场景通常只有一个。
 
 ---
 
@@ -4101,7 +4101,7 @@ public class WeaponSpawner : MonoBehaviour
 }
 ```
 
-【⚠️ 注意】`AssetReference` 拖拽的资源**必须已标记为 Addressable**，否则 Inspector 里拖不进去或加载失败。
+【注意】`AssetReference` 拖拽的资源**必须已标记为 Addressable**，否则 Inspector 里拖不进去或加载失败。
 
 ---
 
@@ -4126,7 +4126,7 @@ IEnumerator CleanupAll()
 }
 ```
 
-【⚠️ 注意】`UnloadAsset` 只能卸载**从 Resources 加载**的资源，且**不能**卸载场景里的物体、`Instantiate` 出来的实例、或 `Sprite`（Sprite 是 `Object` 但 `UnloadAsset` 对它有特殊限制，通常用 `UnloadUnusedAssets`）。`UnloadUnusedAssets` 是异步的，会扫描整个场景，频繁调用有性能开销。
+【注意】`UnloadAsset` 只能卸载**从 Resources 加载**的资源，且**不能**卸载场景里的物体、`Instantiate` 出来的实例、或 `Sprite`（Sprite 是 `Object` 但 `UnloadAsset` 对它有特殊限制，通常用 `UnloadUnusedAssets`）。`UnloadUnusedAssets` 是异步的，会扫描整个场景，频繁调用有性能开销。
 
 ---
 
@@ -4177,7 +4177,7 @@ public class BundleLoader : MonoBehaviour
 }
 ```
 
-【⚠️ 注意】`AssetBundle` 的**依赖管理**是最大痛点：一个 bundle 依赖另一个 bundle 时，必须手动 `LoadFromFile` 所有依赖，顺序错了就加载失败。`Addressables` 正是为了解决这个痛点而生的，所以**新项目直接用 `Addressables`，别自己造 AssetBundle 轮子**。
+【注意】`AssetBundle` 的**依赖管理**是最大痛点：一个 bundle 依赖另一个 bundle 时，必须手动 `LoadFromFile` 所有依赖，顺序错了就加载失败。`Addressables` 正是为了解决这个痛点而生的，所以**新项目直接用 `Addressables`，别自己造 AssetBundle 轮子**。
 
 ---
 
@@ -4241,7 +4241,7 @@ public class SceneLoader : MonoBehaviour
         AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
         op.allowSceneActivation = false;   // 先不切换，等进度满
 
-        // ⚠️ 注意：allowSceneActivation=false 时 op.isDone 恒为 false，
+        // 【注意】注意：allowSceneActivation=false 时 op.isDone 恒为 false，
         //    completed 事件不会触发！所以这里不要用 completed 收尾，
         //    而是用协程轮询 isDone（见下）。进度满后调用 op.allowSceneActivation = true 真正切换。
         StartCoroutine(UpdateProgress(op));
@@ -4426,7 +4426,7 @@ r.sharedMaterial.color = Color.blue;
 | `renderer.material` | 首次访问**自动克隆**，改它只影响本物体 | 每次访问可能产生新实例（GC 压力） | 单个物体独立变色 |
 | `renderer.sharedMaterial` | 直接改**共享材质**，影响所有使用者 | 无克隆开销 | 批量统一改、编辑器调参 |
 
-【⚠️ 注意】`material` 每次访问都可能触发克隆，**不要在 `Update` 里反复读 `material`**，否则每帧产生新材质实例，内存和 GC 都会爆炸。要改就缓存一份引用。
+【注意】`material` 每次访问都可能触发克隆，**不要在 `Update` 里反复读 `material`**，否则每帧产生新材质实例，内存和 GC 都会爆炸。要改就缓存一份引用。
 
 ---
 
@@ -4470,7 +4470,7 @@ public class CullLogic : MonoBehaviour
 }
 ```
 
-【⚠️ 注意】`isVisible` 依赖相机剔除，**编辑器 Scene 视图也算一个相机**，所以编辑器里可能一直为 true。运行时以 Game 视图为准。
+【注意】`isVisible` 依赖相机剔除，**编辑器 Scene 视图也算一个相机**，所以编辑器里可能一直为 true。运行时以 Game 视图为准。
 
 ---
 
@@ -4595,11 +4595,11 @@ m.SetVector("_EmissionColor", new Vector4(1, 0.5f, 0, 1)); // 发光色
 **【代码示例】**
 ```csharp
 // 属性名是字符串，写错不会报编译错，但运行时无效
-m.SetColor("_Color", Color.white);   // ✅ 正确
-m.SetColor("_Colour", Color.white); // ❌ 拼错，静默失败
+m.SetColor("_Color", Color.white);   // 正确
+m.SetColor("_Colour", Color.white); // 拼错，静默失败
 ```
 
-【⚠️ 注意】属性名是字符串，**拼写错误不会编译报错**，只会运行时无效。建议把属性名定义为常量。
+【注意】属性名是字符串，**拼写错误不会编译报错**，只会运行时无效。建议把属性名定义为常量。
 
 ---
 
@@ -4667,7 +4667,7 @@ if (main != null)
 
 **【返回值】** 主相机 `Camera`；没有标记 `MainCamera` 的相机时返回 `null`。
 
-【⚠️ 注意】`Camera.main` 依赖 Tag 为 `MainCamera`。如果场景里没有标记，返回 `null`，**要判空**。新相机默认 Tag 就是 `MainCamera`。
+【注意】`Camera.main` 依赖 Tag 为 `MainCamera`。如果场景里没有标记，返回 `null`，**要判空**。新相机默认 Tag 就是 `MainCamera`。
 
 ---
 
@@ -5020,9 +5020,9 @@ sr.sortingOrder = 10;   // 数值大，画在上面
 
 | API | 标记 |
 |-----|------|
-| `MaterialPropertyBlock` | ✅ 稳定老 API（Unity 5.0 起），批量渲染推荐 |
-| URP（Universal Render Pipeline） | ✅ 较新渲染方案，新项目推荐 |
-| 后期处理（Volume/Post Processing） | ✅ 较新方案（URP 用 Volume） |
+| `MaterialPropertyBlock` | 稳定老 API（Unity 5.0 起），批量渲染推荐 |
+| URP（Universal Render Pipeline） | 较新渲染方案，新项目推荐 |
+| 后期处理（Volume/Post Processing） | 较新方案（URP 用 Volume） |
 | `Camera` / `SpriteRenderer` / `Light` / `Renderer` | 稳定老 API |
 | `Shader.Find` / `new Material` | 稳定老 API |
 
@@ -5087,9 +5087,9 @@ sr.sortingOrder = 10;   // 数值大，画在上面
 | 维度 | UGUI | UI Toolkit | IMGUI |
 |------|------|-----------|-------|
 | 学习资料/面试占比 | ★★★★★ 最多 | ★★★ 增长中 | ★（会读就行） |
-| 适合新手先学 | ✅ 推荐先学 | 可作为进阶 | 不必深究 |
-| 运行时游戏 UI | ✅ 最常用 | ✅ 可以（2021+） | ❌ 不推荐 |
-| 编辑器扩展 UI | ❌ | ✅ 官方新标准 | ✅ 老标准（仍大量在用） |
+| 适合新手先学 | 推荐先学 | 可作为进阶 | 不必深究 |
+| 运行时游戏 UI | 最常用 | 可以（2021+） | 不推荐 |
+| 编辑器扩展 UI | 否 | 官方新标准 | 老标准（仍大量在用） |
 | 布局模型 | anchor/pivot（锚点） | Flexbox（弹性盒，CSS 思维） | 无（即时绘制） |
 
 ---
@@ -5516,7 +5516,7 @@ t.supportRichText = true;
 t.text = "<b>加粗</b><color=#FF0000>红色</color>";
 ```
 
-**【版本标记】** ⚠️ 老 `Text` 组件已不推荐新项目用；官方推荐 `TextMeshPro`（TMP，2018+ 内置），字号、排版、中文字体支持远强于老 Text。老项目/老教程里仍大量见到 `UnityEngine.UI.Text`。
+**【版本标记】** 【注意】老 `Text` 组件已不推荐新项目用；官方推荐 `TextMeshPro`（TMP，2018+ 内置），字号、排版、中文字体支持远强于老 Text。老项目/老教程里仍大量见到 `UnityEngine.UI.Text`。
 
 ---
 
@@ -5550,8 +5550,8 @@ public class HPBar : MonoBehaviour
 **【相似 API 区别】`Image` vs `RawImage`**
 | API | 显示 | 九宫格 | 常用场景 |
 |-----|------|--------|---------|
-| `Image` | `Sprite`（可九宫格/填充） | ✅ | 按钮、血条、图标 |
-| `RawImage` | `Texture2D`（无裁剪） | ❌ | 显示贴图/视频帧/动态纹理 |
+| `Image` | `Sprite`（可九宫格/填充） | 是 | 按钮、血条、图标 |
+| `RawImage` | `Texture2D`（无裁剪） | 否 | 显示贴图/视频帧/动态纹理 |
 
 ---
 
@@ -5878,10 +5878,10 @@ public class DraggableUI : MonoBehaviour,
 | 结构 | GameObject + 组件 | `VisualElement` 树（不占场景物体） |
 | 布局 | anchor / pivot | Flexbox（flex 弹性布局，CSS 思维） |
 | 样式 | 逐个组件设属性 | USS 集中写样式（类似 CSS） |
-| 编辑器扩展 | ❌ 不行 | ✅ 官方新标准（`EditorWindow` + UIElements） |
+| 编辑器扩展 | 不行 | 官方新标准（`EditorWindow` + UIElements） |
 | 成熟度 | 稳定 | 2019 出现、2021 逐渐成熟、新版本主推 |
 
-**【版本标记】** ⚠️ **较新方案**：Unity 2019.1 引入（当时叫 UIElements，主要给编辑器）；**Unity 2021 左右开始支持运行时游戏 UI 并逐渐成熟**；2023+ 官方在编辑器扩展上全面推行。**面试/简历上写"会用 UI Toolkit"是加分项**，但 UGUI 仍是主流项目主力。
+**【版本标记】** 【注意】**较新方案**：Unity 2019.1 引入（当时叫 UIElements，主要给编辑器）；**Unity 2021 左右开始支持运行时游戏 UI 并逐渐成熟**；2023+ 官方在编辑器扩展上全面推行。**面试/简历上写"会用 UI Toolkit"是加分项**，但 UGUI 仍是主流项目主力。
 
 **【代码示例】** 运行时用代码建 UITK 界面：
 ```csharp
@@ -6090,12 +6090,12 @@ public class HPBarFollow3D : MonoBehaviour
 
 | API | 标记 |
 |-----|------|
-| UGUI（`UnityEngine.UI`） | ✅ 稳定、最普及，可放心用 |
-| `UnityEngine.UI.Text` | ⚠️ 老组件，新项目推荐 `TMP_Text`（TextMeshPro） |
-| UI Toolkit（`UnityEngine.UIElements`） | ⚠️ **较新**：2019.1 引入；2021 左右运行时 UI 逐渐成熟；2023+ 官方主推编辑器扩展 |
-| `UIDocument` | ⚠️ 2019+（随 UI Toolkit）；运行时 UI 建议 2021+ |
-| `EventSystem` + `StandaloneInputModule` | ✅ 稳定；新输入方案对应 `InputSystemUIInputModule`（Input System 包） |
-| `sizeDelta` / `SetSizeWithCurrentAnchors` | ✅ 稳定；宽高分量用 `sizeDelta.x` / `.y`（没有 `widthDelta`/`heightDelta`，防拼写错） |
+| UGUI（`UnityEngine.UI`） | 稳定、最普及，可放心用 |
+| `UnityEngine.UI.Text` | 【注意】老组件，新项目推荐 `TMP_Text`（TextMeshPro） |
+| UI Toolkit（`UnityEngine.UIElements`） | 【注意】**较新**：2019.1 引入；2021 左右运行时 UI 逐渐成熟；2023+ 官方主推编辑器扩展 |
+| `UIDocument` | 【注意】2019+（随 UI Toolkit）；运行时 UI 建议 2021+ |
+| `EventSystem` + `StandaloneInputModule` | 稳定；新输入方案对应 `InputSystemUIInputModule`（Input System 包） |
+| `sizeDelta` / `SetSizeWithCurrentAnchors` | 稳定；宽高分量用 `sizeDelta.x` / `.y`（没有 `widthDelta`/`heightDelta`，防拼写错） |
 
 > 具体版本细节以官方手册为准，这里只给推理方向。
 
@@ -6567,7 +6567,7 @@ if (anim.HasParameterOfType("Attack", AnimatorControllerParameterType.Trigger))
     anim.SetTrigger("Attack");
 ```
 
-**【版本标记】** ✅ 较新 API（`Unity 2019.1` 引入），老项目可能没有。
+**【版本标记】** 较新 API（`Unity 2019.1` 引入），老项目可能没有。
 
 ---
 
@@ -6589,7 +6589,7 @@ anim.CrossFade("Run", 0.3f);   // 平滑过渡
 |------|-------------------|-------------------|
 | 机制 | 状态机（`AnimatorController`） | 直接播片段 |
 | 状态切换 | 参数 + 过渡条件 | 代码直接 Play |
-| 复杂动画 | ✅ 支持（多状态、混合树） | ❌ 弱 |
+| 复杂动画 | 支持（多状态、混合树） | 弱 |
 | 地位 | **主流，新项目用** | 旧版，官方不推荐新项目用（未被废弃） |
 | 参数驱动 | `SetBool/SetFloat/SetTrigger` | 无 |
 
@@ -6689,10 +6689,10 @@ public class MyEvent : MonoBehaviour
 
 | 维度 | `UnityEvent` | C# `event` |
 |------|-------------|-----------|
-| 可在 Inspector 拖挂 | ✅ | ❌ |
-| 可序列化 | ✅ | ❌ |
+| 可在 Inspector 拖挂 | 是 | 否 |
+| 可序列化 | 是 | 否 |
 | 性能 | 略慢（反射/序列化） | 快 |
-| 多播 | ✅ | ✅ |
+| 多播 | 是 | |
 | 适用 | UI 按钮、可视化配置 | 纯代码事件系统 |
 
 ---
@@ -6893,14 +6893,14 @@ public class CallbackDemo : MonoBehaviour
 
 | API | 标记 |
 |-----|------|
-| `Animator` | ✅ 主流，新项目用 |
-| `Animation`（老版） | ⚠️ 旧版，官方推荐 `Animator`，未被废弃，老项目可继续用 |
-| `Animator.SetBool/SetFloat/SetTrigger/SetInteger` | ✅ 稳定，长期可用 |
-| `Animator.HasParameterOfType` | ✅ 较新（`Unity 2019.1` 引入） |
-| `Animator.enabled` | ✅ 继承自 `Behaviour` 的基础属性（非序列化专有用法），始终可用 |
-| `AudioSource.PlayClipAtPoint` | ✅ 稳定 |
-| `AudioMixer` | ✅ 稳定，主流混音方案 |
-| `Resources.Load<AudioClip>` | ⚠️ 仍可用，但推荐 `Addressables` |
+| `Animator` | 主流，新项目用 |
+| `Animation`（老版） | 【注意】旧版，官方推荐 `Animator`，未被废弃，老项目可继续用 |
+| `Animator.SetBool/SetFloat/SetTrigger/SetInteger` | 稳定，长期可用 |
+| `Animator.HasParameterOfType` | 较新（`Unity 2019.1` 引入） |
+| `Animator.enabled` | 继承自 `Behaviour` 的基础属性（非序列化专有用法），始终可用 |
+| `AudioSource.PlayClipAtPoint` | 稳定 |
+| `AudioMixer` | 稳定，主流混音方案 |
+| `Resources.Load<AudioClip>` | 【注意】仍可用，但推荐 `Addressables` |
 
 > 具体版本细节以官方手册为准，这里只给推理方向。
 
@@ -6989,7 +6989,7 @@ public class MyEditorTools : MonoBehaviour
 **【参数说明】** `MenuItem("路径/子路径 快捷键")`：
 - `/` 分隔菜单层级；空格后的 `%r` 是快捷键（Ctrl+R）。
 
-【⚠️ 注意】方法**必须 static**。
+【注意】方法**必须 static**。
 
 ---
 
@@ -7098,7 +7098,7 @@ static void CreateAsset()
 |-----|------|
 | `MenuItem` / `CustomEditor` / `Gizmos` | 长期稳定 |
 | `Selection.gameObjects` | 长期稳定 |
-| UI Toolkit 版 Editor（`VisualElement` 自定义 Inspector） | ✅ 较新（Unity 2019+），UI Toolkit 相关见 [第 9 章](第09章_UI系统.md) |
+| UI Toolkit 版 Editor（`VisualElement` 自定义 Inspector） | 较新（Unity 2019+），UI Toolkit 相关见 [第 9 章](第09章_UI系统.md) |
 
 ---
 
@@ -7197,7 +7197,7 @@ System.IO.File.WriteAllText(
 ```csharp
 Application.Quit();          // 退出游戏（桌面/移动端本地）
 ```
-【⚠️ 注意】`Quit` **不会立刻退出**，只是发出退出请求；在**编辑器**里调用它不会关闭编辑器本身，只会退出当前 Play 模式（停止运行）。桌面/移动端构建后可正常退出进程。WebGL 无效。
+【注意】`Quit` **不会立刻退出**，只是发出退出请求；在**编辑器**里调用它不会关闭编辑器本身，只会退出当前 Play 模式（停止运行）。桌面/移动端构建后可正常退出进程。WebGL 无效。
 
 ---
 

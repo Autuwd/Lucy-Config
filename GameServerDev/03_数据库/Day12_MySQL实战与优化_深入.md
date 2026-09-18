@@ -63,8 +63,8 @@ WHERE p.server_id = 1 AND p.level > 50\G
 4. read_cost         ← IO 代价（磁盘读取开销）
 5. using_index       ← 是否使用覆盖索引
 6. using_where       ← 是否使用了 WHERE 过滤
-7. using_temporary   ← 是否使用临时表（⚠ 危险信号）
-8. using_filesort    ← 文件排序（⚠ 危险信号）
+7. using_temporary   ← 是否使用临时表（【注意】危险信号）
+8. using_filesort    ← 文件排序（【注意】危险信号）
 ```
 
 ### 1.4 慢查询定位流程

@@ -296,10 +296,10 @@ HotUpdate（热更新工程 — DLL）
 
 ```
 HybridCLR 支持所有 IL2CPP 平台：
-- iOS ✅（解释执行，不违反 Apple 政策）
-- Android ✅
-- Windows ✅
-- macOS ✅
+- iOS （解释执行，不违反 Apple 政策）
+- Android 
+- Windows 
+- macOS 
 ```
 
 ---

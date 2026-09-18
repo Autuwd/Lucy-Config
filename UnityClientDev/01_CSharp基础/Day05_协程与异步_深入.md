@@ -81,17 +81,17 @@ public ValueTask<int> GetScoreForFrame(int frame)
 ### ValueTask 的限制
 
 ```csharp
-// ✅ 可以：顺序 await
+// 可以：顺序 await
 ValueTask<int> task = GetScoreAsync();
 int result1 = await task;
 int result2 = await task;  // 可以，但要注意底层资源
 
-// ❌ 不可以：并行 await 同一个 ValueTask
+// 不可以：并行 await 同一个 ValueTask
 ValueTask<int> task = GetScoreAsync();
 var t1 = task.AsTask();  // 转换成 Task 可以并行
 var t2 = task.AsTask();
 
-// ❌ 不可以：存储 ValueTask 到字段后 await
+// 不可以：存储 ValueTask 到字段后 await
 private ValueTask<int> _saved;
 void Bad()
 {
@@ -99,20 +99,20 @@ void Bad()
 }
 // await _saved;  // 危险！ValueTask 不应存储为字段
 
-// ⚠️ 原因：ValueTask 内部可能包装了 IValueTaskSource
+// 【注意】原因：ValueTask 内部可能包装了 IValueTaskSource
 // IValueTaskSource 可能被复用——第二次 await 时已过期
 ```
 
 ### 选择指南
 
 ```csharp
-// ✅ 用 Task 的场景：
+// 用 Task 的场景：
 // - 需要并行 await（Task.WhenAll）
 // - 需要多次 await 同一个 task
 // - 需要缓存 Task 到字段
 // - 低频调用（每秒 < 100 次）
 
-// ✅ 用 ValueTask 的场景：
+// 用 ValueTask 的场景：
 // - 可能同步完成（缓存命中）
 // - 高频调用（每秒数百次以上）
 // - 异步结果不需要复用
@@ -438,7 +438,7 @@ public async UniTaskVoid TestConfigureAwait()
     // ConfigureAwait(false)：不捕获上下文
     // 直接在完成线程继续执行
     await SomeOperationAsync().ConfigureAwait(false);
-    // ❌ 危险！可能在后台线程——不能调用 Unity API！
+    // 危险！可能在后台线程——不能调用 Unity API！
     // transform.position = ...  // 崩溃！
 }
 ```
@@ -551,7 +551,7 @@ public async Task<string> LoadDataAsync()
 void ButtonClick()
 {
     // 阻塞等待 → 死锁！
-    // var data = LoadDataAsync().Result;  // ❌ 死锁！
+    // var data = LoadDataAsync().Result;  // 死锁！
     // ButtonClick 线程阻塞
     // LoadDataAsync 完成时需要回到该线程
     // → 互相等待！

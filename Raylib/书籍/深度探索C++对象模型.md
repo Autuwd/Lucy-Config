@@ -5,7 +5,7 @@
 
 ---
 
-## 📋 目录
+## 目录
 
 1. [对象模型](#对象模型)
 2. [构造函数](#构造函数)
@@ -24,7 +24,7 @@
 ### 对象的内存布局
 
 ```cpp
-// ✅ 简单类
+// 简单类
 class Point {
 public:
     float x, y;
@@ -34,7 +34,7 @@ public:
 // [x:4字节][y:4字节]
 // 总大小：8字节
 
-// ✅ 带虚函数的类
+// 带虚函数的类
 class Point {
 public:
     float x, y;
@@ -45,11 +45,11 @@ public:
 // [vptr:4字节][x:4字节][y:4字节]
 // 总大小：12字节
 
-// ✅ vptr（虚函数表指针）
+// vptr（虚函数表指针）
 // 指向虚函数表（vtable）
 // 虚函数表包含虚函数的地址
 
-// 💡 对象模型
+// 【补充】对象模型
 // 1. 简单对象：只有数据成员
 // 2. 带虚函数的对象：有 vptr
 // 3. 继承对象：有 vptr 和基类数据
@@ -58,7 +58,7 @@ public:
 ### vtable（虚函数表）
 
 ```cpp
-// ✅ 虚函数表原理
+// 虚函数表原理
 class Base {
 public:
     virtual void Function1() {}
@@ -80,7 +80,7 @@ public:
 // [vptr][data]
 // vptr -> Derived vtable: [&Derived::Function1, &Derived::Function2]
 
-// 💡 vtable 的作用
+// 【补充】vtable 的作用
 // 1. 实现运行时多态
 // 2. 根据对象实际类型调用函数
 // 3. 开销：一次额外的间接寻址
@@ -89,7 +89,7 @@ public:
 ### 对象大小
 
 ```cpp
-// ✅ 对象大小计算
+// 对象大小计算
 class Empty {};
 
 // sizeof(Empty) = 1（最小大小）
@@ -115,7 +115,7 @@ class Multiple {
 
 // sizeof(Multiple) = sizeof(Base1) + sizeof(Base2)
 
-// 💡 对齐规则
+// 【补充】对齐规则
 // 1. 成员按照其大小对齐
 // 2. 整体按照最大成员大小对齐
 // 3. 可能有填充字节
@@ -128,24 +128,24 @@ class Multiple {
 ### 默认构造函数
 
 ```cpp
-// ✅ 默认构造函数的作用
+// 默认构造函数的作用
 class Widget {
 public:
     // 编译器生成的默认构造函数
     Widget() = default;
 };
 
-// ✅ 什么时候需要默认构造函数？
+// 什么时候需要默认构造函数？
 // 1. 创建数组时
 // 2. 作为容器元素时
 // 3. 作为其他类成员时
 
-// ✅ 编译器生成条件
+// 编译器生成条件
 // 1. 没有显式声明任何构造函数
 // 2. 基类有默认构造函数
 // 3. 成员有默认构造函数
 
-// ❌ 编译器不会生成默认构造函数的情况
+// 编译器不会生成默认构造函数的情况
 // 1. 有显式构造函数
 // 2. 基类没有默认构造函数
 // 3. 成员没有默认构造函数
@@ -154,7 +154,7 @@ public:
 ### 拷贝构造函数
 
 ```cpp
-// ✅ 拷贝构造函数
+// 拷贝构造函数
 class Widget {
 public:
     Widget(const Widget &other) {
@@ -162,7 +162,7 @@ public:
     }
 };
 
-// ✅ 编译器生成的拷贝构造函数
+// 编译器生成的拷贝构造函数
 class Widget {
     int x;
     std::string name;
@@ -171,7 +171,7 @@ class Widget {
 Widget w1;
 Widget w2 = w1;  // 调用编译器生成的拷贝构造函数
 
-// ✅ 浅拷贝 vs 深拷贝
+// 浅拷贝 vs 深拷贝
 class Widget {
 public:
     int *data;
@@ -186,7 +186,7 @@ public:
     }
 };
 
-// 💡 拷贝构造函数的调用时机
+// 【补充】拷贝构造函数的调用时机
 // 1. 用另一个对象初始化
 // 2. 函数参数传递
 // 3. 函数返回值
@@ -195,7 +195,7 @@ public:
 ### 移动构造函数
 
 ```cpp
-// ✅ 移动构造函数
+// 移动构造函数
 class Widget {
 public:
     Widget(Widget &&other) noexcept 
@@ -205,17 +205,17 @@ public:
     }
 };
 
-// ✅ 移动构造函数的优点
+// 移动构造函数的优点
 // 1. 转移资源所有权，避免深拷贝
 // 2. 性能更好
 // 3. 适用于临时对象
 
-// ✅ 移动构造函数的条件
+// 移动构造函数的条件
 // 1. 参数是右值引用（&&）
 // 2. 转移资源所有权
 // 3. 将源对象置为有效但未指定状态
 
-// 💡 移动构造函数 vs 拷贝构造函数
+// 【补充】移动构造函数 vs 拷贝构造函数
 // 拷贝构造函数：深拷贝整个对象（慢）
 // 移动构造函数：只转移资源所有权（快）
 ```
@@ -227,7 +227,7 @@ public:
 ### 析构函数的作用
 
 ```cpp
-// ✅ 析构函数
+// 析构函数
 class Widget {
 public:
     ~Widget() {
@@ -239,12 +239,12 @@ private:
     int *data;
 };
 
-// ✅ 析构函数调用时机
+// 析构函数调用时机
 // 1. 栈对象：离开作用域时
 // 2. 堆对象：delete 时
 // 3. 临时对象：表达式结束时
 
-// ✅ 析构函数顺序
+// 析构函数顺序
 // 栈对象：后构造的先析构（LIFO）
 class Widget {
     Widget() { std::cout << "构造" << std::endl; }
@@ -261,7 +261,7 @@ class Widget {
 // 析构
 // 析构
 
-// 💡 析构函数原则
+// 【补充】析构函数原则
 // 1. 析构函数不应该抛出异常
 // 2. 析构函数应该释放所有资源
 // 3. 使用 RAII 自动管理资源
@@ -270,7 +270,7 @@ class Widget {
 ### 虚析构函数
 
 ```cpp
-// ❌ 没有虚析构函数
+// 没有虚析构函数
 class Base {
     // 没有虚析构函数
 };
@@ -283,9 +283,9 @@ public:
 };
 
 Base *p = new Derived();
-delete p;  // ❌ 内存泄漏！Derived 的析构函数不会调用
+delete p;  // 内存泄漏！Derived 的析构函数不会调用
 
-// ✅ 虚析构函数
+// 虚析构函数
 class Base {
 public:
     virtual ~Base() {}  // 虚析构函数
@@ -295,13 +295,13 @@ class Derived : public Base {
 public:
     int *data;
     Derived() { data = new int[100]; }
-    ~Derived() { delete[] data; }  // ✅ 会调用
+    ~Derived() { delete[] data; }  // 会调用
 };
 
 Base *p = new Derived();
-delete p;  // ✅ 正确释放
+delete p;  // 正确释放
 
-// 💡 什么时候需要虚析构函数？
+// 【补充】什么时候需要虚析构函数？
 // 1. 有虚函数的类
 // 2. 通过基类指针删除子类对象
 // 3. 作为基类的类
@@ -314,7 +314,7 @@ delete p;  // ✅ 正确释放
 ### 五法则
 
 ```cpp
-// ✅ C++11 五法则
+// C++11 五法则
 class Widget {
 public:
     Widget();                                    // 默认构造函数
@@ -325,7 +325,7 @@ public:
     ~Widget();                                   // 析构函数
 };
 
-// 💡 五法则
+// 【补充】五法则
 // 如果你需要显式声明其中一个，通常需要显式声明所有五个
 // 这是因为资源管理的需要
 ```
@@ -333,7 +333,7 @@ public:
 ### RAII（资源获取即初始化）
 
 ```cpp
-// ✅ RAII 原则
+// RAII 原则
 class FileHandle {
 public:
     FileHandle(const char *filename) {
@@ -364,13 +364,13 @@ private:
     FILE *file;
 };
 
-// ✅ 使用
+// 使用
 void Process() {
     FileHandle fh("data.txt");  // 获取资源
     // 使用文件...
 }  // 自动释放资源
 
-// 💡 RAII 的优点
+// 【补充】RAII 的优点
 // 1. 自动释放资源
 // 2. 异常安全
 // 3. 代码简洁
@@ -379,7 +379,7 @@ void Process() {
 ### 拷贝控制示例
 
 ```cpp
-// ✅ 完整示例
+// 完整示例
 class Buffer {
 public:
     // 默认构造函数
@@ -440,7 +440,7 @@ private:
 ### 虚函数表原理
 
 ```cpp
-// ✅ 虚函数表原理
+// 虚函数表原理
 class Base {
 public:
     virtual void Function1() {}
@@ -462,12 +462,12 @@ public:
 // [vptr][data]
 // vptr -> Derived vtable: [&Derived::Function1, &Derived::Function2]
 
-// ✅ 虚函数调用
+// 虚函数调用
 Base *p = new Derived();
 p->Function1();  // 通过 vptr 查找 vtable
                  // 调用 Derived::Function1
 
-// 💡 虚函数开销
+// 【补充】虚函数开销
 // 1. 额外的内存：vptr（4 或 8 字节）
 // 2. 额外的时间：一次间接寻址
 // 3. 不能内联
@@ -476,7 +476,7 @@ p->Function1();  // 通过 vptr 查找 vtable
 ### 虚函数 vs 非虚函数
 
 ```cpp
-// ✅ 虚函数：运行时多态
+// 虚函数：运行时多态
 class Base {
 public:
     virtual void Function() {
@@ -494,7 +494,7 @@ public:
 Base *p = new Derived();
 p->Function();  // 输出 "Derived"
 
-// ✅ 非虚函数：编译时绑定
+// 非虚函数：编译时绑定
 class Base {
 public:
     void Function() {
@@ -512,7 +512,7 @@ public:
 Base *p = new Derived();
 p->Function();  // 输出 "Base"
 
-// 💡 选择原则
+// 【补充】选择原则
 // 1. 需要多态：虚函数
 // 2. 不需要多态：非虚函数
 // 3. 基类析构函数：虚函数
@@ -521,7 +521,7 @@ p->Function();  // 输出 "Base"
 ### 虚析构函数
 
 ```cpp
-// ✅ 虚析构函数
+// 虚析构函数
 class Base {
 public:
     virtual ~Base() {}  // 虚析构函数
@@ -531,13 +531,13 @@ class Derived : public Base {
 public:
     int *data;
     Derived() { data = new int[100]; }
-    ~Derived() { delete[] data; }  // ✅ 会调用
+    ~Derived() { delete[] data; }  // 会调用
 };
 
 Base *p = new Derived();
-delete p;  // ✅ 正确释放
+delete p;  // 正确释放
 
-// 💡 虚析构函数的作用
+// 【补充】虚析构函数的作用
 // 1. 确保正确的析构函数被调用
 // 2. 避免内存泄漏
 // 3. 适用于通过基类指针删除子类对象
@@ -550,7 +550,7 @@ delete p;  // ✅ 正确释放
 ### 多重继承的内存布局
 
 ```cpp
-// ✅ 多重继承
+// 多重继承
 class Base1 {
 public:
     int x;
@@ -569,12 +569,12 @@ public:
 // 内存布局
 // [Base1:x][Base2:y][Derived:z]
 
-// ✅ 多重继承的指针转换
+// 多重继承的指针转换
 Derived *d = new Derived();
-Base1 *b1 = d;  // ✅ 可以转换
-Base2 *b2 = d;  // ✅ 可以转换
+Base1 *b1 = d;  // 可以转换
+Base2 *b2 = d;  // 可以转换
 
-// ✅ 虚继承
+// 虚继承
 class Base {
 public:
     int x;
@@ -587,7 +587,7 @@ class Derived : public Derived1, public Derived2 {};
 // 内存布局
 // [Derived1 vptr][Derived2 vptr][Derived1 data][Derived2 data][Base x]
 
-// 💡 虚继承
+// 【补充】虚继承
 // 1. 解决菱形继承问题
 // 2. 共享基类数据
 // 3. 增加复杂性
@@ -596,7 +596,7 @@ class Derived : public Derived1, public Derived2 {};
 ### 菱形继承问题
 
 ```cpp
-// ❌ 菱形继承问题
+// 菱形继承问题
 class A {
 public:
     int data;
@@ -611,7 +611,7 @@ D d;
 d.B::data = 10;  // 修改 B 继承的 data
 d.C::data = 20;  // 修改 C 继承的 data
 
-// ✅ 虚继承解决
+// 虚继承解决
 class A {
 public:
     int data;
@@ -623,9 +623,9 @@ class D : public B, public C {};
 
 // D 只有一份 A::data
 D d;
-d.data = 10;  // ✅ 直接访问
+d.data = 10;  // 直接访问
 
-// 💡 虚继承的代价
+// 【补充】虚继承的代价
 // 1. 增加内存开销（vptr）
 // 2. 增加访问开销（间接寻址）
 // 3. 增加复杂性
@@ -638,7 +638,7 @@ d.data = 10;  // ✅ 直接访问
 ### dynamic_cast
 
 ```cpp
-// ✅ dynamic_cast 基本用法
+// dynamic_cast 基本用法
 class Base {
 public:
     virtual ~Base() {}
@@ -653,22 +653,22 @@ Base *b = new Derived();
 Derived *d = dynamic_cast<Derived*>(b);
 
 if (d) {
-    d->Function();  // ✅ 成功
+    d->Function();  // 成功
 }
 
-// ✅ dynamic_cast 的条件
+// dynamic_cast 的条件
 // 1. 基类必须有虚函数
 // 2. 转换失败返回 nullptr（指针）或抛出异常（引用）
 
-// ❌ 不安全的转换
+// 不安全的转换
 Base *b = new Base();
 Derived *d = dynamic_cast<Derived*>(b);
 
 if (d) {
-    d->Function();  // ❌ 不会执行，因为转换失败
+    d->Function();  // 不会执行，因为转换失败
 }
 
-// 💡 dynamic_cast vs static_cast
+// 【补充】dynamic_cast vs static_cast
 // dynamic_cast：运行时检查，安全
 // static_cast：编译时检查，不安全
 ```
@@ -678,20 +678,20 @@ if (d) {
 ```cpp
 #include <typeinfo>
 
-// ✅ typeid 基本用法
+// typeid 基本用法
 Base *b = new Derived();
 std::cout << typeid(*b).name() << std::endl;  // 输出 Derived
 
-// ✅ 类型比较
+// 类型比较
 if (typeid(*b) == typeid(Derived)) {
     std::cout << "是 Derived 类型" << std::endl;
 }
 
-// ✅ 获取类型信息
+// 获取类型信息
 std::cout << typeid(int).name() << std::endl;
 std::cout << typeid(double).name() << std::endl;
 
-// 💡 typeid 的用途
+// 【补充】typeid 的用途
 // 1. 获取类型名称
 // 2. 类型比较
 // 3. 调试和日志
@@ -701,57 +701,57 @@ std::cout << typeid(double).name() << std::endl;
 
 ## 难点解析
 
-### 🔴 难点 1：对象模型 vs C++ 标准
+### 难点 1：对象模型 vs C++ 标准
 
 ```cpp
-// ✅ 对象模型是实现细节
+// 对象模型是实现细节
 // C++ 标准没有规定对象的具体实现
 // 不同编译器可能有不同的实现
 
-// ✅ 常见实现
+// 常见实现
 // 1. vptr 在对象开头
 // 2. 虚函数表是静态数组
 // 3. 单一继承：一个 vptr
 // 4. 多重继承：多个 vptr
 
-// 💡 为什么了解对象模型？
+// 【补充】为什么了解对象模型？
 // 1. 理解性能开销
 // 2. 理解底层机制
 // 3. 调试和优化
 // 4. 理解 ABI 兼容性
 ```
 
-### 🔴 难点 2：拷贝控制 vs 移动语义
+### 难点 2：拷贝控制 vs 移动语义
 
 ```cpp
-// ✅ 拷贝控制
+// 拷贝控制
 class Widget {
 public:
     Widget(const Widget &other);  // 拷贝构造函数
     Widget& operator=(const Widget &other);  // 拷贝赋值运算符
 };
 
-// ✅ 移动语义
+// 移动语义
 class Widget {
 public:
     Widget(Widget &&other) noexcept;  // 移动构造函数
     Widget& operator=(Widget &&other) noexcept;  // 移动赋值运算符
 };
 
-// 💡 拷贝 vs 移动
+// 【补充】拷贝 vs 移动
 // 拷贝：深拷贝整个对象（慢）
 // 移动：只转移资源所有权（快）
 
-// ✅ 何时使用移动？
+// 何时使用移动？
 // 1. 临时对象（右值）
 // 2. 显式 std::move
 // 3. 返回局部对象
 ```
 
-### 🔴 难点 3：虚函数表 vs 函数指针
+### 难点 3：虚函数表 vs 函数指针
 
 ```cpp
-// ✅ 虚函数表
+// 虚函数表
 class Base {
 public:
     virtual void Function() {}
@@ -761,7 +761,7 @@ public:
 // [vptr][data]
 // vptr -> vtable: [&Function]
 
-// ✅ 函数指针
+// 函数指针
 class Base {
 public:
     using FunctionPtr = void (*)();
@@ -777,20 +777,20 @@ public:
     static void DefaultFunction() {}
 };
 
-// 💡 虚函数表 vs 函数指针
+// 【补充】虚函数表 vs 函数指针
 // 虚函数表：编译器自动生成，更安全
 // 函数指针：手动管理，更灵活
 
-// 🔴 Unity 对照
+// Unity 对照
 // Unity 的 MonoBehaviour 使用虚函数
 // Unity 的事件系统使用函数指针
 // 理解两者可以帮助理解 Unity 的底层
 ```
 
-### 🔴 难点 4：多重继承的复杂性
+### 难点 4：多重继承的复杂性
 
 ```cpp
-// ✅ 多重继承的内存布局
+// 多重继承的内存布局
 class Base1 {
 public:
     int x;
@@ -809,12 +809,12 @@ public:
 // 内存布局
 // [Base1:x][Base2:y][Derived:z]
 
-// ✅ 指针转换
+// 指针转换
 Derived *d = new Derived();
-Base1 *b1 = d;  // ✅ 可以转换
-Base2 *b2 = d;  // ✅ 可以转换
+Base1 *b1 = d;  // 可以转换
+Base2 *b2 = d;  // 可以转换
 
-// ✅ 虚继承的内存布局
+// 虚继承的内存布局
 class Base {
 public:
     int x;
@@ -827,7 +827,7 @@ class Derived : public Derived1, public Derived2 {};
 // 内存布局
 // [Derived1 vptr][Derived2 vptr][Derived1 data][Derived2 data][Base x]
 
-// 💡 多重继承的复杂性
+// 【补充】多重继承的复杂性
 // 1. 指针偏移
 // 2. 虚继承开销
 // 3. 菱形继承问题
@@ -865,7 +865,7 @@ class Derived : public Derived1, public Derived2 {};
 // 理解 C++ 对象模型可以帮助优化 Unity 性能
 // 例如：避免不必要的拷贝，使用移动语义
 
-// 💡 学习建议
+// 【补充】学习建议
 // 1. 先理解 C++ 对象模型
 // 2. 对比 Unity 的实现方式
 // 3. 思考为什么 Unity 要这样设计
@@ -892,7 +892,7 @@ public class Widget : MonoBehaviour {
 Widget w = GetComponent<Widget>();
 w.Function();  // 通过 Unity 的组件系统
 
-// 💡 区别
+// 【补充】区别
 // C++：手动管理内存，虚函数表
 // Unity：垃圾回收，组件系统
 // C++：更底层，更灵活
@@ -901,7 +901,7 @@ w.Function();  // 通过 Unity 的组件系统
 
 ---
 
-## 📝 学习建议
+## 学习建议
 
 ### 阅读顺序
 1. 先读对象模型（基本概念）

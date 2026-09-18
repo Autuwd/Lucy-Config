@@ -494,26 +494,26 @@ public class UnityMathWrap : MonoBehaviour
 ### 数学性能提示
 
 ```csharp
-// ❌ 慢：频繁计算 magnitude（涉及开平方）
+// 慢：频繁计算 magnitude（涉及开平方）
 if (Vector3.Distance(a, b) < range)
 
-// ✅ 快：用 sqrMagnitude（只需乘加，无开平方）
+// 快：用 sqrMagnitude（只需乘加，无开平方）
 float sqrRange = range * range;
 if ((a - b).sqrMagnitude < sqrRange)
 
-// ❌ 慢：每帧新建向量
+// 慢：每帧新建向量
 void Update() {
     transform.position = new Vector3(x, y, z);  // 产生 GC
 }
 
-// ✅ 快：复用
+// 快：复用
 private Vector3 tempPos;
 void Update() {
     tempPos.Set(x, y, z);
     transform.position = tempPos;
 }
 
-// ⚠️ 避免每帧用除法
+// 【注意】避免每帧用除法
 float half = value / 2f;      // 除法比乘法慢
 float half = value * 0.5f;     // 乘法更快
 ```
