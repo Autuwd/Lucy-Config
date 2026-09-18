@@ -2,6 +2,9 @@
 .codegraph/
 .omo/
 
+# graphify 工具生成输出（可再生物）
+graphify-out/
+
 # OS 文件
 Thumbs.db
 Desktop.ini
