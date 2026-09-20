@@ -334,6 +334,11 @@ _damageDisplays[id].SetPercent(...)  /  _stockDisplays[id].SetStock(...)
 
 ## 六、核心流程逐条拆解
 
+> 【说明】本章是**概览版**，用来快速定位"某个功能在哪一段代码里"。
+> 需要**代码级逐行拆解 + 为什么这么写**，直接看：
+> - **第十一章**：完整执行链路（从按键到击飞，13 个阶段逐阶段拆代码）
+> - **第十二章**：代码编写原理与设计意图（这个项目为什么长这样）
+
 ### 6.1 启动链路
 
 ```
@@ -798,6 +803,918 @@ CameraManager（LateUpdate 时序）
 | `HUDManager` / `AudioMgr` / `ItemSystem` | 不存在（HUD 由 MatchManager 直接管） |
 | `PlayerInputComponent` | 实际是 `InputManager`（手动订阅，非 PlayerInput 组件） |
 | 攻击用帧数（startupFrames） | 实际用**秒**（startupTime），帧数只在 FrameMeter 显示时换算 |
+
+---
+
+## 十一、完整执行链路：从按键到击飞（代码级逐阶段拆解）
+
+> 本章是第六章的**代码级详版**。每个阶段给：触发时机 / 真实代码 / 为什么这么写 / 改哪里会出问题。
+> 场景设定：P1 在地面、没推方向、按下 J 键、对手在正前方。
+
+### 11.0 先建立时间轴概念（Unity 主循环约定）
+
+读任何 Unity 项目，先搞清楚"哪段代码什么时候跑"。本项目的分工：
+
+| 时机 | 频率 | 本项目用它做什么 |
+|---|---|---|
+| `Awake` | 对象创建时一次 | 取组件引用、建立从属关系（谁是谁的 owner） |
+| `OnEnable` | 每次启用 | 订阅事件、启用输入地图 |
+| `Start` | 第一帧前一次 | 读配置、注册自己、初始化数值 |
+| `Update` | 每渲染帧 | **所有决策**（读输入、判状态、开计时器） |
+| `FixedUpdate` | 固定步长（默认 0.02s） | **只写物理**（`rb.velocity = ...`） |
+| `LateUpdate` | 所有 Update 之后 | 相机跟随、帧数表刷新（依赖别人位置算完） |
+| 协程 `yield` | 按条件恢复 | 延时逻辑（硬直结束、延迟重生） |
+| 物理回调 `OnTriggerEnter2D` | 引擎内部 | 命中检测、出界检测 |
+| Animation Event | 动画时间轴 | 判定框开关、攻击结束 |
+
+【重点】这张表是理解一切的前提。**同一个逻辑写在不同时机里，行为完全不同**：
+- 把 `rb.velocity = v` 写进 `Update` → 物理抖动、穿墙
+- 把相机跟随写进 `Update` → 镜头抖（角色还没动完就拍照了）
+- 把"状态只在变化时写"这条忘掉 → Animator 每帧被写，AnyState 反复重入
+
+### 11.1 阶段 0：开局注册链（一次性，先建立骨架）
+
+```
+① GameManager.Awake()
+     SmashDebug.Settings = debugSettings;      // 必须最先，其他模块都要用
+     if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+     Instance = this;
+     DontDestroyOnLoad(gameObject);
+
+② FighterController.Awake()
+     if (rb == null) rb = GetComponent<Rigidbody2D>();            // 兜底
+     if (animator == null) animator = GetComponentInChildren<Animator>();
+     if (hurtbox == null) hurtbox = GetComponentInChildren<Hurtbox>();
+     if (mainCollider == null) mainCollider = GetComponent<Collider2D>();
+     if (hurtbox != null) hurtbox.owner = this;
+     foreach (var hb in GetComponentsInChildren<Hitbox>(true)) hb.owner = this;   // 防自伤
+     StateMachine.OnStateChanged += (prev, next) => OnStateChanged?.Invoke(prev, next);
+
+③ FighterController.Start()
+     StateMachine.Initialize(FighterState.Idle);
+     currentShieldHP = GameManager.Instance.gameSettings.shieldMaxHP;
+     remainingJumps  = fighterData.jumpCount;
+     remainingStocks = GameManager.Instance.gameSettings.stockCount;
+     GameManager.Instance.RegisterFighter(this);
+
+④ MatchManager.Start()
+     settings = GameManager.Instance.gameSettings;
+     MatchTimeRemaining = settings.matchTimeSeconds;
+     SpawnAndBindHUD();
+
+⑤ MatchManager.OnGameStateChangedHandler(GameState.Battle)
+     if (!_matchStarted) { StartMatch(); _matchStarted = true; }
+     foreach (var f in ActivePlayers) RebindFighterEvents(f);
+```
+
+**为什么这么写**
+
+| 设计 | 原因 |
+|---|---|
+| 第 ② 步所有引用都 `GetComponent` 兜底 | 漏拖一个就 NRE，而 **NRE 冒泡会让上层逻辑错乱**。历史踩坑：`mainCollider` 为空 → `IgnoreCollision(null)` 抛异常 → 输入处理链断 → 表现成"抓取键变成击退" |
+| 第 ② 步强制设 `Hitbox.owner` | `Hitbox` 靠 `hurtbox.owner != owner` 排除自己。owner 没设 = 自己打自己 |
+| 第 ③ 步注册放 `Start` 不放 `Awake` | `MatchManager` 也订阅了事件，要保证"所有对象 Awake 完再注册"，否则事件发出去没人接 |
+| 第 ⑤ 步用 `_matchStarted` 防重入 | `OnGameStateChanged` 可能被多次触发（暂停→恢复），不加守卫会开两场比赛 |
+| `MatchManager` 用 `Dictionary` 缓存委托 | 闭包每次 `+=` 都是**新委托实例**，不缓存就退订不掉 → 内存泄漏 + 事件重复触发 |
+
+### 11.2 阶段 1：输入采集（事件驱动，发生在任意一帧）
+
+```csharp
+// InputManager.OnAttackCtx —— InputAction "Attack" 的 started 回调
+private void OnAttackCtx(InputAction.CallbackContext ctx)
+{
+    AttackPressed   = true;
+    AttackHeld      = true;
+    AttackPressTime = Time.time;
+}
+```
+
+**为什么这么写**
+
+- 回调**只写字段，不做决策**。因为回调不知道上下文（在地面还是空中？有没有推方向？），把这些判断集中到 `Update` 里，逻辑只有一处、好调试。
+- `AttackPressed` 是"边沿"（按下瞬间），`AttackHeld` 是"电平"（是否按住）。这两个语义分开，是为了支持"短按 Tilt / 长按 Smash"。
+- `AttackPressTime` 记的是 `Time.time`（受 `timeScale` 影响）。Hitstop 时 `timeScale = 0`，时间冻结 —— 这正好让"长按判定"在卡帧期间也不会误推进。
+
+【补充】本项目**不用** `PlayerInput` 组件的 Send Messages 模式，而是禁用组件 + JSON 克隆一份独立 `InputActionAsset` 手动订阅。原因见 `InputManager` 类头注释：`InputUser` 会给整个资产加 scheme 过滤，双人场景下会导致绑定解析全部失败（控件数=0）。
+
+### 11.3 阶段 2：输入决策（`InputManager.Update`，每帧消费）
+
+```csharp
+if (AttackPressed)
+{
+    FighterState st = fighterController.StateMachine.CurrentState;
+
+    // 分支 1：被抓 → 挣扎
+    if (st == FighterState.Grabbed) { fighterController.OnMashGrabEscape(); chargePending = false; }
+
+    // 分支 2：抓取中 → 只消费（投掷交给 TryAttack 内部拦截）
+    else if (st == FighterState.Grab) { AttackPressed = false; }
+
+    // 分支 3：空中 或 地面无方向 → 立即出招（零延迟）
+    else if (fighterController.StateMachine.IsInAir()
+             || (Mathf.Abs(MoveInput.x) <= 0.5f && Mathf.Abs(MoveInput.y) <= 0.5f))
+    {
+        AttackData attack = GetImmediateAttack();
+        if (attack != null) fighterController.TryAttack(attack);
+    }
+
+    // 分支 4：地面 + 有方向 → 进判定窗（等 0.15s 分短按/长按）
+    else { pendingAttackDir = MoveInput; chargePending = true; }
+
+    AttackPressed = false;   // 消费
+}
+```
+
+**为什么这么写**
+
+| 点 | 原因 |
+|---|---|
+| **分支顺序敏感**，不能调换 | 分支 2 必须在 3/4 之前。否则"抓取中长按"会掉进判定窗 → `StartCharge` 把 `Grab` 状态顶成 `Attack` → **投掷失效 + 双方死锁**（真踩过的坑） |
+| 分支 3 用 `IsInAir()` 而不是 `!IsGrounded` | `IsInAir()` 包含 `Knockback` 状态；`!IsGrounded` 会把"贴地滑行"也当成空中 |
+| 分支 4 存 `pendingAttackDir` 快照 | 判定窗要等 0.15s。如果那时再读 `MoveInput`，玩家"先按攻击再推方向"的操作会串味。**快照按下瞬间的方向**才对 |
+| `AttackPressed = false` 在最后统一消费 | 保证每个分支都只处理一次按键 |
+
+判定窗（同帧后续）：
+
+```csharp
+if (chargePending)
+{
+    float held = Time.time - AttackPressTime;
+    if (held >= longPressThreshold)          // 长按 → 蓄力
+    { chargePending = false; fighterController.StartCharge(GetSmashAttack(pendingAttackDir)); }
+    else if (!AttackHeld)                    // 松手且没到阈值 → 短按 → Tilt
+    { chargePending = false; fighterController.TryAttack(GetTiltAttack(pendingAttackDir)); }
+    // 都不到 → 继续等下一帧
+}
+```
+
+### 11.4 阶段 3：攻击起手（`FighterController.TryAttack`）
+
+```csharp
+// 前置拦截：正抓着人 → 转投掷
+if (grabTarget != null && StateMachine.CurrentState == FighterState.Grab)
+{ PerformThrow(GetThrowDirection()); return; }
+
+// 守卫
+if (isInKnockback || isShielding || StateMachine.CurrentState == FighterState.Dead) return;
+
+// 正在攻击中 → 连段分支
+if (isAttacking)
+{
+    bool isJabChainNow = attackData == fighterData.jab1 || ... jab2 || ... jab3;
+    if (isJabChainNow && comboStep < 2)
+    {
+        if (IsInComboWindow() && hitboxActivatedThisAttack) AdvanceCombo();
+        else inputBuffer.BufferAttack();     // 按太早 → 缓冲，窗口到了自动消费
+    }
+    return;
+}
+
+// ===== 正常起手 =====
+inputBuffer.Clear();
+comboStep = 0;
+SetAttackAnim(data);                          // animator.SetInteger("AttackType", data.animIndex)
+animator.SetInteger("ComboStep", 0);
+attackData = data;
+foreach (var hb in GetComponentsInChildren<Hitbox>(true)) hb.attackData = attackData;  // 广播
+isAttacking = true;
+hitboxActivatedThisAttack = false;
+attackTimer         = data.startupTime + data.activeTime + data.recoveryTime;
+attackFallbackTimer = 1.2f;                   // 兜底：动画事件链断了也能收招
+StateMachine.TransitionTo(FighterState.Attack);
+```
+
+**为什么这么写**
+
+| 点 | 原因 |
+|---|---|
+| **广播 `attackData` 给所有子 Hitbox** | `Hitbox` 是独立组件，它不知道你选了哪个招。而且 `AttackData` 是 **class（引用类型）**，广播是传引用 —— 所以后面连段/蓄力换数据时**必须重新广播**，否则 Hitbox 还拿着旧数据 |
+| 用 `attackFallbackTimer` 兜底 | 正常收招靠动画事件 `AttackFinished`。若事件链断（状态机重组、Motion 未配、relay target 空），`isAttacking` 会永远为 true → 状态机卡死在 `Attack`（`CanAct()==false` 不能动）。兜底 1.2s 覆盖所有动画时长 |
+| `hitboxActivatedThisAttack = false` | 连段守卫。连段推进要求"本次攻击的判定框已经开过"，防止玩家按太快、判定还没出来就取消，把判定吞掉 |
+| `inputBuffer.Clear()` 只在起手时清 | 连段分支里不清，因为缓冲正是给连段用的 |
+| `TiltDown` 附带小跳 | 放在 `TransitionTo(Attack)` 之前、`IsGrounded = false` 强制离地 —— 否则同一帧后面的落地逻辑会把状态覆盖回 `Idle` |
+
+### 11.5 阶段 4：状态 → 动画（分两步，中间隔 1~2 帧）
+
+```csharp
+// 第一步：状态机内部
+public void TransitionTo(FighterState newState)
+{
+    if (!CanTransitionTo(newState))
+    {
+        if (SmashDebug.IsOn(DebugChannel.State))
+            SmashDebug.Log(DebugChannel.State, $"切换被拒: {CurrentState} → {newState}");
+        return;                              // 静默拒绝，只记日志
+    }
+    PreviousState = CurrentState;
+    CurrentState = newState;
+    OnStateChanged?.Invoke(PreviousState, newState);
+}
+
+// 第二步：下一帧的 UpdateAnimation()
+if (StateMachine.CurrentState != lastAnimState)          // 只在变化时写
+{
+    animator.SetInteger("State", (int)StateMachine.CurrentState);   // Attack = 4
+    lastAnimState = StateMachine.CurrentState;
+}
+animator.SetFloat("Speed", Mathf.Abs(velocity.x));
+animator.SetBool("IsGrounded", IsGrounded);
+animator.SetFloat("AirFactor", IsGrounded ? 0f : 1f);
+animator.SetFloat("VerticalSpeed", velocity.y);
+animator.SetFloat("Damage", CurrentDamage);
+
+// Action Layer（索引 1）权重 = 总开关
+float targetWeight = (isAttacking || isShielding) ? 1f : 0f;
+float cur = animator.GetLayerWeight(1);
+animator.SetLayerWeight(1, targetWeight > cur ? targetWeight : Mathf.Lerp(cur, targetWeight, 10f * Time.deltaTime));
+```
+
+Animator 侧：`AnyState` 的转换条件 `State == 4 && AttackType == 0` → 播 `Attack_Jab1`。
+
+**为什么这么写**
+
+| 点 | 原因 |
+|---|---|
+| `State` 参数**只在变化时写** | 每帧写会触发 AnyState 反复重入（动画抽搐）。`lastAnimState` 就是干这个的 |
+| Action Layer 权重用"上升立即、下降 Lerp" | 进攻击要**零延迟**抬权重（否则起手姿势和 Idle 混合，看着软）；退出攻击要**平滑回落**（保留收招过渡） |
+| 权重是 `(isAttacking \|\| isShielding)` | 这是历史踩坑点：`StartCharge` 忘了设 `isAttacking = true` → 权重恒 0 → 蓄力姿势完全不显示（状态机明明切了）。**层权重是总开关** |
+| `animator.speed` 攻击时锁 1.0 | `animator.speed` 是全局缩放（影响所有层）。空中攻击时水平速度低，不锁的话动画被压到 0.4 倍速，"跳起翻转劈砍"被慢放成"奔跑翻转再攻击" |
+| `TransitionTo` 被拒只记日志不报错 | 很多"看起来没生效"的问题根源就在这。**排障第一步：打开 State 通道看有没有"切换被拒"** |
+
+【对照】你 KB 里 Q48.5 那题讲的就是这个：**分层动画里"状态机状态"与"画面显示"是两件事**，四层递进排查 = 状态真切了吗 → 该层权重多少 → 参数写进去了吗 → clip 有事件吗。
+
+### 11.6 阶段 5：动画事件 → 判定框
+
+```
+动画时间轴上的 Activate 事件（挂在 clip 上）
+   │  事件只能调用 Animator 所在物体（Visual）上组件的方法
+   ▼
+HitboxEventRelay.Activate()
+   ├ 若 attackData.hitboxSize == 0 → 告警一次（配置错误，攻击会静默失效）
+   ├ if (target == null || target.attackData == null || target.owner == null) return;
+   ├ float dir = target.owner.isFacingRight ? 1f : -1f;
+   ├ target.transform.localPosition = new Vector3(hitboxOffset.x * dir, hitboxOffset.y, 0);
+   ├ if (target.GetComponent<Collider2D>() is BoxCollider2D box) box.size = hitboxSize;
+   └ target.Activate();
+```
+
+```csharp
+// Hitbox.Activate()
+public void Activate()
+{
+    IsActive = true;
+    if (owner != null) owner.hitboxActivatedThisAttack = true;   // 连段守卫
+    if (hitCollider != null)
+    {
+        hitCollider.enabled = false;
+        hitCollider.enabled = true;      // 强制 off→on 边沿
+    }
+}
+```
+
+**为什么这么写**
+
+| 点 | 原因 |
+|---|---|
+| **为什么要 `HitboxEventRelay` 这层转发** | Animation Event 只能调 Animator 所在物体上的方法。但判定框必须挂在武器附近才能跟随挥动 → 中间加一层转发器 |
+| **`collider.enabled = false; = true;` 不能删** | Unity 的 `OnTriggerEnter2D` 是**边沿触发**。碰撞体一直开着，第二次攻击不会再次触发。必须 off→on 造一次新的进入沿 |
+| **判定框位置/大小由代码按 `AttackData` 摆** | 而不是在场景里手工摆。这样"数据即判定"，配合 `HitboxSceneSync` 工具实现"Scene 里拖 → 写回资产"的可视化编辑 |
+| **判定时机来自动画事件，不来自 `AttackData`** | 动画事件是**唯一权威时间源**。`AttackData` 里的 `startup/active/recovery` 只是"帧数表显示的副本"，靠 `AttackDataEventSync` 工具从事件反向回写 |
+| `owner.hitboxActivatedThisAttack = true` | 连段推进的条件之一。没这个标记，玩家按太快就能取消掉还没出判定的攻击 |
+
+### 11.7 阶段 6：命中检测（物理引擎回调）
+
+```csharp
+private void OnTriggerEnter2D(Collider2D other)
+{
+    if (!IsActive) return;                                   // 判定框没开 → 不算
+
+    Hurtbox hurtbox = other.GetComponent<Hurtbox>();
+    if (hurtbox == null || hurtbox.owner == owner) return;    // 防自伤
+
+    hurtbox.owner.ApplyDamage(attackData, owner);             // 走统一伤害入口
+    // ... 打击感三件套见 11.11
+}
+```
+
+**为什么这么写**
+
+- `Hurtbox` 是**纯标记组件**，只持有 `owner` 引用，没有任何逻辑。所有判定逻辑都在 `Hitbox` 侧 —— 职责单一，改一处不用改两处。
+- 用 `hurtbox.owner != owner` 而不是比 `gameObject`：因为 `Hurtbox` 可能挂在子物体（不同部位），必须比"属于哪个角色"。
+- **走统一的 `ApplyDamage` 入口**：不管是近战命中、投射物命中、还是投掷，全部收敛到同一个方法。护盾/无敌/盾反逻辑只写一遍。
+
+### 11.8 阶段 7：伤害结算（`FighterController.ApplyDamage`）
+
+```csharp
+public void ApplyDamage(AttackData attack, FighterController attacker)
+{
+    if (isInvincible || StateMachine.CurrentState == FighterState.Dead) return;
+
+    // ===== 举盾：伤害全由护盾承受，不掉血不击飞 =====
+    if (isShielding)
+    {
+        if (Time.frameCount - shieldStartFrame <= parryWindowFrames)   // 10 帧窗口
+        { PerformParry(attacker); return; }                            // 无伤、不掉盾
+
+        currentShieldHP -= DamageSystem.CalculateShieldDamage(attack, currentShieldHP);
+        if (currentShieldHP <= 0f) BreakShield();
+        return;                                                        // 关键：直接返回
+    }
+
+    // ===== 正常结算 =====
+    float finalDamage = attack.damage * GameManager.Instance.gameSettings.damageRatio;
+    CurrentDamage += finalDamage;
+    OnDamaged?.Invoke(finalDamage, attacker);                          // 广播给 UI
+
+    float knockSpeed = DamageSystem.CalculateKnockbackVelocity(attack, CurrentDamage, fighterData.weight);
+    Vector2 knockDir = DamageSystem.CalculateKnockbackDirection(attack, transform.position - attacker.transform.position);
+    ApplyKnockback(knockDir, knockSpeed);
+}
+```
+
+击飞速度公式（`DamageSystem`，纯静态无状态）：
+
+```
+knockSpeed = (baseKB + bonusKB) × weightFactor × 1.4 + 18
+             bonusKB      = dmg×0.1 + dmg×knockbackGrowth×0.05
+             weightFactor = 100 / max(1, 体重)
+knockSpeed ×= knockbackGrowth / 100
+```
+
+**三个输入**：攻击数据（base/growth）、目标当前伤害%、目标体重。
+
+**为什么这么写**
+
+| 点 | 原因 |
+|---|---|
+| **盾反用帧号不用秒** | `Time.frameCount - shieldStartFrame`。帧号不受 `timeScale`/Hitstop 影响，格斗游戏的帧窗口必须用帧 |
+| **盾防分支必须 `return`** | 不 return 会继续往下走"累加伤害 + 击飞"，盾就白举了 |
+| **`DamageSystem` 做成静态纯函数类** | 给定输入必定相同输出，方便单独验证数值；也避免"伤害逻辑散落在各处" |
+| `OnDamaged` 用事件广播而不是直接调 MatchManager | `FighterController` 不认识 `MatchManager`。谁想听谁订阅 —— 这是跨层解耦的核心 |
+| 击飞方向用 `transform.position - attacker.transform.position` | 水平方向由"攻击者在哪边"决定，配合 `knockbackAngle` 的 cos/sin 分解 |
+
+### 11.9 阶段 8：击飞应用（`ApplyKnockback`）
+
+```csharp
+public void ApplyKnockback(Vector2 direction, float speed, float hitstunOverride = -1f)
+{
+    knockbackToken++;                        // 令牌：让上一次的硬直协程作废
+    CurrentKnockbackSpeed = speed;
+    knockbackVelocity = direction.normalized * speed;
+    isInKnockback = true;
+    hasLeftGroundInKnockback = false;
+
+    float hitstunDuration = hitstunOverride >= 0f ? hitstunOverride
+                                                  : DamageSystem.CalculateHitstun(speed);
+    StateMachine.TransitionTo(FighterState.Knockback);
+    StartCoroutine(EndHitstunAfter(hitstunDuration));
+}
+```
+
+硬直曲线（`CalculateHitstun`）：速度 10 → 0.15s，速度 70+ → 0.833s，中间 `InverseLerp` 线性映射。
+
+**为什么这么写**
+
+| 点 | 原因 |
+|---|---|
+| **`knockbackToken++`** | 协程是"启动后不管"的。连续被击飞时，上一次的 `EndHitstunAfter` 还在等 —— 没有令牌它到点就把硬直提前结束了。令牌 = 版本号，旧版本作废 |
+| `hasLeftGroundInKnockback = false` | 受身窗口的判据。必须"真离过地"才允许受身，否则贴地击飞会立刻触发受身 |
+| **硬直上限对齐动画时长** | 0.833s 正好是 `Knockback.anim` 的长度。**换动画必须同步这个值**，否则出现"硬直结束但动画还在播" |
+| `hitstunOverride` 参数 | 投掷等特殊场景需要手动指定硬直，不走公式 |
+
+### 11.10 阶段 9：物理表现（`FixedUpdate`，固定步长）
+
+```csharp
+private void FixedUpdate()
+{
+    if (StateMachine.CurrentState == FighterState.Dead) return;
+
+    if (isInKnockback)
+    {
+        if (!IsGrounded) hasLeftGroundInKnockback = true;   // 标记"真离地"
+        rb.velocity = knockbackVelocity;
+        knockbackVelocity.x *= 0.98f;                       // 空气阻力
+        knockbackVelocity.y *= 0.98f;
+    }
+    else
+    {
+        rb.velocity = velocity;
+    }
+}
+```
+
+**为什么这么写**
+
+- **物理赋值只在 `FixedUpdate`**。固定步长保证物理稳定；放 `Update` 会因帧率波动导致抖动、穿墙。
+- 决策（`velocity.x = MoveInput.x * speed`）在 `Update`，赋值在 `FixedUpdate` —— **决策与执行分离**。
+- `hasLeftGroundInKnockback` 在物理步里标记，因为它依赖 `IsGrounded`（`Update` 里算的），而击飞期间 `UpdateGravity` 会提前 return。
+
+### 11.11 阶段 10：打击感三件套
+
+```csharp
+// 接在 ApplyDamage 之后（同一帧）
+Camera cam = Camera.main;
+if (cam != null && cam.TryGetComponent<CameraManager>(out var camMgr))
+    camMgr.Shake(0.3f, 0.15f);                                        // ① 震屏
+
+if (attackData.hitEffectPrefab != null)                               // ② 特效
+{
+    GameObject fx = Instantiate(attackData.hitEffectPrefab, other.transform.position, Quaternion.identity);
+    Destroy(fx, 0.1f);
+}
+
+OnHit?.Invoke(hurtbox.owner);
+
+if (GameManager.Instance.gameSettings.hitstopScale > 0f)              // ③ 卡帧
+    StartCoroutine(HitstopRoutine());
+
+// ---
+private System.Collections.IEnumerator HitstopRoutine()
+{
+    Time.timeScale = 0f;
+    float duration = attackData.hitstopDuration * GameManager.Instance.gameSettings.hitstopScale;
+    yield return new WaitForSecondsRealtime(duration);   // 必须 Realtime
+    Time.timeScale = 1f;
+}
+```
+
+**为什么这么写**
+
+| 点 | 原因 |
+|---|---|
+| 震屏用 `unscaledDeltaTime` 衰减 | Hitstop 把 `timeScale` 冻结时，用 `deltaTime` 的震屏会卡住不动 |
+| **Hitstop 用 `WaitForSecondsRealtime`** | `timeScale = 0` 时 `WaitForSeconds` 永远等不到（它按缩放时间计时）→ 游戏永久卡死 |
+| `hitstopScale` 挂在 `GameSettings` | 全局手感参数，0 = 关闭。方便整体调手感或做"无卡帧模式" |
+| 用 `TryGetComponent` 而不是 `GetComponent` | 避免 `Camera.main` 上没有 `CameraManager` 时产生 GC（`GetComponent` 失败也会分配） |
+
+### 11.12 阶段 11：UI 刷新（事件订阅方，与上面并行发生）
+
+```csharp
+// MatchManager.OnFighterDamagedHandler
+private void OnFighterDamagedHandler(FighterController victim, float damage, FighterController attacker)
+{
+    int id = victim.playerID;                                     // 用玩家 ID 当数组下标
+    if (id < 0 || id >= _damageDisplays.Length || _damageDisplays[id] == null) return;
+    _damageDisplays[id].SetPercent(Mathf.RoundToInt(victim.CurrentDamage));
+}
+```
+
+**为什么这么写**
+
+| 点 | 原因 |
+|---|---|
+| 订阅时用 `Dictionary` 缓存委托 | 见 11.1 的说明。退订必须精确移除同一个委托实例 |
+| 用 `playerID` 当数组下标 | 不用"列表下标"。`ActivePlayers` 的填充顺序 = `Start()` 注册顺序，场景层级一变就错位。`playerID` 是预制体上的固定值，永远可靠 |
+| HUD 靠 `transform.Find("P1_HUD/DamageDisplay")` 找 | **约定式路径**。所以 Prefab 层级命名不能随便改 |
+| UI 层不做业务判断 | `DamageDisplay.SetPercent` 只负责显示，百分比由 `MatchManager` 算好传进来 |
+
+### 11.13 阶段 12：硬直结束（协程）
+
+```csharp
+private System.Collections.IEnumerator EndHitstunAfter(float duration)
+{
+    int token = knockbackToken;
+    yield return new WaitForSeconds(duration);
+
+    if (token != knockbackToken) yield break;     // 期间又被击飞 → 本次作废
+    if (!isInKnockback) yield break;
+
+    if (!IsGrounded)
+    {
+        velocity = knockbackVelocity;             // 惯性交接：击飞速度转成正常速度
+        knockbackVelocity = Vector2.zero;
+        isInKnockback = false;
+        remainingJumps = Mathf.Max(1, fighterData.jumpCount - 1);   // 大乱斗规则：必给一跳回场
+        StateMachine.TransitionTo(FighterState.Fall);
+    }
+    else
+    {
+        knockbackVelocity = Vector2.zero;
+        isInKnockback = false;
+        StateMachine.TransitionTo(FighterState.Idle);
+    }
+}
+```
+
+**为什么这么写**
+
+| 点 | 原因 |
+|---|---|
+| `remainingJumps = Max(1, jumpCount - 1)` | 大乱斗规则：硬直结束必给一跳回场。**不能给 `jumpCount`** —— 因为"第一跳"要求贴地或土狼时间内，空中给满次数反而跳不起来（会被 `TryPerformJump` 的 `groundOk` 卡死） |
+| 空中和地面分开处理 | 空中要"惯性交接"（继续飞）；贴地击飞直接回 `Idle`（没有被推离地面） |
+| 令牌校验放在最前 | 令牌变了说明这次硬直已经被新的击飞接管，直接退出 |
+
+### 11.14 阶段 13：出界 → 扣命 → 重生
+
+```csharp
+// BlastZone.OnTriggerEnter2D → MatchManager
+public void OnPlayerOutOfBounds(FighterController fighter, BlastZone.Side side)
+{
+    if (fighter.StateMachine.CurrentState == FighterState.Dead) return;
+    fighter.Kill();                                                    // 扣命 + 广播 OnKilled
+    if (settings.matchMode == GameSettings.MatchMode.Stock && fighter.remainingStocks > 0)
+        StartCoroutine(RespawnAfterDelay(fighter));
+}
+
+// FighterController.Kill()
+public void Kill()
+{
+    if (StateMachine.CurrentState == FighterState.Dead) return;
+    if (_isKilling) return; _isKilling = true;                         // 防重入
+    remainingStocks = Mathf.Max(0, remainingStocks - 1);
+    StateMachine.TransitionTo(FighterState.Dead);
+    OnKilled?.Invoke(this);
+    _isKilling = false;
+}
+
+// RespawnAfterDelay(3s)
+重新注册 GameManager（_registeredFighters 去重）
+RebindFighterEvents(fighter)              // 先退订旧委托再订阅新的
+fighter.Respawn(随机出生点)
+    位置复位 / 伤害归零 / 清速度 / 无敌 respawnTime / 满盾 / 满跳
+    StateMachine.Initialize(FighterState.Idle);      // 必须 Initialize
+    恢复 visual / mainCollider / hurtbox
+同步 Stock UI + Damage UI 归零
+```
+
+**为什么这么写**
+
+| 点 | 原因 |
+|---|---|
+| `_isKilling` 防重入 | 角色可能同时碰到两个 `BlastZone`（角落），不加守卫会扣两次命 |
+| `BlastZone._triggered` + 0.5s 重置 | 同上，避免同一帧多次触发 |
+| **重生用 `Initialize` 不用 `TransitionTo`** | `Dead` 状态在转换规则里被限制为"只能切到 `Idle`"，但 `Initialize` 直接赋值更干脆，绕开规则表 |
+| 重生后重新注册 + 重绑事件 | `EndMatch` 时把所有 Fighter 从 `ActivePlayers` 移除了；重生必须加回来，否则比赛判定会漏掉这个玩家 |
+| 用 `_registeredFighters`（HashSet）去重 | 防止重复注册导致 `ActivePlayers` 里出现同一个角色两份 |
+
+### 11.15 完整调用时序图（一条链路全貌）
+
+```
+[玩家按 J]
+   │
+   ▼ InputAction.started
+InputManager.OnAttackCtx()                    ← 只写 3 个字段
+   │
+   ▼ 同一帧或下一帧
+InputManager.Update()
+   ├ 4 分支决策 → GetImmediateAttack() → jab1
+   ▼
+FighterController.TryAttack(jab1)
+   ├ 广播 attackData 给所有 Hitbox
+   ├ animator.SetInteger("AttackType", 0)
+   └ StateMachine.TransitionTo(Attack)
+   │
+   ▼ 下一帧
+FighterController.UpdateAnimation()
+   ├ animator.SetInteger("State", 4)
+   └ SetLayerWeight(1, 1f)                    ← Action Layer 点亮
+   │
+   ▼ Animator 播 Attack_Jab1
+[动画播到判定帧]
+   │
+   ▼ Animation Event: Activate
+HitboxEventRelay.Activate()
+   ├ 按 attackData 摆位置/大小
+   └ Hitbox.Activate()                        ← collider off→on
+   │
+   ▼ 物理引擎
+Hitbox.OnTriggerEnter2D(hurtboxCollider)
+   ├ 排除自己
+   ▼
+FighterController.ApplyDamage(attackData, attacker)
+   ├ 无敌/死亡 → return
+   ├ isShielding → 盾反/扣盾/破盾 → return
+   ├ CurrentDamage += damage × damageRatio
+   ├ OnDamaged?.Invoke()  ────────────────────────┐
+   ├ DamageSystem 算 knockSpeed / knockDir        │
+   └ ApplyKnockback()                             │
+        ├ knockbackToken++                        │
+        ├ StateMachine.TransitionTo(Knockback)    │
+        └ StartCoroutine(EndHitstunAfter)         │
+   │                                              │
+   ▼ 同帧继续（回到 Hitbox）                       │
+CameraManager.Shake() / Instantiate(特效) / Hitstop │
+   │                                              │
+   ▼ FixedUpdate                                  ▼ 事件订阅方
+rb.velocity = knockbackVelocity × 0.98        MatchManager.OnFighterDamagedHandler
+   │                                              └ DamageDisplay.SetPercent()
+   ▼ 硬直时间到
+EndHitstunAfter()  →  Fall（空中）/ Idle（地面）
+   │
+   ▼ 若飞出边界
+BlastZone → MatchManager.OnPlayerOutOfBounds → Kill() → RespawnAfterDelay → Respawn()
+```
+
+### 11.16 本链路涉及的跨模块接口清单（改代码前先看这张表）
+
+| 接口 | 定义处 | 调用方 | 改动风险 |
+|---|---|---|---|
+| `TryAttack / TryJump / TryGrab / SetShielding / StartCharge / ReleaseCharge / TrySpecial / DropThroughPlatform` | `FighterController` | `InputManager` | 改签名要同步 `InputManager.Update` |
+| `ApplyDamage` | `FighterController` | `Hitbox`、`Projectile` | 所有伤害来源都走它，改要全回归 |
+| `ApplyKnockback` | `FighterController` | 自身、`PerformThrow` | — |
+| `OnDamaged / OnKilled` | `FighterController` | `MatchManager` 订阅 | 改签名要同步订阅方与 `Dictionary` 缓存类型 |
+| `Activate / Deactivate / AttackFinished` | `Hitbox` | `HitboxEventRelay`（动画事件） | **动画 clip 上的事件名不能改**，改了要同步 clip |
+| `CalculateKnockbackVelocity / Direction / Hitstun / ShieldDamage` | `DamageSystem` | `FighterController`、`FrameMeter` | 纯函数，改要重测手感 |
+| `Spawn / Despawn` | `ObjectPooler` | `Projectile` | — |
+| `OnPlayerOutOfBounds` | `MatchManager` | `BlastZone` | — |
+| `SetPercent / SetStock / SyncTime / Init` | `DamageDisplay` / `StockDisplay` | `MatchManager` | — |
+
+---
+
+## 十二、代码编写原理与设计意图（为什么这么写）
+
+> 第十一章讲"代码怎么跑"，本章讲"**为什么这么写**"。
+> 这一章是**可迁移的**：换任何 Unity 项目，这些原理都成立。
+
+### 12.1 主循环纪律：三种 Update 各有其职
+
+```
+Update       每渲染帧      做"决策"：读输入、判状态、开计时器、改 velocity 变量
+FixedUpdate  固定步长      做"执行"：把 velocity 写进 rb.velocity
+LateUpdate   全部 Update 后 做"跟随"：相机、帧数表（依赖别人算完）
+```
+
+**违反会怎样**
+
+| 错误写法 | 后果 |
+|---|---|
+| 在 `Update` 里 `rb.velocity = v` | 物理步长与渲染帧率不匹配 → 抖动、穿透 |
+| 在 `Update` 里算相机位置 | 角色还没移动完就拍照 → 镜头抖 |
+| 在 `FixedUpdate` 里读 `Input` | 输入按帧采样，物理帧可能一帧收不到、下一帧收到两次 → 丢输入 |
+
+【对照】你在 Raylib 里的主循环是 `PollInput → Update → Draw`，一个循环干完。
+Unity 把它拆成三个回调，是因为**物理和渲染是解耦的两个时钟**。这是引擎层面的取舍，不是冗余。
+
+### 12.2 决策与执行分离
+
+本项目到处是这个模式：
+
+```csharp
+// 决策（Update）—— 只改"意图变量"
+velocity.x = MoveInput.x * speed;
+isRunning = true;
+isShielding = true;
+
+// 执行（FixedUpdate）—— 只做物理赋值
+rb.velocity = velocity;
+```
+
+**为什么**：决策可以每帧重算（廉价），执行只做一次（有代价）。
+另外，决策代码容易测试（纯变量运算），执行代码依赖引擎状态。
+
+### 12.3 事件驱动 vs 轮询：怎么选
+
+| 场景 | 选什么 | 本项目例子 |
+|---|---|---|
+| 一对多、接收方可能不存在、跨层 | **事件** | `OnDamaged` / `OnKilled` / `OnGameStateChanged` |
+| 一对一、确定存在、同层 | **直接引用调用** | `Hitbox → ApplyDamage`、`InputManager → TryAttack` |
+| 需要每帧检查状态 | **轮询** | `IsGrounded` 检测、`UpdateTimers` |
+
+**判断口诀**：**"我不认识你，但你可能想听我说话" → 用事件。**
+
+`FighterController` 不认识 `MatchManager`，但它受伤时有人可能想更新 UI → 广播 `OnDamaged`。
+`Hitbox` 认识 `FighterController`（同一次攻击的上下文），直接调用即可。
+
+【注意】事件的代价：**订阅/退订必须严格对称**。退订不掉就是内存泄漏 + 重复触发（见 12.13）。
+
+### 12.4 引用类型陷阱：`AttackData` 是 class
+
+```csharp
+// AttackData 定义在 FighterData.cs
+[System.Serializable]
+public class AttackData { public float damage; ... }     // class！引用类型
+```
+
+这意味着：
+
+```csharp
+// 【错误】直接改 = 永久污染 ScriptableObject 资产
+chargeBaseData.damage *= 1.25f;
+// 下次进游戏，这个招式的伤害就是改过的值了
+
+// 【正确】先深拷贝
+AttackData final = CloneAttackData(chargeBaseData);
+final.damage = chargeBaseData.damage * Mathf.Lerp(1f, 1.25f, lvl);
+```
+
+**通用规则**：ScriptableObject 里持有的**引用类型字段**，运行时想改必须先克隆。
+`CloneAttackData` 里逐字段拷贝是"手写深拷贝"——**新增 `AttackData` 字段时这里必须同步补充**，否则克隆会丢字段（静默 bug）。
+
+【对照】C++ 里 `struct` 是值语义、赋值即拷贝；C# 的 `class` 是引用语义，`=` 只是复制指针。
+Unity 的 `[System.Serializable]` **不改变**语义，只影响"能不能在 Inspector 里展开"。
+
+### 12.5 边沿触发陷阱：`OnTriggerEnter2D`
+
+```csharp
+// 【必须的写法】
+hitCollider.enabled = false;
+hitCollider.enabled = true;      // 造一次新的 on→off→on 边沿
+```
+
+**为什么**：`OnTriggerEnter2D` 是**进入沿**触发，不是"每帧检测重叠"。
+碰撞体一直开着，第二次攻击不会再次触发 —— 因为"已经在里面了"，没有新的"进入"。
+
+**同类陷阱**：`InputAction` 的 `started` / `performed` 也是边沿；`Update` 里读 `GetKeyDown` 是边沿、`GetKey` 是电平。**边沿只来一次，电平每帧都有**。
+
+### 12.6 令牌机制：协程竞态的解药
+
+```csharp
+knockbackToken++;                                  // 启动时：版本号 +1
+StartCoroutine(EndHitstunAfter(hitstun));
+
+IEnumerator EndHitstunAfter(float d)
+{
+    int token = knockbackToken;                    // 记下启动时的版本号
+    yield return new WaitForSeconds(d);
+    if (token != knockbackToken) yield break;      // 版本变了 → 我被顶替了 → 退出
+    ...
+}
+```
+
+**为什么需要**：协程是"启动后不管"的。连续被击飞两次，第一次的协程还在等 —— 它到点就会把硬直提前结束。
+令牌 = 版本号，让旧协程自杀。
+
+**同类场景**：任何"延时任务可能被新事件取代"的地方都要这个模式。本项目里 `_isKilling`、`_isMatchEnding`、`_triggered`、`_matchStarted` 都是同族（防重入/防重复）。
+
+### 12.7 协程 vs 计时器 vs `Invoke`
+
+| 手段 | 本项目用在哪 | 选它的理由 |
+|---|---|---|
+| **协程** | 硬直结束、投掷后恢复碰撞、延迟重生、闪白、Hitstop | 需要"等待 + 中间做几件事"或需要参数 |
+| **计时器字段** | 攻击兜底、无敌、护盾、抓取超时、眩晕、蓄力 | 需要每帧可读、可被外部打断/查询 |
+| **`Invoke`** | 只有 `TestEndMatch` 用 | **不推荐**：无法取消、无法传参、方法名是字符串（重构不安全） |
+
+【重点】协程里等时间要区分 `WaitForSeconds` 和 `WaitForSecondsRealtime`：
+- 普通延时 → `WaitForSeconds`
+- **Hitstop / 暂停期间也要走完的** → `WaitForSecondsRealtime`（否则 `timeScale = 0` 时永远等不到，游戏卡死）
+
+### 12.8 状态机设计：集中式转换规则表
+
+本项目把转换规则**集中在一个方法**里：
+
+```csharp
+public bool CanTransitionTo(FighterState target)
+{
+    if (CurrentState == Dead && target != Idle) return false;
+    if (CurrentState == Attack && target == Attack) return true;      // 连段
+    if (CurrentState == Knockback) return target is Fall or Dead or Idle or Hit;
+    if (CurrentState is Hit or Stun) return target is Idle or Fall or Knockback or Dead;
+    if (CurrentState == Shield) return target is Idle or ShieldStun or Grab or Stun or Grabbed;
+    return true;
+}
+```
+
+**为什么集中**：状态转换是"规则"，规则散落各处就无法推理。
+所有"为什么这个状态切不过去"的问题，只需要看这一个方法。
+
+**代价**：状态多了以后这个方法会变长。到 20+ 状态时应该改成"转换表数据结构 + 查表"。
+
+【重点】被拒绝时**只记日志不报错**（`SmashDebug` 的 State 通道）。因为"切换被拒"在正常游戏里是常态（比如击飞中想攻击）。但排障时这是第一现场。
+
+### 12.9 对象池：为什么投射物必须用
+
+```csharp
+ObjectPooler.Instance.Spawn(prefab, pos, rot);       // 取
+ObjectPooler.Instance.Despawn(obj, delay);           // 还（只是 SetActive(false)）
+```
+
+**为什么**：Unity 的 `Instantiate` / `Destroy` 会触发 GC。特殊攻击是高频操作，每次都 new 会周期性掉帧。
+
+**本项目的实现细节**：
+- 池以**预制体名**为 key（所以不同预制体不能重名）
+- `Spawn` 后对象**仍在队列里**，靠 `SetActive` 控制可见性
+- 池空时自动扩容
+
+【对照】这就是你 C++ 里写过的内存池 / 对象池。区别是 C# 有 GC，Unity 的 `Instantiate` 走的是"序列化反序列化重建对象图"，比 `new` 还贵。
+
+### 12.10 ScriptableObject 数据驱动
+
+```
+FighterData (SO)  ──  一个角色的所有数值
+GameSettings (SO) ──  全局规则
+DebugSettings (SO) ──  调试开关
+```
+
+**为什么用 SO 而不是硬编码/JSON**：
+
+| 优势 | 说明 |
+|---|---|
+| 策划/自己可在 Inspector 调 | 不用改代码、不用重编译 |
+| 能被场景/预制体引用 | `FighterController.fighterData` 直接拖 |
+| 天然支持"多套配置" | 复制一份资产就是新角色/新规则 |
+| 运行时只读 | 想改数值必须先克隆（见 12.4） |
+
+**注意 SO 的坑**：`SetSelection/GetSelection` 这种"运行时状态"存在 SO 里，靠的是"SO 是资产，跨场景不销毁"。这是**借用了资产的生命周期**，不是 SO 的设计用途 —— 能work，但要知道自己在做什么。
+
+### 12.11 防御性编程四原则
+
+| 原则 | 本项目体现 | 违反的后果 |
+|---|---|---|
+| **引用兜底** | `Awake` 里所有组件引用都 `if (x == null) x = GetComponent<...>()` | 漏拖一个就 NRE，且**异常冒泡会让上层逻辑错乱**（历史：`mainCollider` 空 → 抓取变击退） |
+| **对称清理** | `ReleaseGrab()` 同时处理"我是抓取方"和"我是被抓方" | 单向清理 → 幽灵引用、状态残留（隐形盾） |
+| **幂等** | `ReleaseCharge()` 开头 `if (!isCharging) return;` | 重复调用出错（被打断后松手误触发） |
+| **防重入** | `_isKilling` / `_isMatchEnding` / `_triggered` / `_matchStarted` | 角落同时碰两个 BlastZone → 扣两次命 |
+
+【重点】**"只在 `if (x != null)` 里出现过的字段"是"可能没拖"的强信号**。看到这种写法就要警觉。
+
+### 12.12 Inspector 参数暴露原则
+
+本项目把大量数值挂成 `public` 字段（`gravityScale`、`parryWindowFrames`、`techBounceSpeed`...）。
+
+**什么时候该暴露**：
+- 手感调参（重力、跳跃力、硬直时长、震屏强度）
+- 环境相关（`groundLayer`、`spawnPoints`、`hudPrefab`）
+
+**什么时候不该暴露**：
+- 内部状态（`isRunning`、`lastTapTime`）→ 应该是 `private`
+- 派生值（`attackTimer` 其实是 `startup+active+recovery` 算出来的）
+
+**本项目的现状**：`FighterController` 有 60+ 个 public 字段，其中一部分是内部状态（应该 private），这是**待还的技术债**（见 12.16）。
+
+### 12.13 委托订阅的对称性
+
+```csharp
+// 【错误】这样退订不掉
+f.OnDamaged += (dmg, atk) => OnFighterDamagedHandler(f, dmg, atk);
+f.OnDamaged -= (dmg, atk) => OnFighterDamagedHandler(f, dmg, atk);   // 这是另一个实例！
+
+// 【正确】缓存起来
+System.Action<float, FighterController> dmgHandler = (dmg, atk) => OnFighterDamagedHandler(f, dmg, atk);
+f.OnDamaged += dmgHandler;
+_damagedHandlers[f] = dmgHandler;
+// 退订时
+if (_damagedHandlers.TryGetValue(f, out var dmg)) { f.OnDamaged -= dmg; _damagedHandlers.Remove(f); }
+```
+
+**为什么**：C# 的委托是**值类型语义的引用** —— 每次 `+=` 一个 lambda 都会创建一个**新对象**。不缓存就退订不掉。
+
+**后果**：内存泄漏（委托持有闭包引用）+ 重复触发（重生后事件被订阅多次 → UI 刷新多次）。
+
+【对照】这相当于 C 里注册回调时，`free` 的时候必须传回**同一个函数指针**。传一个"长得一样的函数"是没用的。
+
+### 12.14 时间源唯一性
+
+本项目明确规定：**动画事件是攻击判定的唯一权威时间源**。
+
+```
+Animation Event 时间  ──(AttackDataEventSync 工具)──►  AttackData.startup/active/recovery
+                                                              │
+                                                              ▼
+                                                        FrameMeter 显示
+```
+
+**为什么不让 `AttackData` 当权威**：判定框的开关是 `HitboxEventRelay` 的动画事件驱动的，**零依赖 `AttackData`**。所以 `AttackData` 里的三段时长只是"给帧数表看的副本"。两者必须一致，靠工具强制校验（`S+A+R == clip 长度`，不合格拒写）。
+
+**推广**：任何"两份数据描述同一件事"的地方，必须明确**谁是源、谁是副本**，并写工具校验。否则迟早不一致。
+
+### 12.15 命名与组织规范（本次整理后确立）
+
+```
+每个 .cs 固定 9 段：
+  #region 1. 常量与静态字段
+  #region 2. Inspector 配置          （public / [SerializeField]，按 [Header] 分组）
+  #region 3. 运行时状态              （public 属性 → private 字段 → 缓存引用）
+  #region 4. 事件与委托
+  #region 5. Unity 生命周期           （Awake → OnEnable → Start → Update → FixedUpdate → LateUpdate → OnDisable → OnDestroy）
+  #region 6. 公开 API                （外部调用入口，按调用方分组）
+  #region 7. 核心私有逻辑             （Update 调用的子方法，按调用顺序）
+  #region 8. 私有工具                （纯计算 / 无副作用）
+  #region 9. 调试可视化              （Gizmos / OnGUI）
+```
+
+四条排序原则：
+
+1. **读的顺序 = 跑的顺序**（生命周期在前，被调用的紧随其后）
+2. **接口优先**（public 在 private 前）
+3. **就近原则**（A 调 B，B 就排在 A 后面，不要隔 500 行）
+4. **同类聚拢**（所有协程一起、所有 `Get*` 工具一起）
+
+注释三层：
+
+| 层 | 格式 | 只写什么 |
+|---|---|---|
+| 类头 | `// 职责 / 架构位置 / 依赖 / 被谁使用 / 【注意】` | 这个类在整个项目里的位置 |
+| 方法头 | `// 【做什么】/【参数】/【副作用】/【注意】` | **看代码看不出来的部分** |
+| 方法内 | `// ===== 1. 名词短语 =====` | 30 行以上方法必须分段 |
+
+**删除标准**：删掉这条注释，后来的人会不会踩坑？会 → 留；不会 → 删。
+所以"描述代码字面意思"的注释（`// 设置速度为 5`）必删，"为什么这么写"的注释（`// 必须用 Realtime，否则 timeScale=0 时卡死`）必留。
+
+### 12.16 这个项目的技术债与改进方向
+
+按"改动收益 / 风险"排序：
+
+| # | 问题 | 影响 | 建议 |
+|---|---|---|---|
+| 1 | `FighterController` 1236 行上帝类，8 大职责 | 改任何功能都要动它；冲突高；难测试 | 按职责拆：`MovementController` / `AttackController` / `DefenseController` / `GrabController`。**但拆分要一次一个、每次全回归**，别一次拆完 |
+| 2 | 60+ 个 public 字段，内部状态也暴露 | Inspector 噪音；容易被外部误改 | 内部状态改 `private` + 只读属性 |
+| 3 | `attackTimer` 只写不读 | 误导 | 删掉，或让 `FrameMeter` 真的用它 |
+| 4 | 取消窗口三字段（`cancelIntoAttacks` / `canJumpCancel` / `canSpecialCancel`）全是死字段 | 以为实现了其实没有 | 要么实现，要么删 |
+| 5 | `StageData` / `GameSettings` 里一批字段配置了但没人读 | 改了没效果，容易误判 | 逐条确认：要么接上，要么标注"未实现" |
+| 6 | 硬编码数值：`1.5f`（投掷瞬移）、`0.3f`（抓空回 Idle）、`5f`（抓取超时）、`0.85f`（二段跳） | 调参要改代码 | 提到 `Inspector` 或 `GameSettings` |
+| 7 | `StockDisplay.UpdateTimerText` 里 `fontSize` 的 Lerp 写法会无限放大 | 启用计时器时会暴露 | 记下目标字号，用固定值 Lerp |
+| 8 | 4 个脚本在全局命名空间（`FrameMeter` / `DamageDisplay` / `StockDisplay` / `VisualRootMotion` / `HitboxSceneSync` / `TestEndMatch` / Editor 工具们） | 不一致；易重名 | 统一归到 `SuperSmashLike.*`（改的时候同步改 Editor 引用） |
+| 9 | `MatchManager` 直接管 HUD（`transform.Find` 找子物体） | 层级改名就崩 | 抽一个 `HudBinder`，或改用序列化引用 |
 
 ---
 
