@@ -124,7 +124,7 @@
 | 509 | Fibonacci Number | - | 已完成 |
 | 518 | Coin Change II | - | 已完成 |
 | 543 | Diameter of Binary Tree | - | 已完成 |
-| 560 | Subarray Sum Equals K | - | 已完成 |
+| 560 | Subarray Sum Equals K | 2026-09-24 | 已完成 |
 | 583 | Delete Operation for Two Strings | - | 已完成 |
 | 589 | N-ary Tree Preorder Traversal | - | 已完成 |
 | 590 | N-ary Tree Postorder Traversal | - | 已完成 |
@@ -197,6 +197,7 @@
 
 ## 最近活动
 
+- **2026-09-24**: C# AC 1 题 — LC560(和为K子数组) 前缀和+哈希（先查后存/prefixCount[0]=1/负数兼容）
 - **2026-08-06**: C# 新增 3 题 — LC875(吃香蕉) LC1011(运包裹) LC410(分割数组) 二分答案专题（最小化最大值三连）
 - **2026-08-05**: C# 新增 1 题 — LC34(查找元素第一和最后位置) 二分边界模板
 - **2026-07-29**: C# 新增 8 题 — LC5(最长回文) LC11(盛水) LC26(去重) LC42(接雨水) LC83(链表去重) LC167(两数和) LC283(移零) LC344(反转) 双指针专题
