@@ -141,6 +141,7 @@
 | 714 | Best Time to Buy and Sell Stock with Transaction Fee | - | 已完成 |
 | 72 | Edit Distance | - | 已完成 |
 | 739 | Daily Temperatures | - | 已完成 |
+| 743 | Network Delay Time | 2026-08-27 | 已完成 |
 | 752 | Open the Lock | - | 已完成 |
 | 773 | Sliding Puzzle | - | 已完成 |
 | 785 | Is Graph Bipartite? | - | 已完成 |
