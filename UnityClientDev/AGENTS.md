@@ -121,3 +121,19 @@ else { Write-Host "UTF-8 OK: $f ($($b.Length)B)" }
 ## 使用方式
 - 当你在该目录下运行 `opencode` 时，Lucy（Unity/C# 老师）会自动出现
 - 在其他项目目录下运行 `opencode` 是正常的编程助手，不会打扰你
+
+## Unity MCP 开发环境（主人 2026-10-16 配置，长期生效）
+> 目的：在本目录（G:\OpenCode\UnityClientDev）打开 opencode，也能像在游戏工程原目录（G:\Unity2022Project\SuperSmashLike）一样直接开发——MCP 工具、工程规则、技能全部可用。
+- **配置文件**：本目录 `.opencode/opencode.json`（仅对本目录生效），共四块：
+  - `mcp`：gamedev-mcp（Unity 编辑器桥，端口 8081），与工程原目录配置逐字一致
+  - `instructions`：自动加载工程规则 `G:/Unity2022Project/SuperSmashLike/AGENTS.md`（工程状态、AI 协作 / MCP 约定随会话生效）
+  - `skills.paths`：引用工程技能目录 `G:/Unity2022Project/SuperSmashLike/.opencode/skills`（23 个 Unity MCP 工具技能）
+  - 【注意】`skills` 须保持对象形式 `{ "paths": [...] }`：本机 opencode 1.18.18 实测数组简写会报 `Configuration is invalid`，勿改成数组
+  - `references`：登记工程目录为引用目录，跨目录读写工程文件时自动放行（external-directory 边界例外）
+- **使用前提**：
+  - Unity 编辑器须已打开 SuperSmashLike 工程（MCP 桥依赖编辑器进程）
+  - 同一时间只开一个带 MCP 的 opencode 实例（8081 端口冲突属预期）
+  - 配置只在 opencode 启动时加载一次，修改后需重启 opencode 才能生效
+  - 工程目录若移动/改名，需同步更新本配置中的绝对路径（路径失效为静默，不报错）
+- **移除方式**：删除 `.opencode/opencode.json` 即恢复普通模式
+- **验证记录（2026-10-16）**：`opencode debug config` / `opencode debug skill` 均通过；绝对路径 instructions 已用探针实测加载成功
